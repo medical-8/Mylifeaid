@@ -1,0 +1,9 @@
+
+            <div class="card">
+            <h3>Hospital A</h3>
+            <p id="">Address: 123 Main St</p>
+            <p>Beds Available: 10</p>
+            <p>Emergency Slots: 5</p>
+            <p>Distance: 2 km</p>
+            <p>Bookings: 20</p>
+            </div>

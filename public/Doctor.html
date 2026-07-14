@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | MyLifeAid</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="doctor.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-group">
+            <div class="logo-icon">
+                <img src="images/MYLIFEAID LOGO-Photoroom.png" alt="MyLifeAid Logo" class="admin-logo-img" style="height: 40px; display: none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span style="display: none; font-size: 24px;">🔑</span>
+            </div>
+            <div class="logo-text">
+                <h2><span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span></h2>
+                <p id="role-subtitle">Doctor Dashboard</p>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            <div class="user-pill">
+                <span class="user-avatar">👤</span>
+                <span id="user-display-name">Dr. N. Dlamini | General practitioner</span>
+            </div>
+            <button class="logout-btn" onclick="window.location.href='staff_index.html'">
+                <span>🚪 Log Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="dashboard-main">
+            
+        <div class="welcome-banner">
+            <h3>Welcome Dr. N. Dlamini</h3>
+            <span class="date-stamp">23 May 2025 | 09:16 AM</span>
+        </div>
+
+        <div class="card full-width">
+            <div class="card-header space-between">
+                <div class="flex-align">
+                    <span class="card-icon">🩺</span>
+                    <h3>Patients For Review Today</h3>
+                </div>
+                <button class="pill-btn primary">View All Patients →</button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Patient ID</th>
+                            <th>Patient Name</th>
+                            <th>Reason for Review</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>09:30 AM</td>
+                            <td class="id-cell">PAT-2026-001</td>
+                            <td><strong>THABO MABASO</strong></td>
+                            <td>Post discharge review</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>10:15 AM</td>
+                            <td class="id-cell">PAT-2026-002</td>
+                            <td><strong>NOMSA SMITH</strong></td>
+                            <td>Follow-up Hypertension</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>13:30 PM</td>
+                            <td class="id-cell">PAT-2026-003</td>
+                            <td><strong>SIPHO KHUMALO</strong></td>
+                            <td>Post-op review</td>
+                            <td><span class="status pending">Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="doctor-split-grid">
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Request Lab Tests</h3>
+                </div>
+                <p class="subtitle">Select a patient and request a test</p>
+                
+                <form class="form-body" onsubmit="event.preventDefault();">
+                    <div class="input-group">
+                        <label>Patient</label>
+                        <select>
+                            <option>THABO MABASO (PAT-2026-001)</option>
+                            <option>NOMSA SMITH (PAT-2026-002)</option>
+                            <option>SIPHO KHUMALO (PAT-2026-003)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Test Type</label>
+                        <select>
+                            <option disabled selected>Select Test</option>
+                            <option>BLOOD</option>
+                            <option>FBC (Full Blood Count)</option>
+                            <option>CRP</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Additional Notes (optional)</label>
+                        <textarea rows="4" class="grey-bg" placeholder="Add custom diagnostic requests or priority tags here..."></textarea>
+                    </div>
+                    <button class="action-btn" type="submit">Submit Lab Request</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header space-between">
+                    <h3>Lab Results</h3>
+                    <button class="pill-btn primary">View All Results →</button>
+                </div>
+                <p class="subtitle">View completed lab results</p>
+
+                <div class="table-responsive">
+                    <table class="data-table transparent">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Patient</th>
+                                <th>Test</th>
+                                <th>Result</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>23 May 2025</td>
+                                <td>THABO MABASO</td>
+                                <td><span class="test-tag">BLOOD</span></td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td><span class="status pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>2 May 2025</td>
+                                <td>SIPHO KHUMALO</td>
+                                <td><span class="test-tag">FBC</span></td>
+                                <td><span class="status normal">Normal</span></td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>30 April 2025</td>
+                                <td>NOMSA SMITH</td>
+                                <td><span class="test-tag">CRP</span></td>
+                                <td><span class="status high">High</span></td>
+                                <td><span class="status completed">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>

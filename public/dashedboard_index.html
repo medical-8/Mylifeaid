@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | MyLifeAid</title>
+    <link rel="stylesheet" href="dashboard_styles.css">
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="logo-area">
+            <img src="images/MYLIFEAID LOGO-Photoroom.png" alt="MyLifeAid Logo" class="admin-logo-img">
+            <div class="logo-text">
+                <span class="my">MYLIFEAID</span>
+                <p class="sub-role">Admin • Bed & Patient Manager</p>
+            </div>
+        </div>
+        <div class="header-controls">
+    <div class="user-pill">
+        <span>👤 User | Admin</span>
+    </div>
+    <button class="logout-btn" onclick="window.location.href='staff_index.html'">
+        <span>🚪 Log Out</span>
+    </button>
+</div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <nav>
+                <button class="nav-btn active" onclick="showSection('bed-section', this)">
+                    <span class="icon">🛏️</span> Bed Availability
+                </button>
+                <button class="nav-btn" onclick="showSection('patient-section', this)">
+                    <span class="icon">📋</span> Patient Details
+                </button>
+                <button class="nav-btn" onclick="showSection('chat-section', this)">
+                    <span class="icon">💬</span> Live Chat <span class="badge">3</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <p>© 2026 MyLifeAid v2.0</p>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <section id="bed-section" class="admin-card active">
+                <div class="search-bar-container">
+                    <input type="text" placeholder="Search for hospitals, clinics, specialties...">
+                    <div class="filter-group">
+                        <button class="pill-btn">Permissions</button>
+                        <button class="pill-btn">Filter results</button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <h2><span class="icon">🛏️</span> Bed availability & movement</h2>
+                    <div class="input-group full">
+                        <label>Select Hospital *</label>
+                        <input type="text" value="Johannesburg General Hospital">
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Action Type</label>
+                            <select>
+                                <option>Discharge Patient (frees bed)</option>
+                                <option>Admit Patient (occupies bed)</option>
+                                <option>Transfer Ward</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Patient Number / ID</label>
+                            <input type="text" placeholder="e.g PAT-1024">
+                        </div>
+                    </div>
+                    <div class="input-group full">
+                        <label>Current Ward / Bed ID</label>
+                        <input type="text" placeholder="e.g Ward B-Bed 08">
+                    </div>
+                    <button class="action-btn">Update Bed Availability</button>
+                </div>
+            </section>
+
+            <section id="patient-section" class="admin-card">
+                <div class="form-container">
+                    <h2><span class="icon">👩‍⚕️</span> Register And Assign Patients</h2>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Patient Number / ID</label>
+                            <input type="text" value="PAT-2026-001">
+                        </div>
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" value="THABO MABASO">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Gender</label>
+                            <select><option>MALE</option><option>FEMALE</option></select>
+                        </div>
+                        <div class="input-group">
+                            <label>Contact</label>
+                            <input type="text" value="+27 610868658">
+                        </div>
+                    </div>
+                    <div class="input-group full">
+                        <label>Diagnosis Details</label>
+                        <textarea rows="4">Admitted with respiratory infection.</textarea>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Assign Doctor</label>
+                            <input type="text" value="Dr. N. Dlamini">
+                        </div>
+                        <div class="input-group">
+                            <label>Hospital</label>
+                            <input type="text" value="Hellen Joseph">
+                        </div>
+                    </div>
+                    <button class="action-btn">Assign Patient To Doctor</button>
+                </div>
+            </section>
+
+            <section id="chat-section" class="admin-card chat-grid">
+                <div class="chat-sidebar">
+                    <div class="chat-item active">
+                        <strong>ER Dept - Chris Hani</strong>
+                        <p>Need urgent bed status...</p>
+                    </div>
+                    <div class="chat-item">
+                        <strong>Dr. Smith</strong>
+                        <p>Patient PAT-2026 ready...</p>
+                    </div>
+                </div>
+                <div class="chat-main">
+                    <div class="chat-messages" id="chatBox">
+                        <div class="msg received">System: Welcome to Live Support.</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="msgInput" placeholder="Type message...">
+                        <button onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId, btn) {
+            // Hide all sections
+            document.querySelectorAll('.admin-card').forEach(s => s.classList.remove('active'));
+            // Show selected
+            document.getElementById(sectionId).classList.add('active');
+            // Update buttons
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msgInput');
+            if(input.value.trim() !== "") {
+                const msg = document.createElement('div');
+                msg.className = 'msg sent';
+                msg.innerText = input.value;
+                document.getElementById('chatBox').appendChild(msg);
+                input.value = "";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLifeAid - Resource Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="staff_style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo-group">
+            <div class="logo">
+                <span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="nav-item dropdown">
+                <a href="#" id="aboutBtn">About MyLifeAid ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="ourStoryButton">Our Story</a></li>
+                    <li><a href="#" id="theTeamButton">The Team</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" id="resourcesBtn">Resources ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="bedAvailabilityBtn">Bed Availability</a></li>
+                    <li><a href="#" id="faqBtn">FAQ</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" id="servicesBtn">Our Services ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="emergencySearchBtn">Emergency Numbers</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="navbar-right">
+            <button class="help-button" id="helpButton">Need help?</button>
+            <button class="login-button" id="loginHeaderBtn">Login</button>
+            <div class="user-icon" id="userButton" style="font-size:24px; color:white; cursor:pointer;">👤</div>
+        </div>
+    </nav>
+
+    <!-- HERO / MAIN SECTION -->
+    <main class="hero">
+        <div class="hero-left">
+            <div class="hero-text">
+                <h1>Welcome to the future of <br>Resource Management</h1>
+                <p>MyLifeAid is a platform that empowers you to search and find hospitals, check resource availability, manage your health history, and access essential healthcare information all in one convenient place.</p>
+            </div>
+            
+            <div class="value-props">
+                <div class="prop-item">
+                    <div class="icon-circle"> <img src="images/download.png" alt=""></div>
+                    <div class="prop-text">
+                        <h4>Find Hospitals</h4>
+                        <p>Locate facilities near you instantly.</p>
+                    </div>
+                </div>
+                <div class="prop-item">
+                    <div class="icon-circle"><img src="images/icons8-bar-chart-24.png" alt=""></div>
+                    <div class="prop-text">
+                        <h4>Real-time Resources</h4>
+                        <p>Check active bed and medical staff utilities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INITIAL SIGNUP CARD -->
+        <div class="signup-card">
+            <h3>WELCOME TO MYLIFEAID SIGN-UP</h3>
+            <div class="tabs">
+                <button id="btn-Staff" class="active">STAFF</button>
+                <button id="btn-Admin">ADMIN</button>
+            </div>
+            <div class="input-box">
+                <label id="id-label">STAFF NUMBER</label>
+                <input type="text" placeholder="Enter STAFF ID" id="id-input">
+            </div>
+            <button class="next-btn" id="nextBtn">Next →</button>
+            <div class="info-text">
+                <span class="lock-icon">ⓘ</span>
+                <p>Your  STAFF/ADMIN ID acts as your unique Username. This ensures one record of all your engagements with us.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- INTERACTIVE FLOATING MODAL OVERLAY (Used for Sign-Up Flow and Menus) -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+            <div id="modalBody">
+                <!-- Content gets dynamically populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PERSISTENT POPUP WINDOW (Used for Help / Quick Info) -->
+    <div class="popup-background" id="popupBackground">
+        <div class="popup-box">
+            <button class="close-popup-button" id="closePopupButton">&times;</button>
+            <h3 id="popupTitle" style="margin-bottom: 15px; color:#1D4352;"></h3>
+            <p id="popupMessage" style="line-height: 1.6; color:#4A6273; white-space: pre-line;"></p>
+        </div>
+    </div>
+
+    <script src="staff_script.js"></script>
+    
+</body>
+</html>

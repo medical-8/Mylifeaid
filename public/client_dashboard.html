@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="navbar.css">
+
+    <!-- Leaflet CSS -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+</head>
+
+
+
+
+<body>
+
+
+      <!-- ================= NAVBAR ================= -->
+
+  <nav class="navbar">
+
+    <div class="logo-group">
+
+      <img src="MYAID-LOGO.png"
+        alt="MyAid Logo"
+        class="logo-img">
+
+      <div class="logo-text">
+        <a href="#">
+          <span class="my">MY</span>
+          <span class="life">Life</span>
+          <span class="aid">Aid</span>
+        </a>
+      </div>
+
+    </div>
+
+    
+    <div class="navbar-right">
+
+      <div class="user-icon" id="userButton">
+        <i class='bx bxs-user-circle'></i>
+      </div>
+    </div>
+
+  </nav>
+
+
+    <!-- Map container -->
+    <div id="map"></div>
+
+    <!--Search bar and pin button-->
+    <input id="search-bar" placeholder="Search for a hospital/clinic..." ></input>
+
+    <!--Bottom sheet-->
+    <div id="container">
+        <section id="filter-by">
+            <button id="filter-btn" class="filter-btn" onclick="toggleFilterDropdown()">Filter by</button>
+            <div id="filter-dropdown" class="filter-drop">
+                <button id="beds-filter" class="filter-btn">Beds</button>
+                <button id="emergency-filter" class="filter-btn">Emergency Slots</button>
+                <button id="distance-filter" class="filter-btn">Distance</button>
+                <!-- <button id="bookings-filter" class="filter-btn">Bookings</button> -->
+            </div>
+        </section>
+        <!--Hospital/Clinic Cards-->
+        <div id="cards-container">
+        </div>
+        <!-- <div id="filter-dropdown"> -->
+
+    </div>
+
+
+</body>
+
+
+
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin="">
+</script>
+
+<script>
+//Initialize the map and setting the view for the map
+var map = L.map('map');
+//map.setView([-26.19038820706369, 28.013535778428302], 13);
+
+
+//NB: JS Multi-line comment = /**/ and single line comment = //
+
+//Adding the tile layer to the map
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+ //getting the user's current location and setting the view to that location
+navigator.geolocation.watchPosition(success, error);
+
+//declare marker and circle variables to be used in the success function/global scope 
+let marker, circle, zoomed;
+
+
+//if sucessfully got the user's location, set the view to that location
+function success(position) {
+    console.log(position);
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    const accuracy = position.coords.accuracy;  
+    //uncomment the following line to set the view to the user's location automatically
+    map.setView([latitude, longitude], 13);
+
+    //checks whether a value exist on the marker. First time, there is no value for the marker
+    if (marker) {
+        map.removeLayer(marker);
+        map.removeLayer(circle);
+    }
+
+
+
+    marker = L.marker([latitude, longitude]).addTo(map)
+    circle = L.circle([latitude, longitude], {radius: accuracy}).addTo(map);
+
+    //constantly update the user's location on the map. Added an if to make sure that the
+    //map remains in one level of zoom. First time there is no zoomed value, once it runs
+    //the value is assigned to zoomed and the if statement will not run again and keeping 
+    //the map zoom level the same.
+    
+    if (!zoomed) {
+        zoomed = map.fitBounds(circle.getBounds());
+    }
+
+    //follow the marker
+
+
+
+    map.setView([latitude, longitude]);
+      
+}
+
+//show hospitals on the map as markers
+
+//create a custom icon for the hospital markers
+
+
+
+
+//if there is an error getting the user's location, alert the user
+function error(err)
+{
+    if (err.code === 1) {
+        alert("Please allow location access to use this feature.");
+    } else {
+        alert("Unable to retrieve your location. Please try again.");
+    } 
+}
+
+
+// Get the filter button and dropdown elements
+function toggleFilterDropdown() {
+    const filterBtn = document.querySelector('.filter-btn');
+    const filterDropdown = document.getElementById('filter-dropdown');
+
+    // Toggle the visibility of the dropdown
+    if (filterDropdown.style.display === 'block') {
+        filterDropdown.style.display = 'none';
+    } else {
+        filterDropdown.style.display = 'block';
+    }
+}
+
+
+
+
+//Hospital array
+
+var hospitals = [
+    {
+        id: 1,
+        name: "Helen Joseph Hospital",
+        address: "1 Perth Road, Auckland Park",
+        beds: 640,
+        emergencySlots: 230,
+        distance: 2.4,
+        bookings: 200,
+        lat: -26.1849751,
+        lng: 27.987364,
+        url: "images/helenJoseph.jpg",
+        description: "Major provincial hospital in Auckland Park providing emergency services, surgery, internal medicine, outpatient treatment, and specialist healthcare.",
+        rating: 3,
+        phone: "+27 11 489 1011"
+    
+
+    },
+    {
+        id: 2,
+        name: "Charlotte Maxeke Johannesburg Academic Hospital",
+        address: "7 Jubilee Road, Parktown, Johannesburg",
+        beds: 188,
+        emergencySlots: 570,
+        distance: 3.5,
+        bookings: 460,
+        lat: -26.1748446,
+        lng: 28.045638,
+        url: "images/charlotteMaxeke.jpg",
+        description: "Charlotte Maxeke Academic Hospital is one of Gauteng's largest public academic hospitals, offering specialist healthcare, trauma care, surgery, oncology, and teaching facilities linked to Wits University",
+        rating: 3.5,
+        phone: "+27 11 488 4911"
+    },
+    {
+        id: 3,
+        name: "Rahima Moosa Mother and Child Hospital",
+        address: "Coronationville, Johannesburg 2093",
+        beds: 269,
+        emergencySlots: 130,
+        distance: 4,
+        bookings: 30,
+        lat: -26.1878279,
+        lng: 27.9708293,
+        url: "images/rahimamoosa.jfif",
+        description: "Specialized public hospital focused on maternity care, pediatrics, neonatal treatment, and women's health services.",
+        rating: 3.5,
+        phone: "+27 11 470 9000"
+    },
+
+      {
+        id: 4,
+        name: "South Rand Hospital",
+        address: "33 Friars Hill Road",
+        beds: 300,
+        emergencySlots: 120,
+        distance: 8.5,
+        bookings: 60,
+        lat: -26.2523719,
+        lng: 28.0602911,
+        url: "images/southrand.jfif",
+        description: "Regional government hospital serving southern Johannesburg communities with emergency care, general medical services, and outpatient departments.",
+        rating: 3,
+        phone: "+27 11 681 2000"
+    },
+
+      {
+        id: 5,
+        name: "Edenvale Hospital",
+        address: "Modderfontein Road, Rembrandt Park",
+        beds: 500,
+        emergencySlots: 180,
+        distance: 13.4,
+        bookings: 70,
+        lat: -26.1283571,
+        lng: 28.1261721,
+        url: "images/edenvale.jfif",
+        description: "Public regional hospital providing emergency care, surgery, maternity services, and general healthcare for eastern Johannesburg communities",
+        rating: 3.2,
+        phone: "+27 11 321 6000"
+    },
+
+      {
+        id: 6,
+        name: "Chris Hani Baragwanath Academic Hospital",
+        address: "26 Chris Hani Rd, Diepkloof 319-lq, Johannesburg, 1864",
+        beds: 3400,
+        emergencySlots: 1460,
+        distance: 11,
+        bookings: 890,
+        lat: -26.2596689,
+        lng: 27.9262041,
+        url: "images/chrishanibara.jfif",
+        description: "The largest hospital in Africa, providing specialist, emergency, and academic healthcare services to Soweto and Gauteng",
+        rating: 3.5,
+        phone: "+27 11 933 8000"
+    },
+
+      {
+        id: 7,
+        name: "Bertha Gxowa Hospital",
+        address: "Angus St, Germiston South (Industries E A), Germiston, Gauteng",
+        beds: 450,
+        emergencySlots: 230,
+        distance: 15,
+        bookings: 110,
+        lat: -26.2206758,
+        lng: 28.1621508,
+        url: "images/berthagxowa.jfif",
+        description: "Government hospital in Germiston serving East Rand communities with trauma, surgical, and general healthcare services",
+        rating: 2.9,
+        phone: "+27 11 278 7600"
+    },
+
+      {
+        id: 8,
+        name: "Thelle Mogoerane Hospital",
+        address: "Nguza Street, Vosloorus, Gauteng, South Africa",
+        beds: 840,
+        emergencySlots: 480,
+        distance: 28,
+        bookings: 370,
+        lat: -26.3565257,
+        lng: 28.2212591,
+        url: "images/thellemogoerane.jfif",
+        description: "Modern public regional hospital serving Vosloorus, Katlehong, and surrounding East Rand communities with emergency, maternity, and surgical service",
+        rating: 4,
+        phone: "+27 11 891 7000"
+    },
+
+      {
+        id: 9,
+        name: "Tara Psychiatric Hospital",
+        address: "Hurlingham, Sandton, Johannesburg, South Africa",
+        beds: 300,
+        emergencySlots: 200,
+        distance: 3.5,
+        bookings: 160,
+        lat: -26.1082,
+        lng: 28.0356551,
+        url: "images/tarapsychiatric.jfif",
+        description: "Specialized psychiatric and mental health hospital affiliated with Wits University, offering inpatient and outpatient mental healthcare.",
+        rating: 3.7,
+        phone: "+27 11 535 3000"
+    },
+
+    {
+        id: 10,
+        name: "Tambo Memorial Hospital",
+        address: "Railway Street (corner of Hospital Road), Plantation, Boksburg, 1459.",
+        beds: 640,
+        emergencySlots: 460,
+        distance: 23,
+        bookings: 390,
+        lat: -26.2187007,
+        lng: 28.2427538,
+        url: "images/tambomemorial.jfif",
+        description: "Tambo Memorial Hospital is a public regional hospital located in Boksburg, Gauteng. It provides essential healthcare to over one million residents across Boksburg, Benoni, and parts of Germiston",
+        rating: 3.5,
+        phone: "+27 11 898 8000"
+    },
+     {
+    id: 11,
+        name: "Hillbrow Clinic",
+        address: "51 Klein Street, Hillbrow",
+        beds: 0,
+        emergencySlots: 5,
+        distance: 2.7,
+        bookings: 56,
+        lat: -26.1935691,
+        lng: 28.0428001,
+        url: "images/hillbrow_clinic.jpg",
+        description: "Busy municipal clinic offering HIV/TB treatment, maternal healthcare, immunization, and chronic medication services.",
+        rating: 3.2,
+        phone: "+27 11 694 3700"
+    },
+    {
+        id: 12,
+        name: "Esselen Street Clinic",
+        address: "17 Esselen Street, Hillbrow",
+        beds: 0,
+        emergencySlots: 4,
+        distance: 3.1,
+        bookings: 10,
+        lat: -26.1907234,
+        lng: 28.0425418,
+        url: "images/esselen_street_clinic.jpg",
+        description: "Government clinic in Hillbrow providing outpatient treatment, community healthcare, and primary medical services",
+        rating:2.5,
+        phone: "+27 61 626 6078"
+
+    },
+    {
+        id: 13,
+        name: "Yeoville Clinic",
+        address: "Corner of Hopkins & Kenmere Rd",
+        beds: 12,
+        emergencySlots: 3,
+        distance: 5,
+        bookings: 30,
+        lat: -26.1810683,
+        lng: 28.0619894,
+        url: "images/generic.png",
+        description: "Public clinic offering primary healthcare, immunization, maternal care, and family planning services.",
+        rating: 2.4,
+        phone: "+27 11 837 9119"
+    },
+    {
+        id: 14,
+        name: "Civic Centre Clinic",
+        address: "Civic Centre, Braamfontein",
+        beds: 0,
+        emergencySlots: 2,
+        distance: 1.9,
+        bookings: 15,
+        lat: -26.1019,
+        lng: 28.2233251,
+        url: "images/civic_centre_clinic.jpg",
+        description: "Municipal healthcare clinic serving people living and working in Johannesburg CBD and Braamfontein.",
+        rating: 3,
+        phone: "+27 11 477 9936"
+    },
+    {
+        id: 15,
+        name: "Orchards Clinic",
+        address: "Oaklands Road, Oaklands",
+        beds: 5,
+        emergencySlots: 2,
+        distance: 8.2,
+        bookings: 40,
+        lat: -26.1545872,
+        lng: 28.0830545,
+        url: "images/orchards_clinic.jpg",
+        description: "Free public clinic providing primary healthcare services and chronic medication support to nearby communities. ",
+        rating: 3.1,
+        phone: "+27 83 281 6054"
+    },
+    {
+        id: 16,
+        name: "Jeppe Clinic",
+        address: "34 Ford Street, Jeppestown",
+        beds: 20,
+        emergencySlots: 10,
+        distance: 5.7,
+        bookings: 100,
+        lat: -26.2061647,
+        lng: 28.0652277,
+        url: "images/jeppe_clinic.jpg",
+        description: "Jeppe Clinic is a public primary healthcare facility located at 34 Ford Street, Jeppestown, Johannesburg. It provides free services including antenatal care, chronic disease management, HIV/TB treatment, and immunizations.",
+        rating: 2.5,
+        phone: "+27 11 614 1474"
+    },
+    {
+        id: 17,
+        name: "Hillbrow Poly Municipal Clinic",
+        address: "Braamfontein, Johannesburg",
+        beds: 10,
+        emergencySlots: 7,
+        distance: 3.2,
+        bookings: 200,
+        lat: -26.191699,
+        lng: 28.0430151,
+        url: "images/generic.png",
+        description: "Public clinic offering basic outpatient and municipal healthcare services in Braamfontein.",
+        rating: 1,
+        phone: "+27 11 720 1121"
+    }
+];
+
+
+//Displaying hospitals on the map as markers
+
+//Hospital declration
+    const hospitalList = document.getElementById('cards-container');
+    const markers = [];
+
+
+
+    hospitals.forEach((hospital, index) => {
+
+        /*
+        CREATE HOSPITAL CARD
+        */
+
+        const hospitalDiv =
+            document.createElement('div');
+
+        hospitalDiv.className =
+            'hospital-card';
+
+        /*
+        Insert hospital data
+        */
+
+        hospitalDiv.innerHTML = `
+
+            <h4>${hospital.name}</h4>
+
+            <p>${hospital.address}</p>
+
+            <p>${hospital.phone}</p>
+
+
+        `;
+
+        /*
+        CLICK CARD -> CENTER MAP
+        */
+
+        /*
+        Add card to sidebar
+        */
+
+        hospitalList.appendChild(
+            hospitalDiv
+        );
+
+        /* ================================================= */
+        /* CREATE MAP MARKER */
+        /* ================================================= */
+
+        /*icon*/
+        const myIcon = L.icon({
+            iconUrl: 'images/generic.png',
+            iconSize: [30, 30]
+        });
+
+        const marker =
+            L.marker([
+                hospital.lat,
+                hospital.lng
+            ], { icon: myIcon }).addTo(map);
+
+        /*
+        POPUP CONTENT
+        */
+
+        hospitalDiv.onclick = () => {
+
+            map.setView(
+                [hospital.lat, hospital.lng],
+                16
+            );
+
+            marker.openPopup();
+        };
+
+        marker.bindPopup(`
+
+            <strong>
+                ${hospital.name}
+            </strong>
+
+            <br>
+
+            ${hospital.address}
+
+            <br>
+
+            ${hospital.phone}
+
+            <br><br>
+            <a
+                href="https://www.google.com/maps/dir/?api=1&destination=${hospital.lat},${hospital.lng}">
+
+                Get Directions →
+
+            </a>
+
+        `);
+
+        /*
+        Save marker
+        */
+
+        markers.push(marker);
+
+    });
+
+    /*
+    AUTO FIT MAP TO ALL MARKERS
+    */
+
+    const bounds = L.latLngBounds(
+        hospitals.map(h =>
+            [h.lat, h.lng]
+        )
+    );
+
+    map.fitBounds(bounds);
+
+
+//GET the cards container and search bar elements
+var cardsContainer = document.getElementById("cards-container");
+var searchBar = document.getElementById("search-bar");
+
+//get the filter buttons
+var bedsFilterBtn = document.getElementById("beds-filter");
+var emergencyFilterBtn = document.getElementById("emergency-filter");
+var distanceFilterBtn = document.getElementById("distance-filter");
+//var bookingsFilterBtn = document.getElementById("bookings-filter");
+
+
+
+//render the hospitals on the page
+function renderHospitals(list) {
+
+    cardsContainer.innerHTML = "";
+
+    let i;
+    for (i = 0; i < list.length; i++) {
+
+        let hospital = list[i];
+
+        let card = document.createElement("div");
+        card.className = "card";
+        card.style.display = "flex";
+        card.style.justifyContent = "space-between";
+        card.style.alignItems = "center";
+
+
+        card.innerHTML =
+            "<div>"+
+            "<h3>" + (hospital.name.length > 17 ? hospital.name.substring(0, 17) + "..." : hospital.name) + "</h3>" +
+            "<p>Address: " + (hospital.address.length > 15 ? hospital.address.substring(0, 15) + "..." : hospital.address) + "</p>" +
+            "<p>Beds Available: " + hospital.beds + "</p>" +
+            "<p>Emergency Slots: " + hospital.emergencySlots + "</p>" +
+            "<p>Distance: " + hospital.distance + " km</p>" +
+            "<p>Bookings: " + hospital.bookings + "</p>" +
+            "</div>"+
+            "<img src='"+ hospital.url +"' alt='' width='90' height='90'>";
+
+        //add event listener to the card to show a pop-up with more details about the hospital when clicked
+        
+        
+        //creating the div for the pop-up and styling it.
+        card.addEventListener("click", function() {
+            let popUp = document.createElement("div");
+            popUp.style.position = "fixed";
+            popUp.style.width = "350px";
+            popUp.style.top = "50%";
+            popUp.style.left = "50%";
+            popUp.style.transform = "translate(-50%, -50%)";
+            popUp.style.background = "#fff";
+            popUp.style.padding = "10px";
+            popUp.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
+            popUp.style.zIndex = "1000";
+            popUp.style.maxHeight = "80vh";
+            popUp.style.overflowY = "auto";
+
+
+            popUp.innerHTML = "<div>" +
+                              "<button id='close-popup' style='float:right;font-size:16px;'>✖</button>" +
+                              "<h3>" + hospital.name + "</h3>" +
+                              "<p style='background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 10px;'>" + hospital.description + "</p>"+
+                              "<p>Rating: " + hospital.rating + " / 5</p>"+
+                              "<a style='margin-top:10px; right: 50%; background-color: #1D4352; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px;' href='tel:" + hospital.phone + "'>Call</a>" +
+                              "<button id='showFormBtn' style='margin-top: 10px; background-color: #1D4352; color: white; border: none; padding: 10px 20px; border-radius: 5px; float: right;'>Show Form</button>" +
+                              `
+                                <form id='hospital-form' style="margin-top: 10px; display: none;">
+                                    <h2 style='margin-top: 10px; text-decoration: underline;'>Book an Appointment</h2>
+                                    <h3>Patient Details</h3>
+                                    <div>
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" required>
+                                    </div>
+                                    <div>
+                                    <label for="surname">Surname</label>
+                                    <input type="text" name="surname" required>
+                                    </div>
+                                    <div>
+                                    <label for="id-number">ID Number</label>
+                                    <input type="text" name="id-number" required>
+                                    </div>
+                                    <div>
+                                    <label for="DOB">Date of Birth</label>
+                                    <input type="date" name="date of birth" required>
+                                    </div>
+                                    <div>
+                                    <label for="gender">Gender</label>
+                                    <input type="radio" name="gender" id="male">
+                                    <label for="male">Male</label>
+                                    <input type="radio" name="gender" id="female">
+                                    <label for="female">Female</label>
+                                    </div>
+                                    <div>
+                                    <label for="phonenumber">Phone Number</label>
+                                    <input type="tel" name="phonenumber" id="phonenumber">
+                                    </div>
+                                    <div>
+                                    <label for="email">Email Address</label>
+                                    <input type="email" name="email" id="email">
+                                    </div>
+                                    
+
+                                    <br><br><br><h2>Medical Information and Appointment Details</h2>
+                                    <p>What is the reason for your visit?</p>
+                                    <input type="text">
+                                    <p>Are you experiencing an emergency?</p>
+                                    <input type="radio" name="emergency" id="emergencyY">
+                                    <label for="emergencyY">Yes</label>
+                                    <input type="radio" name="emergency" id="emergencyN">
+                                    <label for="emergencyN">No</label>
+                                    <p>Do you have any chronic illness?</p>
+                                    <input type="radio" name="chronic" id="chronicY">
+                                    <label for="chronicY">Yes</label>
+                                    <input type="radio" name="chronic" id="chronicN">
+                                    <label for="chronicN">No</label>
+                                    <input type="radio" name="chronic" id="idk">
+                                    <label for="idk">Unsure</label>
+                                    <p>Do you have any allergies?</p>
+                                    <input type="radio" name="allergies" id="allergiesY">
+                                    <Label for="allergiesY">Yes</Label>
+                                    <input type="radio" name="allergies" id="allergiesN">
+                                    <label for="allergiesN">No</label>
+                                    <input type="radio" name="allergies" id="idk2">
+                                    <label for="idk2">Unsure</label>
+                                    <p>Have you visited this hospital before?</p>
+                                    <input type="radio" name="visit" id="visitY">
+                                    <label for="visitY">Yes</label>
+                                    <input type="radio" name="visit" id="visitN">
+                                    <label for="visitN">No</label>
+                                    <p>Preferred Appointment Date: </p>
+                                    <input type="date" name="appointmentDate" id="appointmentDate">
+                                    <p>Preferred Appointemnt Time: </p>
+                                    <input type="time" name="appointmentTime" id="appointmentTime">
+                                    <p>Is this your first appointment?</p>
+                                    <input type="radio" name="firstapp" id="firstappY">
+                                    <label for="firstappY">Yes</label>
+                                    <input type="radio" name="firstapp" id="firstappN">
+                                    <label for="firstappN">No</label>
+
+                                    <h2>Emergency Contact</h2>
+                                    <p>Emergecy Contact Full Name:</p>
+                                    <input type="text">
+                                    <p>Emergecy Contact Relationship to patient</p>
+                                    <input type="text">
+                                    <p>Emergecy Contact Phone Number: </p>
+                                    <input type="text">
+
+                                    <h2>Consent and Verification</h2>
+                                    <p>I confirm the information provided is correct</p>
+                                    <input type="checkbox" name="correctinfo" id="correctinfo">
+                                    <label for="correctinfo">Yes</label>
+                                    <p>I consent to the hospital storing my information</p>
+                                    <input type="checkbox" name="consent" id="consent">
+                                    <label for="consent">Yes</label>
+                                </form>
+                              ` +
+                              "</div>";
+            document.body.appendChild(popUp);
+            
+            document.getElementById('close-popup').onclick = function() {
+            document.body.removeChild(popUp);
+            };
+
+            //add event listener to take you to login page when the show form button is clicked
+            document.getElementById('showFormBtn').onclick = function() {
+                window.location.href = "welcome.html";
+            };
+        });
+
+        cardsContainer.appendChild(card);
+    }
+}
+
+
+//search function
+function filterHospitals(searchText) {
+
+    let filtered = [];
+
+    var i;
+    for (i = 0; i < hospitals.length; i++) {
+
+        var hospital = hospitals[i];
+
+        var name = hospital.name.toLowerCase();
+        var address = hospital.address.toLowerCase();
+        var id = hospital.id.toString();
+
+        if (
+            name.indexOf(searchText) !== -1 ||
+            address.indexOf(searchText) !== -1 ||
+            id.indexOf(searchText) !== -1
+        ) {
+            filtered.push(hospital);
+        }
+    }
+
+    return filtered;
+}
+
+//
+function onSearchInput(event) {
+
+    var text = event.target.value.toLowerCase();
+
+    if (text === "") {
+        renderHospitals(hospitals);
+        return;
+    }
+
+    var results = filterHospitals(text);
+
+    renderHospitals(results);
+}
+
+// connect search input to function
+searchBar.addEventListener("input", onSearchInput);
+
+// render hospitals when page loads
+renderHospitals(hospitals);
+
+
+//Filter functions for each filter button
+
+function sortByBeds() {
+
+    hospitals.sort(function (a, b) {
+        return b.beds - a.beds;
+    });
+
+    renderHospitals(hospitals);
+}
+
+function sortByEmergencySlots() {
+
+    //"b.emergencySlots - a.emergencySlots" sorts the hospitals in descending order of emergency slots.
+    hospitals.sort(function (a, b) {
+        return b.emergencySlots - a.emergencySlots;
+    });
+
+    renderHospitals(hospitals);
+}
+
+function sortByDistance() {
+
+    //"a.distance - b.distance" sorts the hospitals in ascending order of distance.
+    hospitals.sort(function (a, b) {
+        return a.distance - b.distance;
+    });
+
+    renderHospitals(hospitals);
+}
+
+//connect filter buttons to functions
+
+bedsFilterBtn.addEventListener("click", sortByBeds);
+emergencyFilterBtn.addEventListener("click", sortByEmergencySlots);
+distanceFilterBtn.addEventListener("click", sortByDistance);
+//bookingsFilterBtn.addEventListener("click", sortByBookings);
+
+
+</script>
+
+
+</html> 

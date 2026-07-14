@@ -1,0 +1,849 @@
+/* ================================================= */
+/* GLOBAL STYLES */
+/* ================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* 
+body = entire webpage
+Sets:
+- font
+- background
+- default text color
+*/
+
+body{
+    font-family:'Space Grotesk',sans-serif;
+    background:#f5f7fb;
+    color:#1D4352;
+    overflow-x:hidden;
+}
+
+/* ================================================= */
+/* NAVBAR */
+/* ================================================= */
+
+.navbar{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 6%;
+    background:#0f2a35;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+/* LOGO SECTION */
+
+.logo-group{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+}
+
+.logo-text a{
+    text-decoration:none;
+    font-size:28px;
+    font-weight:700;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+}
+
+/* DIFFERENT LOGO COLORS */
+
+.my{
+  color: #0C5259;
+ font-weight: 300;
+}
+
+.life{
+   color: #3692D4;
+font-weight: 700;
+}
+
+.aid{
+    color: #E63946;
+font-weight: 700;
+}
+
+/* ================================================= */
+/* NAVIGATION LINKS */
+/* ================================================= */
+
+.nav-links{
+    display:flex;
+    gap:35px;
+    list-style:none;
+}
+
+.nav-item{
+    position:relative;
+}
+
+.nav-item a{
+    text-decoration:none;
+    color:white;
+    font-size:15px;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.nav-item a:hover{
+    color:#3BA3EC;
+}
+
+/* ================================================= */
+/* DROPDOWN MENU */
+/* ================================================= */
+
+.dropdown-menu{
+    position:absolute;
+    top:100%;
+    left:0;
+    background:white;
+    min-width:200px;
+    border-radius:10px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+    display:none;
+    overflow:hidden;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+.dropdown-menu li{
+    list-style:none;
+}
+
+.dropdown-menu li a{
+    display: block;
+    padding: 10px 20px;
+    color: #1D4352;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.dropdown-menu li a:hover{
+    background:#f3f7fb;
+}
+
+.nav-item.dropdown:hover .dropdown-menu{
+    display:block;
+}
+
+
+
+/* ================================================= */
+/* NAVBAR RIGHT SIDE */
+/* ================================================= */
+
+.nav-item:hover .dropdown-menu {
+display: block;
+}
+
+.navbar-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.login-button{
+   border:none;
+    padding:12px 22px;
+    background:transparent;
+    color:white;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+  font-family: Space grotesk, sans-serif;
+  border: 2px solid white; 
+}
+
+.login-button:HOVER{
+     transform:translateY(-2px);
+    opacity:0.9;
+
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.hidden {
+  display: none;
+}
+/* HELP BUTTON */
+
+.help-button{
+    border:none;
+    padding:12px 22px;
+    background:transparent;
+    color:white;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+    border: 2px solid white; 
+}
+
+.help-button:hover{
+    transform:translateY(-2px);
+    opacity:0.9;
+}
+
+/* USER ICON */
+
+.user-icon{
+    color:white;
+    font-size:40px;
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* ================================================= */
+/* HERO SECTION */
+/* ================================================= */
+
+.hero{
+    width:100%;
+    min-height:85vh;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:80px 8%;
+
+    background:
+    linear-gradient(
+        135deg,
+        #08151c 0%,
+        #163746 100%
+    );
+
+    gap:60px;
+}
+
+/* HERO LEFT */
+
+.hero-left{
+    flex:1;
+}
+
+.hero-text h1{
+    font-size:52px;
+    line-height:1.1;
+    color:white;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    font-size:18px;
+    line-height:1.7;
+    color:rgba(255,255,255,0.8);
+    max-width:650px;
+}
+
+/* ================================================= */
+/* VALUE PROPOSITIONS */
+/* ================================================= */
+
+  .value-props{
+    margin-top:40px;
+
+    display:flex;
+
+    /* MAKES ITEMS GO SIDE BY SIDE */
+    flex-direction:row;
+
+    gap:30px;
+
+    /* ALLOWS ITEMS TO WRAP ON SMALLER SCREENS */
+    flex-wrap:wrap;
+}
+
+
+.prop-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* CIRCLE ICON */
+
+.icon-circle{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.1);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    font-size:28px;
+}
+
+/* TEXT */
+
+.prop-text h4{
+    color:white;
+    font-size:18px;
+    margin-bottom:4px;
+    font-weight: bold;
+}
+
+.prop-text p{
+    color:rgba(255,255,255,0.75);
+    font-size: 11px;
+}
+
+/* ================================================= */
+/* SIGNUP CARD */
+/* ================================================= */
+
+.signup-card{
+    width:420px;
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 25px 50px rgba(0,0,0,0.2);
+    border-radius: 12px;
+}
+
+.signup-card h3{
+    text-align:center;
+    margin-bottom:25px;
+    color:#1D4352;
+}
+
+/* ================================================= */
+/* TABS */
+/* ================================================= */
+
+.tabs{
+    display:flex;
+    background:#edf3f8;
+    border-radius:10px;
+    padding:4px;
+    margin-bottom:20px;
+}
+
+.tabs button{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    border-radius:8px;
+    font-weight:600;
+    transition:0.3s;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.tabs button.active{
+    background:#1D4352;
+    color:white;
+}
+
+/* ================================================= */
+/* INPUT BOX */
+/* ================================================= */
+
+.input-box{
+    margin-bottom:20px;
+}
+
+.input-box label{
+    display:block;
+    margin-bottom:8px;
+    font-size:13px;
+    font-weight:700;
+    color:#4A6273;
+}
+
+.input-box input{
+    width:100%;
+    padding:15px;
+    border-radius:10px;
+    border:1px solid #d6dee7;
+    outline:none;
+    font-size:15px;
+}
+
+.input-box input:focus{
+    border-color:#3BA3EC;
+}
+
+/* ================================================= */
+/* NEXT BUTTON */
+/* ================================================= */
+
+.next-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    background:#1D4352;
+    color:white;
+    border-radius:6px;
+    font-size:16px;
+    font-weight:500;
+    cursor:pointer;
+    transition:0.3s;
+    padding: 14px;
+    justify-content: center;
+    gap:8px;
+    display:flex;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-top: 15px;
+}
+
+.next-btn:hover{
+    background:#15313d;
+}
+
+/* ================================================= */
+/* INFO TEXT */
+/* ================================================= */
+
+.info-text{
+    margin-top:20px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.lock-icon{
+    color:#1D4352;
+    font-size:20px;
+}
+
+.info-text p{
+    font-size:14px;
+    line-height:1.6;
+    color:#4A6273;
+}
+
+/* ================================================= */
+/* SEARCH BAR */
+/* ================================================= */
+
+.search-container{
+    width:90%;
+    max-width:700px;
+
+    margin:-35px auto 30px auto;
+
+    background:white;
+
+    border-radius:60px;
+
+    display:flex;
+    align-items:center;
+
+    padding:12px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+
+    position:relative;
+    z-index:50;
+}
+
+.search-container input{
+    flex:1;
+    border:none;
+    outline:none;
+    padding:15px;
+    font-size:15px;
+    background:transparent;
+}
+
+.search-container button{
+    border:none;
+    background:#1D4352;
+    color:white;
+    padding:14px 25px;
+    border-radius:40px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+/* ================================================= */
+/* MAIN SECTION */
+/* ================================================= */
+
+.main{
+    width:90%;
+    margin:auto;
+
+    display:flex;
+    gap:25px;
+
+    margin-bottom:40px;
+}
+
+/* ================================================= */
+/* HOSPITAL SIDEBAR */
+/* ================================================= */
+
+.hospital-list{
+    width:340px;
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.06);
+
+    max-height:650px;
+    overflow-y:auto;
+}
+
+.hospital-list h3{
+    margin-bottom:20px;
+}
+
+/* HOSPITAL CARD */
+
+.hospital-card{
+    padding:18px;
+    border-radius:14px;
+    background:#f7fafc;
+    margin-bottom:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.hospital-card:hover{
+    transform:translateY(-3px);
+    background:#edf5fb;
+}
+
+.hospital-card h4{
+    margin-bottom:10px;
+}
+
+.hospital-card p{
+    font-size:14px;
+    color:#4A6273;
+    margin-bottom:5px;
+}
+
+.city{
+    margin-top:10px;
+    font-size:13px;
+    font-weight:700;
+    color:#E63946;
+}
+
+/* ================================================= */
+/* MAP */
+/* ================================================= */
+
+#map{
+    flex:1;
+    height:650px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,0.06);
+}
+
+/* ================================================= */
+/* FEATURES PANEL */
+/* ================================================= */
+
+.features-panel{
+    width:90%;
+    margin:50px auto;
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.feature-item{
+    background:white;
+    border-radius:18px;
+    padding:25px;
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,0.06);
+}
+
+.feature-icon{
+    font-size:40px;
+    color:#1D4352;
+}
+
+.feature-text h4{
+    margin-bottom:6px;
+}
+
+.feature-text p{
+    color:#4A6273;
+    font-size:14px;
+}
+
+/* ================================================= */
+/* POPUP BACKGROUND */
+/* ================================================= */
+
+.popup-background{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.55);
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:2000;
+}
+
+/* POPUP BOX */
+
+.popup-box{
+    width:90%;
+    max-width:500px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    position:relative;
+}
+
+/* CLOSE BUTTON */
+
+.close-popup-button{
+    position:absolute;
+    top:15px;
+    right:20px;
+
+    border:none;
+    background:none;
+
+    font-size:30px;
+    cursor:pointer;
+}
+
+/* ================================================= */
+/* MODAL */
+/* ================================================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.6);
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:3000;
+}
+
+/* MODAL CONTENT */
+
+.modal-content{
+    width:90%;
+    max-width:600px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    position:relative;
+}
+
+/* CLOSE MODAL BUTTON */
+
+.close-modal{
+    position:absolute;
+    top:15px;
+    right:20px;
+
+    border:none;
+    background:none;
+
+    font-size:32px;
+    cursor:pointer;
+}
+
+/* ================================================= */
+/* INPUT GROUPS */
+/* ================================================= */
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #d6dee7;
+    outline:none;
+}
+
+/* ================================================= */
+/* FINAL SIGNUP BUTTON */
+/* ================================================= */
+
+.final-signup-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    background:#1D4352;
+    color:white;
+    border-radius:10px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+/* ================================================= */
+/* REMEMBER ME */
+/* ================================================= */
+
+.remember-me{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.remember-me input[type="checkbox"]
+ {    width: 16px;   
+     height: 16px;   
+      margin: 0;
+}
+/* ================================================= */
+/* LOGIN NOTE */
+/* ================================================= */
+
+.login-note{
+    margin-top:18px;
+    text-align:center;
+    font-size:14px;
+}
+
+.login-note a{
+    color:#E63946;
+    font-weight:700;
+}
+
+/* ================================================= */
+/* LOADING */
+/* ================================================= */
+
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#1D4352;
+}
+
+/* ================================================= */
+/* RESPONSIVE DESIGN */
+/* ================================================= */
+
+@media(max-width:1000px){
+
+    .hero{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .signup-card{
+        width:100%;
+    }
+
+    .main{
+        flex-direction:column;
+    }
+
+    .hospital-list{
+        width:100%;
+    }
+
+    #map{
+        width:100%;
+    }
+
+    .nav-links{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .hero-text h1{
+        font-size:40px;
+    }
+
+    .search-container{
+        flex-direction:column;
+        border-radius:20px;
+    }
+
+    .search-container button{
+        width:100%;
+    }
+
+    .navbar{
+        padding:20px;
+    }
+}
+
+.modal-content {
+    max-height: 80vh;   /* limits height to 80% of screen */
+    overflow-y: auto;   /* enables vertical scrolling */
+}
