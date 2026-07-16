@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyLifeAid</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- LEFT SIDE -->
+        <div class="left-panel">
+
+<header class="header">
+
+    <div class="logo-container">
+
+        <img src="Image/MyLifeAidLogo.png" alt="logo" class="logo">
+
+        <h2 class="brand-name">
+            <span class="my">My</span><span class="life">Life</span><span class="aid">Aid</span>
+        </h2>
+
+    </div>
+
+</header>
+
+            <div class="hero-text">
+                <h1>
+                    Your Health.<br>
+                    Our Precision.<br>
+                    One Tap Away.
+                </h1>
+
+                <p>
+                    From checking hospital location to AI-assisted care
+                    navigation in seconds.....
+                </p>
+
+                <div class="buttons">
+                    <button onclick="goToPatient(this)">I'M A PATIENT</button>
+
+<button class="staff-btn" onclick="goToStaff(this)">
+    I'M STAFF
+</button>
+                </div>
+
+                <p class="trust-text">
+                    Trusted by 200+ clinics and 500+ patients
+                </p>
+            </div>
+
+            <footer>
+    <a href="pages/help.html" onclick="return goToHelp(this, event)">Help</a>
+    <a href="pages/contact.html" onclick="return goToContact(this, event)">Contact</a>
+    <a href="pages/about.html" onclick="return goToAbout(this, event)">About Us</a>
+</footer>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right-panel">
+
+           <button class="learn-more" onclick="goToLearnMore(this)">
+    Learn More
+</button>
+
+            <div class="card location-card">
+                <img src="Image/find care 1.png" height="100" alt="findCare">
+                <span>Find care</span>
+            </div>
+
+            <div class="card booking-card">
+                <img src="Image/book.png" height="100" alt="book">
+                <span>Book fast</span>
+            </div>
+
+            <div class="card live-card">
+                <img src="Image/live better.png" height="100" alt="findCare">
+                <span>Live Better</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
