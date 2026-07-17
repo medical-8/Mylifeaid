@@ -35,15 +35,30 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;   /* Controls the space between the logo and text */
+}
+
+
 .logo {
     font-size: 24px;
     font-weight: 700;
     letter-spacing: 0.5px;
+    margin: 0;
 }
 
 .logo .my { color: #0C5259; font-weight: 300; }
 .logo .life { color: #3692D4; }
 .logo .aid { color: #CE4040; }
+
+.logo-img{
+    width:50px;
+    height:50px;
+    object-fit:contain;
+    margin:0;
+}
 
 .nav-links {
     display: flex;
@@ -297,7 +312,7 @@ body {
 .modal-overlay, .popup-background {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(255, 255, 255, 0.6);
     display: none;
     justify-content: center;
     align-items: center;
@@ -306,10 +321,15 @@ body {
 }
 
 .modal-content, .popup-box {
-    max-width: 500px;
+   max-width: 500px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     position: relative;
     animation: slideIn 0.3s ease-out;
 }
+
 
 .close-modal, .close-popup-button {
     position: absolute;
@@ -373,3 +393,4 @@ CSS
     object-fit: contain; /* Keeps the icon proportional without distorting */
     display: block;    /* Removes default inline bottom spacing gaps */
 }
+

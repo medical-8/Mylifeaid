@@ -79,13 +79,15 @@ nextBtn.onclick = () => {
     const userInput = idInput.value.trim();
 
     if (userInput === "") {
-        alert("Verification required. Please enter your ID / Staff validation number.");
+        openPopup("Verification required.",
+            " Please enter your ID / Staff validation number.");
         return;
     }
 
     // Dynamic South African Identification Parsing Rule
     if (btnStaff.classList.contains('active') && userInput.length !== 13) {
-        alert("Invalid Formatting: Standard National Staff IDs must follow the 13-digit identification configuration.");
+        openPopup("Invalid Formatting:",
+            "Standard National Staff IDs must follow the 13-digit identification configuration.");
         return;
     }
 
@@ -172,14 +174,14 @@ function attachModalDynamicEvents() {
             const role = document.getElementById('regRole').value;
             
             if(!name || !email) {
-                alert("Please fill out your profile registration fields.");
+                openPopup("","Please fill out your profile registration fields.");
                 return;
             }
             
-            alert(`Registration process completed for ${name}! Welcome onboard.`);
+            openPopup("",`Registration process completed for ${name}! Welcome onboard.`);
             closeModal();
 
-            // Redirect to dashboard layout if registered user is an ADMIN
+            // Redirect to dashboard layout if registered user is an ADMING
             if (role === 'admin') {
                 window.location.href = "dashedboard_index.html";
             }

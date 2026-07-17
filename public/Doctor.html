@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="doctor.css">
 </head>
 <body>
-
+    
     <nav class="navbar">
+        
         <div class="logo-group">
             <div class="logo-icon">
-                <img src="images/MYLIFEAID LOGO-Photoroom.png" alt="MyLifeAid Logo" class="admin-logo-img" style="height: 40px; display: none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
-                <span style="display: none; font-size: 24px;">🔑</span>
+                <img src="MYAID-LOGO.png" alt="MyLifeAid Logo" class="logo-img">
+
             </div>
             <div class="logo-text">
                 <h2><span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span></h2>
@@ -29,7 +30,7 @@
                 <span id="user-display-name">Dr. N. Dlamini | General practitioner</span>
             </div>
             <button class="logout-btn" onclick="window.location.href='staff_index.html'">
-                <span>🚪 Log Out</span>
+                <span> Log Out</span>
             </button>
         </div>
     </nav>
@@ -38,7 +39,10 @@
             
         <div class="welcome-banner">
             <h3>Welcome Dr. N. Dlamini</h3>
-            <span class="date-stamp">23 May 2025 | 09:16 AM</span>
+            <div class="date-time">
+             <span id="current-date"></span> |
+             <span id="current-time"></span>
+</div>
         </div>
 
         <div class="card full-width">
@@ -168,3 +172,6 @@
             </div>
 
         </div>
+        <script src="doctor.js"></script>
+</body>
+    
