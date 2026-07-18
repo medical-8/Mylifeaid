@@ -53,7 +53,7 @@ document.getElementById("helpButton").onclick = () => {
 };
 
 document.getElementById("userButton").onclick = () => {
-    openPopup("User Profile Status", "No User Session Detected.\nPlease sign up or log in to view active medical credentials.");
+    openPopup("User Profile Status", "No User Session Detected.\nPlease enter your Staff or Admin number to view active medical credentials.");
 };
 
 /* ================================================= */
@@ -92,31 +92,23 @@ nextBtn.onclick = () => {
     }
 
     // Track if the user selected Admin for the registration setup
-    const userRole = btnAdmin.classList.contains('active') ? 'admin' : 'staff';
+    nextBtn.onclick = () => {
+        const userInput = idInput.value.trim();
 
-    // Load Form Phase 2 inside dynamic Modal view
-    openModal(`
-        <h3 style="margin-bottom:20px; color:#1D4352;">Account Verification</h3>
-        <input type="hidden" id="regRole" value="${userRole}">
-        <div class="input-group">
-            <label>Full Legal Name</label>
-            <input type="text" id="regName" placeholder="Enter full name and surname">
-        </div>
-        <div class="input-group">
-            <label>Secure Email Address</label>
-            <input type="email" id="regEmail" placeholder="name@hospital.com">
-        </div>
-        <div class="input-group">
-            <label>Mobile Contact Number</label>
-            <input type="tel" id="regPhone" placeholder="e.g. +27 82 123 4567">
-        </div>
-        <div class="input-group">
-            <label>Create Password</label>
-            <input type="password" id="regPass" placeholder="••••••••">
-        </div>
-        <button class="final-signup-btn" id="createBtn">CREATE ACCOUNT</button>
-        <p class="login-note">Already have an account? <a href="#" id="modalToLoginLink">Login here</a></p>
-    `);
+        if (userInput === "") {
+            openPopup(
+                "Verification Required",
+                "Please enter your Staff ID or Admin ID."
+            );
+            return;
+        }
+
+        if (btnStaff.classList.contains("active")) {
+            window.location.href = "doctor.html";
+        } else if (btnAdmin.classList.contains("active")) {
+            window.location.href = "admin_dashboard.html";
+        }
+    };
 };
 
 // Render Login Interface Directly
@@ -132,7 +124,6 @@ function renderLoginModal() {
             <input type="password" id="loginPass" placeholder="••••••••">
         </div>
         <button class="final-signup-btn" id="submitLoginBtn">LOGIN</button>
-        <p class="login-note">New to the platform? <a href="#" id="modalToSignupLink">Create an account</a></p>
     `);
 }
 
@@ -141,7 +132,6 @@ document.getElementById("loginHeaderBtn").onclick = (e) => {
     e.preventDefault();
     renderLoginModal();
 };
-
 /* ================================================= */
 /* DYNAMIC CONTEXT EVENT LISTENERS */
 /* ================================================= */
