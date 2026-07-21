@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyLifeAid - Resource Management</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"> 
+    <title>MyLifeAid - Facility Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="staff_style.css">
+    
+    <style>
+        /* Fallback CSS for the new login inputs to ensure they look good if not in your staff_style.css */
+        .input-box { margin-bottom: 15px; text-align: left; }
+        .input-box label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #1D4352; text-transform: uppercase; }
+        .input-box input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Space Grotesk', sans-serif; box-sizing: border-box; }
+        #login-error { color: #e74c3c; font-size: 13px; margin-top: 10px; display: none; text-align: center; font-weight: 600;}
+    </style>
 </head>
 <body>
 
     <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="logo-group"> 
-        <img src="MYAID-LOGO.png"
-        alt="MyAid Logo"
-        class="logo-img">
+        <div class="logo-group">
             <div class="logo">
                 <span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span>
             </div>
@@ -45,8 +52,7 @@
 
         <div class="navbar-right">
             <button class="help-button" id="helpButton">Need help?</button>
-            <button class="login-button" id="loginHeaderBtn">Login</button>
-            <div class="user-icon" id="userButton" style="font-size:24px; color:white; cursor:pointer;">👤</div>
+            <button class="login-button" id="loginHeaderBtn" onclick="window.location.href='healthcare-auth.html'">Register Facility</button>
         </div>
     </nav>
 
@@ -76,36 +82,47 @@
             </div>
         </div>
 
-        <!-- INITIAL SIGNUP CARD -->
+        <!-- REVISED LOGIN CARD -->
         <div class="signup-card">
-            <h3>WELCOME TO MYLIFEAID SIGN-UP</h3>
+            <h3>FACILITY SECURE LOGIN</h3>
+            
             <div class="tabs">
-                <button id="btn-Staff" class="active">STAFF</button>
-                <button id="btn-Admin">ADMIN</button>
+                <button id="btn-Staff" class="active" onclick="switchTab('Staff')">STAFF</button>
+                <button id="btn-Admin" onclick="switchTab('Admin')">ADMIN</button>
             </div>
-            <div class="input-box">
-                <label id="id-label">STAFF NUMBER</label>
-                <input type="text" placeholder="Enter STAFF ID" id="id-input">
-            </div>
-            <button class="next-btn" id="nextBtn">Next →</button>
-            <div class="info-text">
+            
+            <form id="loginForm" style="margin-top: 20px;">
+                <div class="input-box">
+                    <label id="id-label">STAFF NUMBER</label>
+                    <input type="text" placeholder="Enter your ID Number" id="login-staff-id" required>
+                </div>
+                
+                <div class="input-box">
+                    <label>PASSWORD</label>
+                    <input type="password" placeholder="Enter your password" id="login-password" required>
+                </div>
+
+                <div id="login-error"></div>
+                
+                <button type="submit" class="next-btn" id="loginBtn" style="margin-top: 15px; width: 100%; cursor: pointer;">Login →</button>
+            </form>
+            
+            <div class="info-text" style="margin-top: 20px;">
                 <span class="lock-icon">ⓘ</span>
-                <p>Your  STAFF/ADMIN ID acts as your unique Username. This ensures one record of all your engagements with us.</p>
+                <p>Please log in using your assigned Staff/Admin Number and password. New staff must check their email for setup instructions.</p>
             </div>
         </div>
     </main>
 
-    <!-- INTERACTIVE FLOATING MODAL OVERLAY (Used for Sign-Up Flow and Menus) -->
+    <!-- INTERACTIVE FLOATING MODAL OVERLAY -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <button class="close-modal" id="closeModalBtn">&times;</button>
-            <div id="modalBody">
-                <!-- Content gets dynamically populated by JS -->
-            </div>
+            <div id="modalBody"></div>
         </div>
     </div>
 
-    <!-- PERSISTENT POPUP WINDOW (Used for Help / Quick Info) -->
+    <!-- PERSISTENT POPUP WINDOW -->
     <div class="popup-background" id="popupBackground">
         <div class="popup-box">
             <button class="close-popup-button" id="closePopupButton">&times;</button>
@@ -113,9 +130,116 @@
             <p id="popupMessage" style="line-height: 1.6; color:#4A6273; white-space: pre-line;"></p>
         </div>
     </div>
-    <div id="messageBox" class="message-box"></div>
+
 
     <script src="staff_script.js"></script>
     
+    <!-- ================= FIREBASE LOGIN LOGIC ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collectionGroup, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+            authDomain: "mylaid-f9947.firebaseapp.com",
+            projectId: "mylaid-f9947",
+            storageBucket: "mylaid-f9947.firebasestorage.app",
+            messagingSenderId: "315125553793",
+            appId: "1:315125553793:web:af4ac3618e0531fa190b80"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        
+        let selectedRole = 'Staff';
+
+        btnAdmin.addEventListener('click', function () {
+            selectedRole = 'Admin';
+        });
+
+        btnStaff.addEventListener('click', function () {
+            selectedRole = 'Staff';
+        });
+
+        // UI Tab Switcher
+        window.switchTab = function(role) {
+            selectedRole = role;
+            const btnStaff = document.getElementById('btn-Staff');
+            const btnAdmin = document.getElementById('btn-Admin');
+            const idLabel = document.getElementById('id-label');
+            
+            if(role === 'Staff') {
+                btnStaff.classList.add('active');
+                btnAdmin.classList.remove('active');
+                idLabel.innerText = "STAFF NUMBER";
+            } else {
+                btnAdmin.classList.add('active');
+                btnStaff.classList.remove('active');
+                idLabel.innerText = "ADMIN NUMBER";
+            }
+        }
+
+        // Login Submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const staffId = document.getElementById('login-staff-id').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorBox = document.getElementById('login-error');
+            const loginBtn = document.getElementById('loginBtn');
+
+            errorBox.style.display = 'none';
+            loginBtn.innerText = "Locating Profile...";
+            loginBtn.disabled = true;
+
+            try {
+                // 1. Query Firestore across all 'team' subcollections to find the matching staff number
+                const teamQuery = query(
+                    collectionGroup(db, 'team'), 
+                    where('staffNumber', '==', staffId),
+                    where('role', '==', selectedRole)
+                );
+
+                const querySnapshot = await getDocs(teamQuery);
+
+                if (querySnapshot.empty) {
+                    throw new Error(`Invalid ${selectedRole} Number. Please check your ID and selected tab.`);
+                }
+
+                // 2. Extract the hidden email address from the profile
+                const staffProfile = querySnapshot.docs[0].data();
+                const registeredEmail = staffProfile.email;
+
+                if (!registeredEmail) {
+                    throw new Error("No email linked to this account. Contact your administrator.");
+                }
+
+                loginBtn.innerText = "Authenticating...";
+
+                // 3. Sign in securely using the retrieved email and provided password
+                await signInWithEmailAndPassword(auth, registeredEmail, password);
+                
+                // Redirect based on selected role
+                if (selectedRole === 'Admin') {
+                    window.location.href = "dashedboard_index.html";
+                } else {
+                    window.location.href = "Doctor.html";
+                }
+
+            } catch (error) {
+                console.error("Login Error:", error);
+                // Simplify Firebase errors for the user
+                let msg = error.message;
+                if (msg.includes('auth/invalid-credential')) msg = "Incorrect password.";
+                
+                errorBox.innerText = msg;
+                errorBox.style.display = 'block';
+                loginBtn.innerText = "Login →";
+                loginBtn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
