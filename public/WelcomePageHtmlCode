@@ -1,91 +1,1609 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyLifeAid</title>
-    <link rel="stylesheet" href="style.css">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MyLifeAid</title>
+
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- BOXICONS -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- LEAFLET MAP -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="patienthomepagestyle.css">
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- RESPONSIVE LAYOUT ENHANCEMENTS -->
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      width: 100%;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* NAVBAR RESPONSIVENESS */
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 5%;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* HERO SECTION RESPONSIVENESS */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: stretch;
+      padding: 2rem 5%;
+      gap: 30px;
+      width: 100%;
+    }
+
+    .hero-left {
+      flex: 1 1 450px;
+      min-width: 280px;
+    }
+
+    .signup-card {
+      flex: 1 1 320px;
+      max-width: 450px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .value-props {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .prop-item {
+      flex: 1 1 140px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* SEARCH CONTAINER RESPONSIVENESS */
+    .search-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 1.5rem 5%;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .search-container input {
+      flex: 1 1 280px;
+      max-width: 600px;
+      padding: 12px 16px;
+      box-sizing: border-box;
+    }
+
+    .search-container button {
+      padding: 12px 24px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    /* MAIN SECTION (MAP & HOSPITAL LIST) RESPONSIVENESS */
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 1rem 5%;
+      gap: 20px;
+      min-height: 500px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hospital-list {
+      flex: 1 1 300px;
+      max-height: 600px;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    #map {
+      flex: 2 1 400px;
+      min-height: 400px;
+      width: 100%;
+      border-radius: 8px;
+      z-index: 1;
+    }
+
+    /* FEATURES PANEL RESPONSIVENESS */
+    .features-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 2rem 5%;
+      gap: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .feature-item {
+      flex: 1 1 250px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* POPUP & MODAL RESPONSIVENESS */
+    .popup-background,
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .popup-box,
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+    }
+
+    .close-popup-button,
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-group input[type="text"],
+    .input-group input[type="email"],
+    .input-group input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .final-signup-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    /* MEDIA QUERIES FOR TABLETS AND MOBILE DEVICES */
+    @media (max-width: 992px) {
+      .hero {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-left,
+      .signup-card {
+        max-width: 100%;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+
+      .navbar-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .main {
+        flex-direction: column-reverse;
+      }
+
+      #map {
+        height: 350px;
+        min-height: 300px;
+      }
+
+      .hospital-list {
+        max-height: 350px;
+      }
+
+      .search-container input {
+        flex: 1 1 100%;
+      }
+
+      .search-container button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .value-props {
+        flex-direction: column;
+      }
+
+      .prop-item {
+        width: 100%;
+      }
+
+      .popup-box,
+      .modal-content {
+        padding: 18px;
+      }
+    }
+  </style>
+
 </head>
+
 <body>
 
-    <div class="container">
+  <!-- ================= NAVBAR ================= -->
 
-        <!-- LEFT SIDE -->
-        <div class="left-panel">
+  <nav class="navbar">
 
-<header class="header">
+    <div class="logo-group">
 
-    <div class="logo-container">
+      <img src="MYAID-LOGO.png"
+        alt="MyAid Logo"
+        class="logo-img">
 
-        <img src="Image/MyLifeAidLogo.png" alt="logo" class="logo">
+      <div class="logo-text">
+        <a href="#">
+          <span class="my">MY</span>
+          <span class="life">Life</span>
+          <span class="aid">Aid</span>
+        </a>
+      </div>
 
-        <h2 class="brand-name">
-            <span class="my">My</span><span class="life">Life</span><span class="aid">Aid</span>
+    </div>
+
+    <ul class="nav-links">
+
+      <li class="nav-item dropdown">
+
+        <a href="#">
+          About Us
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+
+        <ul class="dropdown-menu">
+          <li><a href="#" id="ourStoryButton">Our Story</a></li>
+          <li><a href="#" id="theTeamButton">The Team</a></li>
+        </ul>
+
+      </li>
+
+      <li class="nav-item dropdown">
+
+        <a href="#">
+          Services
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+
+        <ul class="dropdown-menu">
+          <li><a href="#" id="bedAvailabilityBtn">Bed Availability</a></li>
+          <li><a href="#" id="emergencySearchBtn">Emergency Search</a></li>
+          <li><a href="#" id="userPortalBtn">User Portal</a></li>
+        </ul>
+
+      </li>
+
+      <li class="nav-item dropdown">
+
+        <a href="#">
+          Resources
+          <i class="fa-solid fa-chevron-down"></i>
+        </a>
+
+        <ul class="dropdown-menu">
+          <li><a href="#" id="faqBtn">FAQ</a></li>
+        </ul>
+
+      </li>
+
+    </ul>
+    
+    <div class="navbar-right">
+
+      <button class="help-button" id="helpButton">
+        Need Help?
+      </button>
+
+      <div class="user-icon" id="userButton">
+        <i class='bx bxs-user-circle'></i>
+      </div>
+
+    </div>
+
+  </nav>
+
+  <!-- ================= HERO SECTION ================= -->
+
+  <section class="hero">
+
+    <div class="hero-left">
+
+      <div class="hero-text">
+
+        <h1>
+          Welcome to the future of Resource Management
+        </h1>
+
+        <p>
+          MyLifeAid empowers you to search and find hospitals,
+          check availability, and manage your health.
+        </p>
+
+      </div>
+
+      <!-- VALUE PROPS -->
+
+      <div class="value-props">
+
+        <div class="prop-item">
+          <div class="icon-circle">
+            <i class='bx bx-building-house'></i>
+          </div>
+
+          <div class="prop-text">
+            <h4>Find Hospitals</h4>
+            <p>Near You</p>
+          </div>
+        </div>
+
+        <div class="prop-item">
+          <div class="icon-circle">
+            <i class='bx bx-calendar-check'></i>
+          </div>
+
+          <div class="prop-text">
+            <h4>Check Real-time</h4>
+            <p>Availability</p>
+          </div>
+        </div>
+
+        <div class="prop-item">
+          <div class="icon-circle">
+            <i class='bx bx-shield-quarter'></i>
+          </div>
+
+          <div class="prop-text">
+            <h4>Secure & Private</h4>
+            <p>Your Data</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SIGNUP CARD -->
+
+    <div class="signup-card">
+
+      <h3>WELCOME TO MYLIFEAID SIGN-UP</h3>
+
+
+      <button class="next-btn" id="nextBtn">Create Account</button>
+      <button class="next-btn" id="loginBtn">Login</button>
+
+    </div>
+
+  </section>
+
+  <!-- ================= SEARCH ================= -->
+
+  <div class="search-container">
+
+    <input type="text"
+      id="searchInput"
+      placeholder="Search for hospitals or locations...">
+
+    <button id="searchBtn">
+      Search Hospitals
+    </button>
+
+  </div>
+
+  <!-- ================= MAIN ================= -->
+
+  <section class="main">
+
+    <div class="hospital-list">
+
+      <h3>Nearby Hospitals</h3>
+
+      <div id="hospitalList"></div>
+
+    </div>
+
+    <div id="map"></div>
+
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+
+  <section class="features-panel">
+
+    <div class="feature-item">
+      <i class='bx bx-time-five feature-icon'></i>
+
+      <div class="feature-text">
+        <h4>Real-time Updates</h4>
+        <p>Live information at your fingertips</p>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <i class='bx bx-check-shield feature-icon'></i>
+
+      <div class="feature-text">
+        <h4>Trusted & Verified</h4>
+        <p>All facilities are verified</p>
+      </div>
+    </div>
+
+    <div class="feature-item">
+      <i class='bx bx-group feature-icon'></i>
+
+      <div class="feature-text">
+        <h4>Easy & Accessible</h4>
+        <p>Designed for everyone</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= POPUP ================= -->
+
+  <div class="popup-background" id="popupBackground">
+
+    <div class="popup-box">
+
+      <button class="close-popup-button"
+        id="closePopupButton">
+
+        &times;
+
+      </button>
+
+      <div id="popupContent"></div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= MODAL ================= -->
+
+  <div class="modal-overlay" id="modalOverlay">
+
+    <div class="modal-content">
+
+      <button class="close-modal"
+        id="closeModalBtn">
+
+        &times;
+
+      </button>
+
+      <div id="modalBody"></div>
+
+    </div>
+
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+
+/* ================================================= */
+/* HOSPITAL DATABASE */
+/* ================================================= */
+
+/*
+This array stores all hospital information.
+
+Each hospital object contains:
+- name
+- latitude
+- longitude
+- address
+- phone
+- city
+
+The map uses latitude + longitude
+to place markers.
+*/
+
+const hospitalsData = [
+
+     {
+        name: "Hillbrow Clinic",
+        lat: -26.1935691,
+        lng: 28.0428001,
+        address: "51 Klein Street, Hillbrow",
+        phone: "+27 11 694 3700",
+        city: "Johannesburg"
+    },
+    {
+        name: "Esselen Street Clinic",
+        address: "17 Esselen Street, Hillbrow",
+        lat: -26.1907234,
+        lng: 28.0425418,
+        phone: "+27 61 626 6078",
+        city: "Johannesburg"
+
+    },
+    {
+        name: "Yeoville Clinic",
+        lat: -26.1810683,
+        lng: 28.0619894,
+        address: "Corner of Hopkins & Kenmere Rd",
+        phone: "+27 11 837 9119",
+        city: "Johannesburg"
+    },
+    {
+        name: "Civic Centre Clinic",
+        lat: -26.1019,
+        lng: 28.2233251,
+        address: "Civic Centre, Braamfontein",
+        phone: "+27 11 477 9936",
+        city: "Johannesburg"
+    },
+    {
+        name: "Orchards Clinic",
+        lat: -26.1545872,
+        lng: 28.0830545,
+        address: "Oaklands Road, Oaklands",
+        phone: "+27 83 281 6054",
+        city: "Johannesburg"
+    },
+    {
+        name: "Jeppe Clinic",
+        lat: -26.2061647,
+        lng: 28.0652277,
+        address: "34 Ford Street, Jeppestown",
+        phone: "+27 11 614 1474",
+        city: "Johannesburg"
+    },
+    {
+        name: "Hillbrow Poly Municipal Clinic",
+        lat: -26.191699,
+        lng: 28.0430151,
+        address: "Braamfontein, Johannesburg",
+        phone: "+27 11 720 1121",
+        city: "Johannesburg"
+    }
+
+];
+
+/* ================================================= */
+/* GLOBAL VARIABLES */
+/* ================================================= */
+
+/*
+map = stores leaflet map
+
+markers = stores all map markers
+*/
+
+let map;
+let markers = [];
+
+/* ================================================= */
+/* INITIALIZE MAP */
+/* ================================================= */
+
+function initMap() {
+
+    /*
+    Create map inside div with id="map"
+
+    setView([lat,lng], zoomLevel)
+    */
+
+    map = L.map('map').setView(
+        [-26.1881, 28.246],
+        11
+    );
+
+    /*
+    Add map tiles
+
+    This is the visual map layer
+    */
+
+    L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        {
+            attribution:
+                '&copy; OpenStreetMap &copy; CARTO',
+
+            subdomains: 'abcd',
+
+            maxZoom: 19
+        }
+    ).addTo(map);
+
+    /*
+    Display all hospitals immediately
+    */
+
+    displayHospitals(hospitalsData);
+}
+
+/* ================================================= */
+/* DISPLAY HOSPITALS */
+/* ================================================= */
+
+function displayHospitals(hospitals) {
+
+    /*
+    Remove old markers from map
+    */
+
+    markers.forEach(marker => {
+        map.removeLayer(marker);
+    });
+
+    markers = [];
+
+    /*
+    Get hospital sidebar
+    */
+
+    const hospitalList =
+        document.getElementById('hospitalList');
+
+    /*
+    If no hospitals found
+    */
+
+    if (hospitals.length === 0) {
+
+        hospitalList.innerHTML = `
+            <div class="loading">
+                No hospitals found.
+            </div>
+        `;
+
+        return;
+    }
+
+    /*
+    Clear old hospital cards
+    */
+
+    hospitalList.innerHTML = '';
+
+    /*
+    Loop through hospitals
+    */
+
+    hospitals.forEach((hospital, index) => {
+
+        /*
+        CREATE HOSPITAL CARD
+        */
+
+        const hospitalDiv =
+            document.createElement('div');
+
+        hospitalDiv.className =
+            'hospital-card';
+
+        /*
+        Insert hospital data
+        */
+
+        hospitalDiv.innerHTML = `
+
+            <h4>${hospital.name}</h4>
+
+            <p>${hospital.address}</p>
+
+            <p>${hospital.phone}</p>
+
+            <div class="city">
+                ${hospital.city}
+            </div>
+
+        `;
+
+        /*
+        CLICK CARD -> CENTER MAP
+        */
+
+        hospitalDiv.onclick = () => {
+
+            map.setView(
+                [hospital.lat, hospital.lng],
+                16
+            );
+
+            markers[index].openPopup();
+        };
+
+        /*
+        Add card to sidebar
+        */
+
+        hospitalList.appendChild(
+            hospitalDiv
+        );
+
+        /* ================================================= */
+        /* CREATE MAP MARKER */
+        /* ================================================= */
+
+        /*icon*/
+        const myIcon = L.icon({
+            iconUrl: 'images/generic.png',
+            iconSize: [30, 30]
+        });
+
+        const marker =
+            L.marker([
+                hospital.lat,
+                hospital.lng
+            ], { icon: myIcon }).addTo(map);
+
+        /*
+        POPUP CONTENT
+        */
+
+        marker.bindPopup(`
+
+            <strong>
+                ${hospital.name}
+            </strong>
+
+            <br>
+
+            ${hospital.address}
+
+            <br>
+
+            ${hospital.phone}
+
+            <br><br>
+
+            <a
+                href="https://www.google.com/maps/dir/?api=1&destination=${hospital.lat},${hospital.lng}"
+                target="_blank">
+
+                Get Directions →
+
+            </a>
+
+        `);
+
+        /*
+        Save marker
+        */
+
+        markers.push(marker);
+
+    });
+
+    /*
+    AUTO FIT MAP TO ALL MARKERS
+    */
+
+    const bounds = L.latLngBounds(
+        hospitals.map(h =>
+            [h.lat, h.lng]
+        )
+    );
+
+    map.fitBounds(bounds);
+}
+
+/* ================================================= */
+/* SEARCH FUNCTION */
+/* ================================================= */
+
+function searchHospitals() {
+
+    /*
+    Get search input
+    */
+
+    const query =
+        document.getElementById('searchInput')
+        .value
+        .trim()
+        .toLowerCase();
+
+    /*
+    Empty search protection
+    */
+
+    if (query === "") {
+
+        alert(
+            "Please enter a location"
+        );
+
+        return;
+    }
+
+    /*
+    Filter hospitals
+
+    includes() checks if text exists
+    */
+
+    const filtered =
+        hospitalsData.filter(hospital =>
+
+            hospital.city
+            .toLowerCase()
+            .includes(query)
+
+            ||
+
+            hospital.name
+            .toLowerCase()
+            .includes(query)
+        );
+
+    /*
+    If hospitals found
+    */
+
+    if (filtered.length > 0) {
+
+        displayHospitals(filtered);
+
+    } else {
+
+        /*
+        No hospitals found
+        */
+
+        document.getElementById(
+            'hospitalList'
+        ).innerHTML = `
+
+            <div class="loading">
+                No hospitals found.
+            </div>
+
+        `;
+    }
+}
+
+/* ================================================= */
+/* POPUP SYSTEM */
+/* ================================================= */
+
+const popupBackground =
+    document.getElementById(
+        "popupBackground"
+    );
+
+const popupContent =
+    document.getElementById(
+        "popupContent"
+    );
+
+/*
+OPEN POPUP
+*/
+
+function openPopup(title, message) {
+
+    popupContent.innerHTML = `
+
+        <h2 style="
+            margin-bottom:15px;
+            color:#1D4352;
+        ">
+
+            ${title}
+
         </h2>
 
+        <p style="
+            line-height:1.7;
+        ">
+
+            ${message}
+
+        </p>
+
+    `;
+
+    popupBackground.style.display =
+        "flex";
+}
+
+/*
+CLOSE POPUP
+*/
+
+function closePopup() {
+
+    popupBackground.style.display =
+        "none";
+}
+
+/* ================================================= */
+/* HELP BUTTON */
+/* ================================================= */
+
+document.getElementById(
+    "helpButton"
+).onclick = () => {
+
+    openPopup(
+        "Need Help?",
+        "Call: 0800 123 456"
+    );
+};
+
+/* ================================================= */
+/* USER BUTTON */
+/* ================================================= */
+
+document.getElementById(
+    "userButton"
+).onclick = () => {
+    /*
+    SUCCESS MODAL
+    */
+
+    openModal(
+
+        'Account Verification',
+
+        `
+        <form id= "signup-form">
+        <div class="input-group">
+
+            <label>Full Name</label>
+
+            <input
+                type="text" id="fullName" name="fullName" required
+                placeholder="Enter your full name">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Email Address</label>
+
+            <input
+                type="email" id="SignEmail" name="email" required
+                placeholder="Enter your email">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>phone number</label>
+
+            <input
+                type="text" id="SignPhone" name="phone" required
+                placeholder="Enter your phone number">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+                type="password" id="SignPassword" name="password" required
+                placeholder="Create a password">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Confirm Password</label>
+
+            <input
+                type="password"
+                placeholder="......">
+
+        </div>
+        <div class="input-group remember-me">
+    <label>
+        <input type="checkbox" id="rememberMe">
+        Remember me
+    </label>
     </div>
+        <button type="button" class="final-signup-btn"
+            id="createBtn">
 
-</header>
+            CREATE ACCOUNT
 
-            <div class="hero-text">
-                <h1>
-                    Your Health.<br>
-                    Our Precision.<br>
-                    One Tap Away.
-                </h1>
+        </button>
+        </form>
 
-                <p>
-                    From checking hospital location to AI-assisted care
-                    navigation in seconds.....
-                </p>
+        <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
 
-                <div class="buttons">
-                    <button onclick="goToPatient(this)">I'M A PATIENT</button>
+        `
+        
+    );
 
-<button class="staff-btn" onclick="goToStaff(this)">
-    I'M STAFF
-</button>
+
+
+   const loginLink =
+    document.getElementById(
+        "loginLinkModal"
+        
+    );
+ 
+
+if (loginLink) {
+    loginLink.onclick = (e) => {
+        e.preventDefault();
+
+        openModal(
+            'Login',
+            `
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
                 </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <!--Add forgot password link.-->
+                <a href="#" id="forgotPasswordLink" style= "text-decoration: underline; color: black;">Forgot Password?</a>
+                <button type="submit" class="final-signup-btn">LOGIN</button>
+            </form>
+            `
+        );
 
-                <p class="trust-text">
-                    Trusted by 200+ clinics and 500+ patients
-                </p>
-            </div>
+    };
+} 
+};
 
-            <footer>
-    <a href="pages/help.html" onclick="return goToHelp(this, event)">Help</a>
-    <a href="pages/contact.html" onclick="return goToContact(this, event)">Contact</a>
-    <a href="pages/about.html" onclick="return goToAbout(this, event)">About Us</a>
-</footer>
+/* ================================================= */
+/* CLOSE POPUP EVENTS */
+/* ================================================= */
+
+document.getElementById(
+    "closePopupButton"
+).onclick = closePopup;
+
+/*
+Close when clicking background
+*/
+
+popupBackground.onclick = (event) => {
+
+    if (event.target === popupBackground) {
+
+        closePopup();
+    }
+};
+
+/* ================================================= */
+/* MODAL SYSTEM */
+/* ================================================= */
+
+const modalOverlay = document.getElementById('modalOverlay');
+const modalBodyDiv = document.getElementById('modalBody');
+const closeModalBtn = document.getElementById('closeModalBtn');
+/*
+OPEN MODAL
+*/
+
+function openModal(titleText, bodyHtml) {
+modalBodyDiv.innerHTML = `
+<h3 style="margin-bottom:15px; color:#1D4352; font-family:'Space Grotesk', sans-serif;">${titleText}</h3>
+<div style="line-height:1.6; font-family:'Space Grotesk', sans-serif;">${bodyHtml}</div>
+`;
+modalOverlay.style.display = 'flex';
+}
+//close modal
+function closeModal() {
+modalOverlay.style.display = 'none';
+}
+
+//info modal with custom content
+function showInfoModal(title, message) {
+openModal(title, `<p style="white-space: pre-line; font-family:'Space Grotesk', sans-serif;">${message}</p>`);
+}
+
+/* ================================================= */
+/* DROPDOWN BUTTON EVENTS */
+/* ================================================= */
+
+document.getElementById(
+    'ourStoryButton'
+).onclick = (e) => {
+
+    e.preventDefault();
+
+    showInfoModal(
+        'Our Story',
+
+        'MyLifeAid was founded in 2026 to connect people with healthcare resources instantly.'
+    );
+};
+
+document.getElementById(
+    'theTeamButton'
+).onclick = (e) => {
+
+    e.preventDefault();
+
+    showInfoModal(
+        'The Team',
+
+        'Medical 8 :8 UJ Students'
+    );
+};
+
+document.getElementById(
+    'bedAvailabilityBtn'
+).onclick = (e) => {
+
+    e.preventDefault();
+
+    showInfoModal(
+        'Bed Availability',
+
+        `
+            search for bed Availability on map
+        `
+    );
+};
+
+document.getElementById(
+    'emergencySearchBtn'
+).onclick = (e) => {
+
+    e.preventDefault();
+
+    showInfoModal(
+        'Emergency Numbers',
+
+        `
+Ambulance: 10177
+
+Police: 10111
+
+National Emergency: 112
+        `
+    );
+};
+
+document.getElementById(
+    'faqBtn'
+).onclick = (e) => {
+
+    e.preventDefault();
+
+    showInfoModal(
+        'FAQ',
+
+        `
+Q: How do I search?
+
+A: Use the search bar.
+
+Q: Is my data safe?
+
+A: Yes.
+        `
+    );
+};
+
+
+/* ================================================= */
+/* SEARCH EVENTS */
+/* ================================================= */
+
+/*
+Button click
+*/
+
+document.getElementById(
+    'searchBtn'
+).onclick = searchHospitals;
+
+/*
+Enter key support
+*/
+
+document.getElementById(
+    'searchInput'
+).addEventListener(
+
+    'keypress',
+
+    (e) => {
+
+        if (e.key === 'Enter') {
+
+            searchHospitals();
+        }
+    }
+);
+
+/* ================================================= */
+/* CLOSE MODAL EVENTS */
+/* ================================================= */
+
+closeModalBtn.onclick =
+    closeModal;
+
+modalOverlay.onclick = (e) => {
+
+    if (e.target === modalOverlay) {
+
+        closeModal();
+    }
+};
+
+/* ================================================= */
+/* START MAP */
+/* ================================================= */
+
+/*
+This MUST be last
+
+Starts entire application
+*/
+
+initMap();
+
+/* ================================================= */
+/* NEXT BUTTON FUNCTIONALITY */
+/* ================================================= */
+
+const nextBtn = document.getElementById(
+    'nextBtn'
+);
+
+nextBtn.onclick = () => {
+    /*
+    SUCCESS MODAL
+    */
+
+    openModal(
+
+        'Account Verification',
+
+        `
+        <form id= "signup-form">
+        <div class="input-group">
+
+            <label>Full Name</label>
+
+            <input
+                type="text" id="fullName" name="fullName" required
+                placeholder="Enter your full name">
 
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="right-panel">
+        <div class="input-group">
 
-           <button class="learn-more" onclick="goToLearnMore(this)">
-    Learn More
-</button>
+            <label>Email Address</label>
 
-            <div class="card location-card">
-                <img src="Image/find care 1.png" height="100" alt="findCare">
-                <span>Find care</span>
-            </div>
-
-            <div class="card booking-card">
-                <img src="Image/book.png" height="100" alt="book">
-                <span>Book fast</span>
-            </div>
-
-            <div class="card live-card">
-                <img src="Image/live better.png" height="100" alt="findCare">
-                <span>Live Better</span>
-            </div>
+            <input
+                type="email" id="SignEmail" name="email" required
+                placeholder="Enter your email">
 
         </div>
 
+        <div class="input-group">
+
+            <label>phone number</label>
+
+            <input 
+                type="text" id="SignPhone" name="phone" required
+                placeholder="Enter your phone number">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+                type="password" id="SignPassword" name="password" required
+                placeholder="Create a password">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Confirm Password</label>
+
+            <input
+                type="password"
+                placeholder="......">
+
+        </div>
+        <div class="input-group remember-me">
+    <label>
+        <input type="checkbox" id="rememberMe">
+        Remember me
+    </label>
     </div>
+        <button class="final-signup-btn" type="button"
+            id="createBtn">
 
-    <script src="script.js"></script>
+            CREATE ACCOUNT
+
+        </button>
+        </form>
+
+        <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
+
+        `
+        
+    );
+
+
+   const loginLink =
+    document.getElementById(
+        "loginLinkModal"
+        
+    );
+ 
+
+if (loginLink){
+
+    loginLink.onclick = (e) => {
+
+        e.preventDefault();
+
+        openModal(
+            'Login',
+            `
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <!--Add forgot password link.-->
+                <a href="#" id="forgotPasswordLink" style= "text-decoration: underline; color: black;">Forgot Password?</a>
+                <button type="submit" class="final-signup-btn">LOGIN</button>
+            </form>
+            `
+        );
+        
+
+    };
+
+}  
+}
+
+
+//LOGIN BTN
+
+const loginBtn = document.getElementById(
+    'loginBtn'
+);
+
+loginBtn.onclick = () => {
+    /*
+    SUCCESS MODAL
+    */
+
+    openModal(
+
+            'Login',
+            `
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <!--Add forgot password link.-->
+                <a href="#" id="forgotPasswordLink" style= "text-decoration: underline; color: black;">Forgot Password?</a>
+                <button type="submit" class="final-signup-btn">LOGIN</button>
+            </form>
+            `
+        
+    );
+
+
+   const signLink =
+    document.getElementById(
+        "signLinkModal"
+        
+    );
+ 
+
+if (signLink){
+
+    signLink.onclick = (e) => {
+
+        e.preventDefault();
+
+        openModal(
+
+        'Account Verification',
+
+        `
+        <form id= "signup-form">
+        <div class="input-group">
+
+            <label>Full Name</label>
+
+            <input
+                type="text" id="fullName" name="fullName" required
+                placeholder="Enter your full name">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Email Address</label>
+
+            <input
+                type="email" id="SignEmail" name="email" required
+                placeholder="Enter your email">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>phone number</label>
+
+            <input 
+                type="text" id="SignPhone" name="phone" required
+                placeholder="Enter your phone number">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+                type="password" id="SignPassword" name="password" required
+                placeholder="Create a password">
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Confirm Password</label>
+
+            <input
+                type="password"
+                placeholder="......">
+
+        </div>
+        <div class="input-group remember-me">
+    <label>
+        <input type="checkbox" id="rememberMe">
+        Remember me
+    </label>
+    </div>
+        <button class="final-signup-btn" type="button"
+            id="createBtn">
+
+            CREATE ACCOUNT
+
+        </button>
+        </form>
+
+        <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
+
+        `
+
+        );
+        
+
+    };
+
+}  
+}
+
+  </script>
+  <script type="module" src="./login.js"></script>
+  <script type="module" src="./signup.js"></script>
+
+  
 </body>
 </html>
