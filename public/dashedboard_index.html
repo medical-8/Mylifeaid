@@ -4,30 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | MyLifeAid</title>
-    <link rel="stylesheet" href="dashboard_styles.css">
+    
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= BASE STYLES ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* ================= HEADER ================= */
+        .admin-header {
+            background-color: #1D4352;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-text .my { font-weight: 700; font-size: 22px; letter-spacing: 1px; }
+        .logo-text .sub-role { font-size: 12px; opacity: 0.8; }
+        .header-controls { display: flex; align-items: center; gap: 20px; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .logout-btn:hover { background: #c0392b; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 28px; color: white; cursor: pointer; }
+
+        /* ================= LAYOUT ================= */
+        .dashboard-container { display: flex; flex: 1; overflow: hidden; position: relative; }
+        
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            transition: transform 0.3s ease;
+            z-index: 5;
+        }
+        .nav-btn {
+            background: none; border: none; width: 100%; text-align: left; padding: 15px 25px;
+            font-size: 16px; color: #555; cursor: pointer; display: flex; align-items: center; gap: 10px;
+            transition: 0.2s;
+        }
+        .nav-btn:hover, .nav-btn.active { background: #e0f2fe; color: #1D4352; border-right: 4px solid #1D4352; font-weight: 600; }
+        .sidebar-footer { margin-top: auto; padding: 20px; font-size: 12px; color: #999; text-align: center; }
+
+        .content-area { flex: 1; padding: 30px; overflow-y: auto; }
+        .admin-card { display: none; background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .admin-card.active { display: block; }
+
+        /* ================= RESOURCES (BEDS) ================= */
+        .resource-grid { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; }
+        .counter-box {
+            flex: 1; min-width: 300px; background: #f8f9fa; border: 1px solid #eee; border-radius: 10px; padding: 25px; text-align: center;
+        }
+        .counter-box h3 { color: #1D4352; margin-bottom: 15px; font-size: 18px; }
+        .counter-controls { display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .counter-controls button {
+            width: 45px; height: 45px; font-size: 24px; border: none; border-radius: 6px;
+            background: #1D4352; color: white; cursor: pointer; transition: 0.2s;
+        }
+        .counter-controls button:hover { background: #15323d; }
+        
+        .counter-controls input[type="number"] {
+            width: 80px; text-align: center; font-size: 24px; font-weight: bold; border: 2px solid #ccc; 
+            border-radius: 6px; padding: 8px 5px; outline: none; color: #1D4352;
+        }
+        .counter-controls input[type="number"]:focus { border-color: #1D4352; }
+        .total-divider { font-size: 24px; color: #666; font-weight: bold; margin: 0 5px; }
+
+        /* ================= PATIENTS TABLE ================= */
+        .search-bar-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-bar-container input { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 15px; }
+        .pill-btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; background: #2ecc71; color: white; transition: 0.2s; font-size: 14px; }
+        .pill-btn:hover { background: #27ae60; }
+        
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        table th, table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        table th { background: #f8f9fa; color: #1D4352; }
+        .badge { padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .badge.pending { background: #fef08a; color: #9a3412; }
+        .badge.accepted { background: #bbf7d0; color: #166534; }
+        .badge.assigned { background: #bfdbfe; color: #075985; }
+
+        .action-btn { background: #1D4352; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px; }
+        .action-btn.accept { background: #2ecc71; }
+        
+        /* ================= MODAL ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
+        .modal-content { background: #fff; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; border: none; background: none; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .detail-item { font-size: 14px; }
+        .detail-item label { color: #666; font-size: 12px; display: block; margin-bottom: 3px; }
+        .detail-item strong { color: #333; }
+        
+        .assign-section { background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-top: 20px; }
+        .assign-section select, .assign-section input { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Space Grotesk', sans-serif; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .sidebar { 
+                position: absolute; 
+                height: 100%; 
+                transform: translateX(-100%); 
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1); 
+            }
+            .sidebar.show { transform: translateX(0); }
+            .content-area { padding: 15px; width: 100%; }
+            .header-controls .user-pill span { display: none; }
+            .modal-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
     <header class="admin-header">
         <div class="logo-area">
-            <img src="images/MYLIFEAID LOGO-Photoroom.png" alt="MyLifeAid Logo" class="admin-logo-img">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <div class="logo-text">
                 <span class="my">MYLIFEAID</span>
-                <p class="sub-role">Admin • Bed & Patient Manager</p>
+                <p class="sub-role" id="hospitalNameDisplay">Loading Facility...</p>
             </div>
         </div>
         <div class="header-controls">
-    <div class="user-pill">
-        <span>👤 User | Admin</span>
-    </div>
-    <button class="logout-btn" onclick="window.location.href='staff_index.html'">
-        <span>🚪 Log Out</span>
-    </button>
-</div>
+            <div class="user-pill" style="font-weight: 600;">
+                <span id="adminNameDisplay">👤 Admin</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">🚪 Log Out</button>
+        </div>
     </header>
 
     <div class="dashboard-container">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <nav>
                 <button class="nav-btn active" onclick="showSection('bed-section', this)">
                     <span class="icon">🛏️</span> Bed Availability
@@ -36,7 +151,7 @@
                     <span class="icon">📋</span> Patient Details
                 </button>
                 <button class="nav-btn" onclick="showSection('chat-section', this)">
-                    <span class="icon">💬</span> Live Chat <span class="badge">3</span>
+                    <span class="icon">💬</span> Live Chat
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -44,132 +159,427 @@
             </div>
         </aside>
 
-        <main class="content-area">
+        <main class="content-area" onclick="closeSidebarOnMobile()">
             
+            <!-- BED AVAILABILITY SECTION -->
             <section id="bed-section" class="admin-card active">
-                <div class="search-bar-container">
-                    <input type="text" placeholder="Search for hospitals, clinics, specialties...">
-                    <div class="filter-group">
-                        <button class="pill-btn">Permissions</button>
-                        <button class="pill-btn">Filter results</button>
-                    </div>
-                </div>
-
-                <div class="form-container">
-                    <h2><span class="icon">🛏️</span> Bed availability & movement</h2>
-                    <div class="input-group full">
-                        <label>Select Hospital *</label>
-                        <input type="text" value="Johannesburg General Hospital">
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <label>Action Type</label>
-                            <select>
-                                <option>Discharge Patient (frees bed)</option>
-                                <option>Admit Patient (occupies bed)</option>
-                                <option>Transfer Ward</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Patient Number / ID</label>
-                            <input type="text" placeholder="e.g PAT-1024">
+                <h2><span class="icon">🛏️</span> Facility Resource Monitors</h2>
+                <p style="color:#666; font-size:14px; margin-top:5px;">Update live bed and emergency slot availability. Changes save automatically.</p>
+                
+                <div class="resource-grid">
+                    <div class="counter-box">
+                        <h3>Available Beds</h3>
+                        <div class="counter-controls">
+                            <button onclick="updateResource('bedsAvailable', -1)">-</button>
+                            <input type="number" id="bedsAvailableInput" value="0" min="0" onchange="setResource('bedsAvailable', this.value)">
+                            <span class="total-divider">/<span id="totalBeds">...</span></span>
+                            <button onclick="updateResource('bedsAvailable', 1)">+</button>
                         </div>
                     </div>
-                    <div class="input-group full">
-                        <label>Current Ward / Bed ID</label>
-                        <input type="text" placeholder="e.g Ward B-Bed 08">
+                    
+                    <div class="counter-box">
+                        <h3>Available Emergency Slots</h3>
+                        <div class="counter-controls">
+                            <button onclick="updateResource('emergencySlotsAvailable', -1)">-</button>
+                            <input type="number" id="slotsAvailableInput" value="0" min="0" onchange="setResource('emergencySlotsAvailable', this.value)">
+                            <span class="total-divider">/<span id="totalSlots">...</span></span>
+                            <button onclick="updateResource('emergencySlotsAvailable', 1)">+</button>
+                        </div>
                     </div>
-                    <button class="action-btn">Update Bed Availability</button>
                 </div>
             </section>
 
+            <!-- PATIENT DETAILS SECTION -->
             <section id="patient-section" class="admin-card">
-                <div class="form-container">
-                    <h2><span class="icon">👩‍⚕️</span> Register And Assign Patients</h2>
-                    <div class="row">
-                        <div class="input-group">
-                            <label>Patient Number / ID</label>
-                            <input type="text" value="PAT-2026-001">
-                        </div>
-                        <div class="input-group">
-                            <label>Full Name</label>
-                            <input type="text" value="THABO MABASO">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <label>Gender</label>
-                            <select><option>MALE</option><option>FEMALE</option></select>
-                        </div>
-                        <div class="input-group">
-                            <label>Contact</label>
-                            <input type="text" value="+27 610868658">
-                        </div>
-                    </div>
-                    <div class="input-group full">
-                        <label>Diagnosis Details</label>
-                        <textarea rows="4">Admitted with respiratory infection.</textarea>
-                    </div>
-                    <div class="row">
-                        <div class="input-group">
-                            <label>Assign Doctor</label>
-                            <input type="text" value="Dr. N. Dlamini">
-                        </div>
-                        <div class="input-group">
-                            <label>Hospital</label>
-                            <input type="text" value="Hellen Joseph">
-                        </div>
-                    </div>
-                    <button class="action-btn">Assign Patient To Doctor</button>
+                <h2><span class="icon">📋</span> Booking & Patient Management</h2>
+                
+                <div class="search-bar-container" style="margin-top:20px;">
+                    <input type="text" id="patientSearch" placeholder="Search by First Name, Surname, or Booking ID...">
+                    <button class="pill-btn" onclick="acceptAllPending()">Accept All Pending</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date & Time</th>
+                                <th>Booking ID</th>
+                                <th>Patient Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <tr><td colspan="5" style="text-align: center;">Loading bookings...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
-            <section id="chat-section" class="admin-card chat-grid">
-                <div class="chat-sidebar">
-                    <div class="chat-item active">
-                        <strong>ER Dept - Chris Hani</strong>
-                        <p>Need urgent bed status...</p>
-                    </div>
-                    <div class="chat-item">
-                        <strong>Dr. Smith</strong>
-                        <p>Patient PAT-2026 ready...</p>
-                    </div>
-                </div>
-                <div class="chat-main">
-                    <div class="chat-messages" id="chatBox">
-                        <div class="msg received">System: Welcome to Live Support.</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="msgInput" placeholder="Type message...">
-                        <button onclick="sendMessage()">Send</button>
-                    </div>
+            <!-- LIVE CHAT SECTION -->
+            <section id="chat-section" class="admin-card">
+                <h2><span class="icon">💬</span> Live Support Chat</h2>
+                <div style="margin-top: 30px; text-align: center; padding: 50px; background: #f8f9fa; border: 2px dashed #ddd; border-radius: 12px;">
+                    <h3 style="color: #1D4352;">Live Chat Integration Coming Soon...</h3>
+                    <p style="color: #666; margin-top: 10px;">The real-time patient support portal will be connected here shortly.</p>
                 </div>
             </section>
 
         </main>
     </div>
 
+    <!-- BOOKING DETAILS MODAL -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h3 style="color:#1D4352; margin-bottom: 20px;">Patient Booking Details</h3>
+            
+            <div class="modal-grid" id="modalDetailsGrid">
+                <!-- Details injected by JS -->
+            </div>
+
+            <div class="assign-section">
+                <h4 style="color:#1D4352; margin-bottom:10px;">Assign to Doctor / Staff</h4>
+                <label style="font-size:12px; color:#666;">Select available staff member:</label>
+                <input list="doctorsList" id="doctorInput" placeholder="Type name or select...">
+                <datalist id="doctorsList">
+                    <!-- Options injected by JS -->
+                </datalist>
+                <input type="hidden" id="modalBookingId">
+                <button class="pill-btn" style="width:100%; margin-top:15px; border-radius:6px; background:#1D4352;" onclick="assignDoctor()">Assign Case</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UI Interaction Script -->
     <script>
         function showSection(sectionId, btn) {
-            // Hide all sections
             document.querySelectorAll('.admin-card').forEach(s => s.classList.remove('active'));
-            // Show selected
             document.getElementById(sectionId).classList.add('active');
-            // Update buttons
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('msgInput');
-            if(input.value.trim() !== "") {
-                const msg = document.createElement('div');
-                msg.className = 'msg sent';
-                msg.innerText = input.value;
-                document.getElementById('chatBox').appendChild(msg);
-                input.value = "";
+            
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('show');
             }
         }
+        function closeModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+        function closeSidebarOnMobile() {
+            if(window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('show');
+            }
+        }
+    </script>
+
+    <!-- ================= FIREBASE LOGIC ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, collectionGroup, query, where, getDocs, doc, getDoc, updateDoc, increment, collection, writeBatch
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+            authDomain: "mylaid-f9947.firebaseapp.com",
+            projectId: "mylaid-f9947",
+            storageBucket: "mylaid-f9947.firebasestorage.app",
+            messagingSenderId: "315125553793",
+            appId: "1:315125553793:web:af4ac3618e0531fa190b80"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let providerId = null;
+        
+        let localBedsTotal = 0;
+        let localSlotsTotal = 0;
+        let localBedsAvailable = 0;
+        let localSlotsAvailable = 0;
+        
+        let allBookings = [];
+        let allStaff = [];
+
+        // 1. Auth Check & Fetch Hospital ID
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const q = query(collectionGroup(db, 'team'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    
+                    if (!snap.empty) {
+                        const adminDoc = snap.docs[0];
+                        providerId = adminDoc.ref.parent.parent.id;
+                        document.getElementById('adminNameDisplay').innerText = `👤 ${adminDoc.data().name} (Admin)`;
+
+                        loadHospitalData();
+                        loadBookings();
+                        loadDoctors();
+                    } else {
+                        alert("Unauthorized access. Admin profile not found.");
+                        signOut(auth);
+                    }
+                } catch (error) {
+                    console.error("Error fetching admin profile:", error);
+                }
+            } else {
+                window.location.href = "staff_index.html";
+            }
+        });
+
+        // 2. Load Hospital Resources
+        async function loadHospitalData() {
+            const hRef = doc(db, 'healthcare_services', providerId);
+            const hSnap = await getDoc(hRef);
+            if (hSnap.exists()) {
+                const data = hSnap.data();
+                document.getElementById('hospitalNameDisplay').innerText = data.name + " Dashboard";
+                
+                localBedsTotal = data.beds || 0;
+                localSlotsTotal = data.emergencySlots || 0;
+                
+                // If available fields don't exist yet, default to total
+                localBedsAvailable = data.bedsAvailable !== undefined ? data.bedsAvailable : localBedsTotal;
+                localSlotsAvailable = data.emergencySlotsAvailable !== undefined ? data.emergencySlotsAvailable : localSlotsTotal;
+                
+                document.getElementById('totalBeds').innerText = localBedsTotal;
+                document.getElementById('totalSlots').innerText = localSlotsTotal;
+                
+                document.getElementById('bedsAvailableInput').value = localBedsAvailable;
+                document.getElementById('slotsAvailableInput').value = localSlotsAvailable;
+            }
+        }
+
+        // 3. Update Resources (Beds / Slots) via +/- Buttons
+        window.updateResource = async function(type, amount) {
+            if (type === 'bedsAvailable') {
+                localBedsAvailable = Math.max(0, Math.min(localBedsTotal, localBedsAvailable + amount));
+                document.getElementById('bedsAvailableInput').value = localBedsAvailable;
+                updateResourceInDB(type, localBedsAvailable);
+            } else {
+                localSlotsAvailable = Math.max(0, Math.min(localSlotsTotal, localSlotsAvailable + amount));
+                document.getElementById('slotsAvailableInput').value = localSlotsAvailable;
+                updateResourceInDB(type, localSlotsAvailable);
+            }
+        }
+
+        // 4. Update Resources via Direct Input Typing
+        window.setResource = async function(type, value) {
+            let num = parseInt(value) || 0;
+            if (type === 'bedsAvailable') {
+                localBedsAvailable = Math.max(0, Math.min(localBedsTotal, num));
+                document.getElementById('bedsAvailableInput').value = localBedsAvailable;
+                updateResourceInDB(type, localBedsAvailable);
+            } else {
+                localSlotsAvailable = Math.max(0, Math.min(localSlotsTotal, num));
+                document.getElementById('slotsAvailableInput').value = localSlotsAvailable;
+                updateResourceInDB(type, localSlotsAvailable);
+            }
+        }
+
+        async function updateResourceInDB(field, val) {
+            try {
+                await updateDoc(doc(db, "healthcare_services", providerId), {
+                    [field]: val
+                });
+            } catch (error) {
+                console.error("Failed to update resource in DB:", error);
+            }
+        }
+
+        // 5. Load Bookings
+        async function loadBookings() {
+            try {
+                const bSnap = await getDocs(collection(db, "healthcare_services", providerId, "bookings"));
+                allBookings = [];
+                bSnap.forEach(doc => {
+                    allBookings.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort descending by date
+                allBookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                renderBookings(allBookings);
+            } catch (error) {
+                console.error("Error loading bookings:", error);
+            }
+        }
+
+        // Render Table
+        function renderBookings(list) {
+            const tbody = document.getElementById('bookingsTableBody');
+            tbody.innerHTML = "";
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No bookings found.</td></tr>`;
+                return;
+            }
+
+            list.forEach(booking => {
+                let badgeClass = 'pending';
+                if(booking.status === 'Accepted') badgeClass = 'accepted';
+                if(booking.status === 'Assigned') badgeClass = 'assigned';
+
+                const dateStr = new Date(booking.createdAt).toLocaleDateString() + " " + (booking.appointmentTime || "");
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${dateStr}</td>
+                        <td style="font-family:monospace; color:#666;">${booking.id.substring(0,8)}...</td>
+                        <td><strong>${booking.firstName || ''} ${booking.surname || ''}</strong></td>
+                        <td><span class="badge ${badgeClass}">${booking.status || 'Pending'}</span></td>
+                        <td>
+                            ${(!booking.status || booking.status === 'Pending') ? `<button class="action-btn accept" onclick="acceptSingleBooking('${booking.id}')">Accept</button>` : ''}
+                            <button class="action-btn" onclick="openBookingDetails('${booking.id}')">View</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // 6. Search Bookings
+        document.getElementById('patientSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allBookings.filter(b => 
+                (b.firstName && b.firstName.toLowerCase().includes(term)) ||
+                (b.surname && b.surname.toLowerCase().includes(term)) ||
+                (b.id.toLowerCase().includes(term))
+            );
+            renderBookings(filtered);
+        });
+
+        // 7. Accept Single Booking
+        window.acceptSingleBooking = async function(id) {
+            try {
+                await updateDoc(doc(db, "healthcare_services", providerId, "bookings", id), {
+                    status: "Accepted"
+                });
+                await updateDoc(doc(db, "healthcare_services", providerId), {
+                    bedsAvailable: increment(-1)
+                });
+
+                const b = allBookings.find(x => x.id === id);
+                if(b) b.status = "Accepted";
+                renderBookings(allBookings);
+            } catch (error) {
+                console.error("Error accepting:", error);
+            }
+        }
+
+        // 8. Accept All Pending
+        window.acceptAllPending = async function() {
+            try {
+                const batch = writeBatch(db);
+                let count = 0;
+
+                allBookings.forEach(b => {
+                    if (!b.status || b.status === "Pending") {
+                        const ref = doc(db, "healthcare_services", providerId, "bookings", b.id);
+                        batch.update(ref, { status: "Accepted" });
+                        b.status = "Accepted"; 
+                        count++;
+                    }
+                });
+
+                if (count > 0) {
+                    await batch.commit();
+                    renderBookings(allBookings);
+                    alert(`Successfully accepted ${count} pending bookings.`);
+                } else {
+                    alert("No pending bookings to accept.");
+                }
+            } catch (error) {
+                console.error("Batch accept failed:", error);
+            }
+        }
+
+        // 9. Load Doctors (Staff) for Datalist
+        async function loadDoctors() {
+            try {
+                const tSnap = await getDocs(collection(db, "healthcare_services", providerId, "team"));
+                const datalist = document.getElementById('doctorsList');
+                datalist.innerHTML = "";
+                
+                tSnap.forEach(doc => {
+                    const member = doc.data();
+                    if (member.role === 'Staff') {
+                        allStaff.push({ id: doc.id, ...member });
+                        datalist.innerHTML += `<option value="${member.name} (${member.staffNumber})"></option>`;
+                    }
+                });
+            } catch (error) {
+                console.error("Error loading doctors:", error);
+            }
+        }
+
+        // 10. Open Details Modal
+        window.openBookingDetails = function(id) {
+            const b = allBookings.find(x => x.id === id);
+            if(!b) return;
+
+            document.getElementById('modalBookingId').value = b.id;
+            
+            const grid = document.getElementById('modalDetailsGrid');
+            grid.innerHTML = `
+                <div class="detail-item"><label>Booking ID</label><strong>${b.id}</strong></div>
+                <div class="detail-item"><label>Status</label><strong>${b.status || 'Pending'}</strong></div>
+                <div class="detail-item"><label>First Name</label><strong>${b.firstName || 'N/A'}</strong></div>
+                <div class="detail-item"><label>Surname</label><strong>${b.surname || 'N/A'}</strong></div>
+                <div class="detail-item"><label>ID Number</label><strong>${b.idNumber || 'N/A'}</strong></div>
+                <div class="detail-item"><label>Phone</label><strong>${b.phone || 'N/A'}</strong></div>
+                <div class="detail-item"><label>Appointment Date</label><strong>${b.appointmentDate || 'N/A'}</strong></div>
+                <div class="detail-item"><label>Appointment Time</label><strong>${b.appointmentTime || 'N/A'}</strong></div>
+                <div class="detail-item" style="grid-column: 1 / -1;"><label>Reason</label><strong>${b.reason || "N/A"}</strong></div>
+            `;
+            
+            document.getElementById('doctorInput').value = b.assignedDoctor || "";
+            document.getElementById('bookingModal').style.display = 'flex';
+        }
+
+        // 11. Assign Doctor
+        window.assignDoctor = async function() {
+            const bId = document.getElementById('modalBookingId').value;
+            const docInput = document.getElementById('doctorInput').value;
+
+            if(!docInput) {
+                alert("Please select a doctor to assign.");
+                return;
+            }
+
+            try {
+                await updateDoc(doc(db, "healthcare_services", providerId, "bookings", bId), {
+                    status: "Assigned",
+                    assignedDoctor: docInput
+                });
+                
+                alert(`Case assigned to ${docInput}`);
+                
+                const b = allBookings.find(x => x.id === bId);
+                if(b) {
+                    b.status = "Assigned";
+                    b.assignedDoctor = docInput;
+                }
+                renderBookings(allBookings);
+                closeModal();
+
+            } catch (error) {
+                console.error("Assign error:", error);
+                alert("Failed to assign doctor.");
+            }
+        }
+
+        // 12. Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = "staff_index.html";
+        });
+
     </script>
 </body>
 </html>
