@@ -4,33 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard | MyLifeAid</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="doctor.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1, 14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* Navbar */
+        .navbar {
+            background-color: #1D4352; color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10;
+        }
+        .logo-group { display: flex; align-items: center; gap: 10px; }
+        .logo-text h2 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .logo-text p { margin: 0; font-size: 12px; opacity: 0.8; }
+        .navbar-right { display: flex; align-items: center; gap: 20px; }
+        .user-pill { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .logout-btn:hover { background: #c0392b; }
+
+        /* Main Dashboard */
+        .dashboard-main { flex: 1; padding: 30px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        
+        .welcome-banner { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e0e0e0; padding-bottom: 15px;}
+        .welcome-banner h3 { color: #1D4352; font-size: 24px; }
+        .date-stamp { color: #666; font-size: 14px; font-weight: 500; }
+
+        .card { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .flex-align { display: flex; align-items: center; gap: 10px; }
+        .flex-align h3 { color: #1D4352; font-size: 20px; margin: 0; }
+        
+        /* Table */
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        .data-table th { background: #f8f9fa; color: #1D4352; font-weight: 600; }
+        .data-table tbody tr:hover { background: #fdfdfd; }
+        
+        .id-cell { font-family: monospace; color: #666; }
+
+        /* Buttons */
+        .action-btns { display: flex; gap: 10px; }
+        .btn-done { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 13px; }
+        .btn-done:hover { background: #27ae60; }
+        .btn-not-done { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 13px; }
+        .btn-not-done:hover { background: #c0392b; }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; text-align: center; }
+            .welcome-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dashboard-main { padding: 15px; }
+        }
+    </style>
 </head>
 <body>
-    
-    <nav class="navbar">
-        
-        <div class="logo-group">
-            <div class="logo-icon">
-                <img src="MYAID-LOGO.png" alt="MyLifeAid Logo" class="logo-img">
 
-            </div>
+    <nav class="navbar">
+        <div class="logo-group">
             <div class="logo-text">
                 <h2><span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span></h2>
-                <p id="role-subtitle">Doctor Dashboard</p>
+                <p id="role-subtitle">Facility Staff Dashboard</p>
             </div>
         </div>
 
         <div class="navbar-right">
             <div class="user-pill">
                 <span class="user-avatar">👤</span>
-                <span id="user-display-name">Dr. N. Dlamini | General practitioner</span>
+                <span id="user-display-name">Loading Profile...</span>
             </div>
-            <button class="logout-btn" onclick="window.location.href='staff_index.html'">
-                <span> Log Out</span>
+            <button class="logout-btn" id="logoutBtn">
+                <span>🚪 Log Out</span>
             </button>
         </div>
     </nav>
@@ -38,20 +88,16 @@
     <main class="dashboard-main">
             
         <div class="welcome-banner">
-            <h3>Welcome Dr. N. Dlamini</h3>
-            <div class="date-time">
-             <span id="current-date"></span> |
-             <span id="current-time"></span>
-</div>
+            <h3 id="welcomeMessage">Welcome, Doctor</h3>
+            <span class="date-stamp" id="currentDateStamp">Loading Date...</span>
         </div>
 
         <div class="card full-width">
             <div class="card-header space-between">
                 <div class="flex-align">
-                    <span class="card-icon">🩺</span>
-                    <h3>Patients For Review Today</h3>
+                    <span class="card-icon" style="font-size: 24px;">🩺</span>
+                    <h3>Patients Assigned For Review</h3>
                 </div>
-                <button class="pill-btn primary">View All Patients →</button>
             </div>
             
             <div class="table-responsive">
@@ -59,119 +105,174 @@
                     <thead>
                         <tr>
                             <th>Time</th>
-                            <th>Patient ID</th>
+                            <th>ID Number</th>
                             <th>Patient Name</th>
                             <th>Reason for Review</th>
-                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="patientsTableBody">
                         <tr>
-                            <td>09:30 AM</td>
-                            <td class="id-cell">PAT-2026-001</td>
-                            <td><strong>THABO MABASO</strong></td>
-                            <td>Post discharge review</td>
-                            <td><span class="status pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>10:15 AM</td>
-                            <td class="id-cell">PAT-2026-002</td>
-                            <td><strong>NOMSA SMITH</strong></td>
-                            <td>Follow-up Hypertension</td>
-                            <td><span class="status pending">Pending</span></td>
-                        </tr>
-                        <tr>
-                            <td>13:30 PM</td>
-                            <td class="id-cell">PAT-2026-003</td>
-                            <td><strong>SIPHO KHUMALO</strong></td>
-                            <td>Post-op review</td>
-                            <td><span class="status pending">Pending</span></td>
+                            <td colspan="5" style="text-align: center; padding: 20px;">Checking assigned patients...</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="doctor-split-grid">
-            
-            <div class="card">
-                <div class="card-header">
-                    <h3>Request Lab Tests</h3>
-                </div>
-                <p class="subtitle">Select a patient and request a test</p>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, collectionGroup, query, where, getDocs, collection, doc, updateDoc
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+            authDomain: "mylaid-f9947.firebaseapp.com",
+            projectId: "mylaid-f9947",
+            storageBucket: "mylaid-f9947.firebasestorage.app",
+            messagingSenderId: "315125553793",
+            appId: "1:315125553793:web:af4ac3618e0531fa190b80"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let providerId = null;
+        let myStaffNumber = "";
+        let assignedPatients = [];
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('currentDateStamp').innerText = now.toLocaleDateString('en-ZA', options);
+        }
+        setInterval(updateDateTime, 60000);
+        updateDateTime();
+
+        onAuthStateChanged(auth, async function(user) {
+            if (user) {
+                try {
+                    const q = query(collectionGroup(db, 'team'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    
+                    if (!snap.empty) {
+                        const staffDoc = snap.docs[0];
+                        const staffData = staffDoc.data();
+                        
+                        myStaffNumber = staffData.staffNumber;
+                        providerId = staffDoc.ref.parent.parent.id;
+                        
+                        document.getElementById('user-display-name').innerText = staffData.name + " | " + staffData.staffNumber;
+                        document.getElementById('welcomeMessage').innerText = "Welcome, " + staffData.name;
+
+                        loadAssignedPatients();
+                    } else {
+                        alert("Unauthorized access. Staff profile not found.");
+                        signOut(auth);
+                    }
+                } catch (error) {
+                    console.error("Error fetching staff profile:", error);
+                }
+            } else {
+                window.location.href = "staff_index.html";
+            }
+        });
+
+        async function loadAssignedPatients() {
+            const tbody = document.getElementById('patientsTableBody');
+            try {
+                const bSnap = await getDocs(collection(db, "healthcare_services", providerId, "bookings"));
+                assignedPatients = [];
                 
-                <form class="form-body" onsubmit="event.preventDefault();">
-                    <div class="input-group">
-                        <label>Patient</label>
-                        <select>
-                            <option>THABO MABASO (PAT-2026-001)</option>
-                            <option>NOMSA SMITH (PAT-2026-002)</option>
-                            <option>SIPHO KHUMALO (PAT-2026-003)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Test Type</label>
-                        <select>
-                            <option disabled selected>Select Test</option>
-                            <option>BLOOD</option>
-                            <option>FBC (Full Blood Count)</option>
-                            <option>CRP</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Additional Notes (optional)</label>
-                        <textarea rows="4" class="grey-bg" placeholder="Add custom diagnostic requests or priority tags here..."></textarea>
-                    </div>
-                    <button class="action-btn" type="submit">Submit Lab Request</button>
-                </form>
-            </div>
+                bSnap.forEach(function(doc) {
+                    const b = doc.data();
+                    
+                    /* 
+                     * Robust Check: We ensure the status is Assigned, that an assignedDoctor string exists, 
+                     * and that the string contains this specific doctor's unique Staff Number. 
+                     */
+                    if (b.status === "Assigned" && b.assignedDoctor && b.assignedDoctor.indexOf(myStaffNumber) !== -1) {
+                        const patientData = b;
+                        patientData.id = doc.id;
+                        assignedPatients.push(patientData);
+                    }
+                });
 
-            <div class="card">
-                <div class="card-header space-between">
-                    <h3>Lab Results</h3>
-                    <button class="pill-btn primary">View All Results →</button>
-                </div>
-                <p class="subtitle">View completed lab results</p>
+                assignedPatients.sort(function(a, b) {
+                    return new Date(a.appointmentDate) - new Date(b.appointmentDate);
+                });
+                
+                renderPatients();
 
-                <div class="table-responsive">
-                    <table class="data-table transparent">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Patient</th>
-                                <th>Test</th>
-                                <th>Result</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>23 May 2025</td>
-                                <td>THABO MABASO</td>
-                                <td><span class="test-tag">BLOOD</span></td>
-                                <td><span class="status pending">Pending</span></td>
-                                <td><span class="status pending">Pending</span></td>
-                            </tr>
-                            <tr>
-                                <td>2 May 2025</td>
-                                <td>SIPHO KHUMALO</td>
-                                <td><span class="test-tag">FBC</span></td>
-                                <td><span class="status normal">Normal</span></td>
-                                <td><span class="status completed">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>30 April 2025</td>
-                                <td>NOMSA SMITH</td>
-                                <td><span class="test-tag">CRP</span></td>
-                                <td><span class="status high">High</span></td>
-                                <td><span class="status completed">Completed</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            } catch (error) {
+                console.error("Error loading patients:", error);
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Failed to load assigned patients. Check console logs.</td></tr>";
+            }
+        }
 
-        </div>
-        <script src="doctor.js"></script>
+        function renderPatients() {
+            const tbody = document.getElementById('patientsTableBody');
+            tbody.innerHTML = "";
+
+            if (assignedPatients.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>No patients assigned to you right now.</td></tr>";
+                return;
+            }
+
+            assignedPatients.forEach(function(patient) {
+                const timeStr = patient.appointmentTime || "Walk-in";
+                const idStr = patient.idNumber || "N/A";
+                const nameStr = patient.firstName + " " + patient.surname;
+                const reasonStr = patient.reason || "N/A";
+
+                let rowHtml = "<tr>";
+                rowHtml += "<td><strong>" + timeStr + "</strong><br><small style='color:#666;'>" + patient.appointmentDate + "</small></td>";
+                rowHtml += "<td class='id-cell'>" + idStr + "</td>";
+                rowHtml += "<td><strong>" + nameStr + "</strong><br><small style='color:#666;'>" + patient.phone + "</small></td>";
+                rowHtml += "<td>" + reasonStr + "</td>";
+                rowHtml += "<td>";
+                rowHtml += "<div class='action-btns'>";
+                rowHtml += "<button class='btn-done' onclick=\"updatePatientStatus('" + patient.id + "', 'Completed')\">✔ Done</button>";
+                rowHtml += "<button class='btn-not-done' onclick=\"updatePatientStatus('" + patient.id + "', 'Not Done')\">✖ Not Done</button>";
+                rowHtml += "</div>";
+                rowHtml += "</td>";
+                rowHtml += "</tr>";
+
+                tbody.innerHTML += rowHtml;
+            });
+        }
+
+        window.updatePatientStatus = async function(bookingId, newStatus) {
+            if(!confirm("Are you sure you want to mark this patient as " + newStatus + "?")) return;
+
+            try {
+                await updateDoc(doc(db, "healthcare_services", providerId, "bookings", bookingId), {
+                    status: newStatus
+                });
+                
+                assignedPatients = assignedPatients.filter(function(p) {
+                    return p.id !== bookingId;
+                });
+                
+                renderPatients();
+                
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("Failed to update status. Please try again.");
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            await signOut(auth);
+            window.location.href = "staff_index.html";
+        });
+
+    </script>
 </body>
-    
+</html>
