@@ -6,6 +6,7 @@
     <title>Patient Dashboard | MyLifeAid</title>
     
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="navbar.css">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -20,49 +21,44 @@
 </head>
 <body>
 
-<header id="search-header">
-    <!-- Hamburger Menu -->
-    <div class="search-container">
-        <button id="hamburger-btn" type="button" aria-label="Open sidebar">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-
-    <aside id="sidebar">
-        <button id="close-sidebar" type="button">&times;</button>
-        <h2>Menu</h2>
-        <nav>
-            <a href="booking_history.html" style="color: black; text-decoration: none; padding: 10px; border-radius: 6px; font-weight:bold;">Booking History</a>
-            <a href="#" id="logOutBtn" style="background-color: rgb(225, 57, 19); color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight:bold;">Log out</a>
-        </nav>
-    </aside>
-
-    <div id="sidebar-overlay"></div>
-
-
-        <!-- Search Bar -->
-        <input
-            id="search-bar"
-            type="text"
-            placeholder="Search for a hospital/clinic..."
-        >
-
-        <button id="filter-btn" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-        </button>
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="logo-group">
+      <img src="MYAID-LOGO.png" alt="MyAid Logo" class="logo-img">
+      <div class="logo-text">
+        <a href="#">
+          <span class="my">MY</span>
+          <span class="life">Life</span>
+          <span class="aid">Aid</span>
+        </a>
+      </div>
     </div>
-
-    <div id="filter-dropdown" class="filter-drop">
-        <button id="beds-filter" class="filter-btn">Beds</button>
-        <button id="emergency-filter" class="filter-btn">Emergency Slots</button>
-        <button id="distance-filter" class="filter-btn">Distance</button>
+    
+    <div class="navbar-right">
+      <div class="user-icon" id="userButton">
+        <i class='bx bxs-user-circle'></i>
+      </div>
     </div>
-</header>
+    <button id="logOutBtn" style="color: white; background-color: #E63946; border-radius: 8px; padding: 10px; font-size: medium; cursor: pointer; border: none;">Logout</button>
+  </nav>
 
   <!-- Map container -->
-  <div id="map" style="height: 400px; width: 100%;"></div>
+  <div id="map" style="height: 400px; width: 100%; z-index: 1; margin: 40px auto;"></div>
 
   <!--Bottom sheet-->
   <div id="container">
+        <!--Search bar and pin button-->
+      <input id="search-bar" placeholder="Search for a hospital/clinic..." style="width: 90%; margin: 80px auto; display: block; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 16px; bottom: auto;">
+      <section id="filter-by">
+          <button id="filter-btn" class="filter-btn" style="padding: 10px 20px; background: #1D4352; color: white; border: none; border-radius: 6px; cursor: pointer;">Filter by</button>
+          
+          <div id="filter-dropdown" class="filter-drop" style="display: none; margin-top: 10px;">
+              <button id="beds-filter" class="filter-btn" style="margin-right: 10px; padding: 8px; cursor: pointer;">Beds</button>
+              <button id="emergency-filter" class="filter-btn" style="margin-right: 10px; padding: 8px; cursor: pointer;">Emergency Slots</button>
+              <button id="distance-filter" class="filter-btn" style="padding: 8px; cursor: pointer;">Distance</button>
+          </div>
+      </section>
+
       <!--Hospital/Clinic Cards-->
       <div id="cards-container">
           <p style="text-align: center;">Loading nearby healthcare facilities...</p>
@@ -220,7 +216,6 @@
                             name: data.name || "Unknown Facility",
                             address: data.address || "Address not provided",
                             phone: data.phone || "No phone",
-                            tawkto: data.tawkto || "",
                             lat: parseFloat(data.lat),
                             lng: parseFloat(data.lng),
                             type: data.type || "Hospital",
@@ -232,8 +227,7 @@
                             description: data.description || data.type + " located in your area.",
                             rating: data.rating || 0,
                             url: "images/generic.png", 
-                            distance: Infinity,
-                            schedule: data.schedule || null // Fetch schedule directly from DB
+                            distance: Infinity
                         });
                     } catch (error) {
                         console.error("Error processing hospital document:", error);
@@ -310,11 +304,11 @@
                     card.innerHTML = `
                         <div>
                             <h3 style="color:#1D4352; margin-bottom:5px;">${hospital.name.length > 13 ? hospital.name.substring(0, 13) + "..." : hospital.name}</h3>
-                            <p style="font-size:20px; color:#666;"><strong>Address:</strong> ${hospital.address.length > 13 ? hospital.address.substring(0, 13) + "..." : hospital.address}</p>
-                            <p style="font-size:20px; color:#666;"><strong>Booked:</strong> ${hospital.booking || 0}</p>
-                            <p style="font-size:20px; color:#666;"><strong>Beds Available:</strong> ${hospital.bedsAvailable || 0}</p>
-                            <p style="font-size:20px; color:#666;"><strong>Emergency Slots:</strong> ${hospital.emergencySlotsAvailable || 0}</p>
-                            <p style="font-size:20px; color:#e74c3c; font-weight:600;"><strong>Distance:</strong> ${distanceText}</p>
+                            <p style="font-size:14px; color:#666;"><strong>Address:</strong> ${hospital.address.length > 13 ? hospital.address.substring(0, 13) + "..." : hospital.address}</p>
+                            <p style="font-size:14px; color:#666;"><strong>Booked:</strong> ${hospital.booking || 0}</p>
+                            <p style="font-size:14px; color:#666;"><strong>Beds Available:</strong> ${hospital.bedsAvailable || 0}</p>
+                            <p style="font-size:14px; color:#666;"><strong>Emergency Slots:</strong> ${hospital.emergencySlotsAvailable || 0}</p>
+                            <p style="font-size:14px; color:#e74c3c; font-weight:600;"><strong>Distance:</strong> ${distanceText}</p>
                         </div>
                         <img src='${hospital.url}' alt='Hospital' width='90' height='90' style="border-radius:6px; object-fit:cover;">
                     `;
@@ -391,7 +385,6 @@
                 <div style="display:flex; gap:10px; margin-bottom: 15px;">
                     <a style='flex:1; text-align:center; background-color: #2ecc71; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight:bold;' href='tel:${hospital.phone}'>Call Facility</a>
                     <button id='showFormBtn' style='flex:1; background-color: #3498db; color: white; border: none; padding: 10px; border-radius: 6px; font-weight:bold; cursor:pointer;'>Book</button>
-                    <button id='tawktoBtn' style='flex:1; background-color: #e67e22; color: white; border: none; padding: 10px; border-radius: 6px; font-weight:bold; cursor:pointer;' onclick='window.location.href="${hospital.tawkto}"'>Chat</button>
                 </div>
 
                 <form id='hospital-form' style="display: none; background-color: #fff; color:#333; padding: 15px; border-radius: 8px;">
@@ -410,11 +403,10 @@
                     <input type="tel" name="phone" required style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;">
                     
                     <label>Preferred Date</label>
-                    <input type="date" id="bookDate" name="appointmentDate" required style="width:100%; padding:8px; margin-bottom:5px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;">
-                    <p id="schedule-hint" style="font-size:12px; color:#e74c3c; margin-top:0px; margin-bottom:10px; min-height:15px;"></p>
+                    <input type="date" name="appointmentDate" required style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;">
                     
                     <label>Preferred Time</label>
-                    <input type="time" id="bookTime" name="appointmentTime" required disabled style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;">
+                    <input type="time" name="appointmentTime" required style="width:100%; padding:8px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;">
 
                     <label>Reason for visit</label>
                     <textarea name="reason" required style="width:100%; padding:8px; margin-bottom:15px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;"></textarea>
@@ -424,63 +416,6 @@
             `;
 
             document.body.appendChild(popUp);
-
-            // Set minimum date to today
-            const dateInput = document.getElementById('bookDate');
-            const timeInput = document.getElementById('bookTime');
-            const scheduleHint = document.getElementById('schedule-hint');
-            
-            const todayStr = new Date().toISOString().split('T')[0];
-            dateInput.setAttribute('min', todayStr);
-
-            // Handle Schedule/Date Changes
-            dateInput.addEventListener('change', function(e) {
-                // Ensure date parses locally to avoid UTC offset issues
-                const selectedDate = new Date(e.target.value + 'T00:00:00'); 
-                const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const dayName = daysOfWeek[selectedDate.getDay()];
-                
-                const schedule = hospital.schedule ? hospital.schedule[dayName] : null;
-
-                if (schedule) {
-                    if (schedule.closed) {
-                        scheduleHint.innerText = "Facility is closed on " + dayName + "s.";
-                        scheduleHint.style.color = "#e74c3c";
-                        timeInput.disabled = true;
-                        timeInput.value = "";
-                        timeInput.removeAttribute('min');
-                        timeInput.removeAttribute('max');
-                    } else {
-                        const openTime = schedule.open || "00:00";
-                        const closeTime = schedule.close || "23:59";
-                        scheduleHint.innerText = "Hours for " + dayName + ": " + openTime + " - " + closeTime;
-                        scheduleHint.style.color = "#2ecc71";
-                        timeInput.disabled = false;
-                        timeInput.setAttribute('min', openTime);
-                        timeInput.setAttribute('max', closeTime);
-                    }
-                } else {
-                    scheduleHint.innerText = "No specific schedule found. Subject to general availability.";
-                    scheduleHint.style.color = "#666";
-                    timeInput.disabled = false;
-                    timeInput.removeAttribute('min');
-                    timeInput.removeAttribute('max');
-                }
-            });
-
-            // Validate time input strictly against schedule limits
-            timeInput.addEventListener('change', function(e) {
-                const selectedTime = e.target.value;
-                const minTime = timeInput.getAttribute('min');
-                const maxTime = timeInput.getAttribute('max');
-                
-                if (minTime && maxTime) {
-                    if (selectedTime < minTime || selectedTime > maxTime) {
-                        alert("Please select a time within the facility's operating hours (" + minTime + " - " + maxTime + ").");
-                        e.target.value = "";
-                    }
-                }
-            });
 
             // Close logic
             document.getElementById('close-popup').onclick = function() {
@@ -506,27 +441,15 @@
             document.getElementById('hospital-form').addEventListener('submit', async function(e) {
                 try {
                     e.preventDefault();
-                    
-                    // Double check time validity right before submission
-                    const selectedTime = timeInput.value;
-                    const minTime = timeInput.getAttribute('min');
-                    const maxTime = timeInput.getAttribute('max');
-                    if (minTime && maxTime && (selectedTime < minTime || selectedTime > maxTime)) {
-                        alert("Invalid time selected. Please select a time between " + minTime + " and " + maxTime + ".");
-                        return;
-                    }
-
                     const submitBtn = document.getElementById('submitBookingBtn');
                     submitBtn.innerText = "Submitting...";
                     submitBtn.disabled = true;
-                    
-                    const user = auth.currentUser;
 
                     const formData = new FormData(e.target);
                     const bookingData = Object.fromEntries(formData.entries());
                     bookingData.status = "Pending";
                     bookingData.createdAt = new Date().toISOString();
-                    bookingData.userId = user.uid;
+
 
                     try {
                         // Save inside the specific hospital's 'bookings' subcollection
@@ -693,27 +616,6 @@
     } catch (error) {
         console.error("Error initializing app:", error);
     }
-
-    // ================= SIDEBAR LOGIC =================
-    const hamburgerBtn = document.getElementById("hamburger-btn");
-    const sidebar = document.getElementById("sidebar");
-    const closeSidebar = document.getElementById("close-sidebar");
-    const sidebarOverlay = document.getElementById("sidebar-overlay");
-
-    hamburgerBtn.addEventListener("click", function () {
-        sidebar.classList.add("open");
-        sidebarOverlay.classList.add("open");
-        hamburgerBtn.setAttribute("aria-label", "Close sidebar");
-    });
-
-    function closeSidebarMenu() {
-        sidebar.classList.remove("open");
-        sidebarOverlay.classList.remove("open");
-        hamburgerBtn.setAttribute("aria-label", "Open sidebar");
-    }
-
-    closeSidebar.addEventListener("click", closeSidebarMenu);
-    sidebarOverlay.addEventListener("click", closeSidebarMenu);
 
   </script>
 </body>

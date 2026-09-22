@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthcare Provider Portal | MyLifeAid</title>
+
+  <!-- GOOGLE FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- BOXICONS -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- LEAFLET MAP -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    /* ================= BASE STYLES ================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    body {
+      background-color: #f4f7f6;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .auth-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+    }
+
+    /* ================= HEADER ================= */
+    .auth-header {
+      background: #1D4352;
+      color: #fff;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .auth-header h2 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .auth-header p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* ================= TOGGLE TABS ================= */
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      background: #fafafa;
+      color: #666;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #fff;
+      color: #1D4352;
+      border-bottom: 3px solid #1D4352;
+    }
+
+    /* ================= FORMS ================= */
+    .auth-form-wrapper {
+      padding: 30px;
+    }
+
+    .form-section {
+      display: none;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1D4352;
+    }
+
+    .input-group input, 
+    .input-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .input-group input:focus, 
+    .input-group select:focus {
+      border-color: #1D4352;
+    }
+
+    /* MAP SEARCH STYLES */
+    .map-search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .map-search-btn {
+      padding: 0 15px;
+      background: #1D4352;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+
+    .map-search-btn:hover {
+      background: #15323d;
+    }
+
+    .map-container {
+      height: 200px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      z-index: 1; /* Keep leaflet controls below dropdowns */
+    }
+
+    .map-hint {
+      font-size: 12px;
+      color: #e74c3c;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      background: #1D4352;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .auth-btn:hover {
+      background: #15323d;
+    }
+
+    .forgot-pwd {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      color: #1D4352;
+      text-decoration: none;
+      margin-bottom: 15px;
+    }
+
+    .forgot-pwd:hover {
+      text-decoration: underline;
+    }
+
+    .message-box {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    .message-box.error { background: #fee; color: #c0392b; display: block; }
+    .message-box.success { background: #e8f8f5; color: #16a085; display: block; }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .auth-container { border-radius: 0; box-shadow: none; }
+      body { padding: 0; background: #fff; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <h2>Healthcare Portal</h2>
+      <p>Manage your facility's availability & details</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Register Facility</button>
+    </div>
+
+    <div class="auth-form-wrapper">
+      
+      <!-- NOTIFICATION MESSAGES -->
+      <div id="sys-message" class="message-box"></div>
+
+      <!-- ================= LOGIN FORM ================= -->
+      <form id="form-login" class="form-section active">
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="log-email" required placeholder="facility@example.com">
+        </div>
+        
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="log-password" required placeholder="••••••••">
+        </div>
+
+        <a href="#" class="forgot-pwd" id="forgot-pwd-btn">Forgot Password?</a>
+
+        <button type="submit" class="auth-btn">Access Dashboard</button>
+      </form>
+
+
+      <!-- ================= REGISTRATION FORM ================= -->
+      <form id="form-register" class="form-section">
+        <div class="input-group">
+          <label>Facility Name</label>
+          <input type="text" id="reg-name" required placeholder="e.g. Hillbrow General">
+        </div>
+
+        <div class="input-group">
+          <label>Facility Type</label>
+          <select id="reg-type" required>
+            <option value="Hospital">Hospital</option>
+            <option value="Clinic">Clinic</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="reg-email" required placeholder="official@facility.com">
+        </div>
+
+        <div class="input-group">
+          <label>Contact Number</label>
+          <input type="text" id="reg-phone" required placeholder="+27 11 123 4567">
+        </div>
+
+        <div class="input-group">
+          <label>Physical Address</label>
+          <input type="text" id="reg-address" required placeholder="Street Address, City">
+        </div>
+
+        <div class="input-group">
+          <label>Pin Location on Map</label>
+          <!-- QUICK SEARCH FEATURE -->
+          <div class="map-search-box">
+            <input type="text" id="map-search-input" placeholder="Type hospital or city name to find...">
+            <button type="button" id="map-search-btn" class="map-search-btn">Search</button>
+          </div>
+          <!-- MAP -->
+          <div id="facility-map" class="map-container"></div>
+          <span class="map-hint" id="map-error">* Click on the map or search to pin your exact location.</span>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input type="password" id="reg-password" required placeholder="Create a strong password">
+        </div>
+
+        <button type="submit" class="auth-btn">Register Facility</button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= FIREBASE & LOGIC ================= -->
+  <script type="module">
+    // Import standard Firebase v10 Modular SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      sendEmailVerification, 
+      sendPasswordResetEmail 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      setDoc 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+      authDomain: "mylaid-f9947.firebaseapp.com",
+      projectId: "mylaid-f9947",
+      storageBucket: "mylaid-f9947.firebasestorage.app",
+      messagingSenderId: "315125553793",
+      appId: "1:315125553793:web:af4ac3618e0531fa190b80",
+      measurementId: "G-0EQQ0JW6X1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ================= MAP INITIALIZATION =================
+    let map;
+    let locationMarker = null;
+    let selectedLat = null;
+    let selectedLng = null;
+
+    // Load Map only when Register tab is active to avoid Leaflet rendering bugs in hidden divs
+    window.initFacilityMap = function() {
+      if(map) {
+        map.invalidateSize();
+        return;
+      }
+      // Centered roughly on Johannesburg by default
+      map = L.map('facility-map').setView([-26.2041, 28.0473], 11); 
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      map.on('click', function(e) {
+        setMapPin(e.latlng.lat, e.latlng.lng);
+      });
+    }
+
+    // Function to place the pin
+    function setMapPin(lat, lng) {
+      if(locationMarker) {
+        map.removeLayer(locationMarker);
+      }
+      locationMarker = L.marker([lat, lng]).addTo(map);
+      selectedLat = lat;
+      selectedLng = lng;
+      document.getElementById('map-error').style.color = '#16a085';
+      document.getElementById('map-error').innerText = "Location pinned successfully!";
+    }
+
+    // ================= MAP QUICK SEARCH LOGIC =================
+    document.getElementById('map-search-btn').addEventListener('click', async () => {
+      const query = document.getElementById('map-search-input').value;
+      if (!query) return;
+
+      try {
+        document.getElementById('map-search-btn').innerText = "...";
+        
+        // Fetch coordinates from OpenStreetMap Nominatim API
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          
+          // Fly to location and set pin
+          map.setView([lat, lon], 15);
+          setMapPin(lat, lon);
+        } else {
+          document.getElementById('map-error').style.color = '#e74c3c';
+          document.getElementById('map-error').innerText = "Location not found. Please try a different name or click the map.";
+        }
+      } catch (error) {
+        console.error("Map search error:", error);
+      } finally {
+        document.getElementById('map-search-btn').innerText = "Search";
+      }
+    });
+
+    // Support 'Enter' key inside the map search input
+    document.getElementById('map-search-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission
+        document.getElementById('map-search-btn').click();
+      }
+    });
+
+
+    // ================= UI TAB SWITCHER =================
+    window.switchTab = function(tab) {
+      document.getElementById('sys-message').className = 'message-box'; // clear messages
+      document.getElementById('sys-message').innerText = '';
+
+      if(tab === 'login') {
+        document.getElementById('tab-login').classList.add('active');
+        document.getElementById('tab-register').classList.remove('active');
+        document.getElementById('form-login').classList.add('active');
+        document.getElementById('form-register').classList.remove('active');
+      } else {
+        document.getElementById('tab-register').classList.add('active');
+        document.getElementById('tab-login').classList.remove('active');
+        document.getElementById('form-register').classList.add('active');
+        document.getElementById('form-login').classList.remove('active');
+        // Delay map initialization slightly to ensure div is visible
+        setTimeout(initFacilityMap, 100);
+      }
+    }
+
+    // Helper for showing messages
+    function showMessage(text, type) {
+      const msgBox = document.getElementById('sys-message');
+      msgBox.innerText = text;
+      msgBox.className = `message-box ${type}`;
+    }
+
+    // ================= REGISTER LOGIC =================
+    document.getElementById('form-register').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if(!selectedLat || !selectedLng) {
+        showMessage("Please pin your facility's location on the map.", "error");
+        return;
+      }
+
+      const name = document.getElementById('reg-name').value;
+      const type = document.getElementById('reg-type').value;
+      const email = document.getElementById('reg-email').value;
+      const phone = document.getElementById('reg-phone').value;
+      const address = document.getElementById('reg-address').value;
+      const password = document.getElementById('reg-password').value;
+
+      try {
+        // 1. Create Auth User
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // 2. Adding to Collection 'healthcare_services'
+        await setDoc(doc(db, "healthcare_services", user.uid), {
+          name: name,
+          type: type,
+          email: email,
+          phone: phone,
+          address: address,
+          lat: selectedLat,
+          lng: selectedLng,
+          createdAt: new Date().toISOString()
+        });
+
+        // 3. Send Verification Email
+        await sendEmailVerification(user);
+
+        showMessage("Registration successful! Please check your email to verify your account before logging in.", "success");
+        document.getElementById('form-register').reset();
+        document.getElementById('map-search-input').value = '';
+        if(locationMarker) map.removeLayer(locationMarker);
+        
+        // Switch back to login after 3 seconds
+        setTimeout(() => switchTab('login'), 3000);
+
+      } catch (error) {
+        showMessage(error.message, "error");
+      }
+    });
+
+    // ================= LOGIN LOGIC =================
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('log-email').value;
+      const password = document.getElementById('log-password').value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Check Verification
+        if(!user.emailVerified) {
+          showMessage("Please verify your email address first. Check your inbox.", "error");
+          // Optionally sign back out
+          await auth.signOut();
+          return;
+        }
+
+        // Success - Redirect
+        window.location.href = "healthcare-dashboard.html";
+
+      } catch (error) {
+        showMessage("Invalid email or password.", "error");
+      }
+    });
+
+    // ================= FORGOT PASSWORD LOGIC =================
+    document.getElementById('forgot-pwd-btn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('log-email').value;
+      
+      if(!email) {
+        showMessage("Please enter your email address in the field above first.", "error");
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage("Password reset link sent! Please check your email.", "success");
+      } catch (error) {
+        showMessage(error.message, "error");
+      }
+    });
+
+  </script>
+</body>
+</html>

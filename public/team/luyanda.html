@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyLifeAid | Luyanda Msiza</title>
+  <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: #123f4b;
+      position: relative;
+    }
+
+    /* Blurred overlay */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(10px);
+      background-color: #123f4b; /* Maroon overlay */
+      z-index: -1;
+    }
+
+    /* HEADER */
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-group img {
+      height: 40px;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 25px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    /* Dropdown Menu */
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 5px;
+      z-index: 10;
+      min-width: 150px;
+      overflow: hidden;
+    }
+
+    .dropdown a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      transition: background 0.3s;
+    }
+
+    .dropdown a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Centered Title */
+    #title {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+    }
+
+    #title h1 {
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    #title .my {
+      color: #0C5259;
+    }
+
+    #title .life {
+      color: #3692D4;
+    }
+
+    #title .aid {
+      color: #CE4040;
+    }
+
+    #title p {
+      font-size: 18px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* Biography Section */
+    .bio-section {
+      max-width: 800px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+    }
+
+    .bio-section img {
+      display: block;
+      margin: 0 auto 15px;
+      max-width: 200px;
+      border-radius: 10px;
+    }
+
+    .bio-section h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .bio-section p.bio-text {
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .info-table td {
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .info-table td:first-child {
+      font-weight: bold;
+      width: 40%;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .info-table a {
+      color: #add8e6;
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #title h1 {
+        font-size: 32px;
+      }
+
+      #title p {
+        font-size: 16px;
+      }
+
+      .bio-section img {
+        max-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div id="header">
+    <!-- Hamburger Menu -->
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <!-- Dropdown Menu -->
+    <div class="dropdown" id="dropdown-menu">
+      <a href="select.html">Team</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <!-- Centered Title -->
+  <div id="title">
+    <h1><span class="my">MY</span><span class="life">LIFE</span><span class="aid">Aid</span></h1>
+  </div>
+
+  <!-- Biography Section -->
+  <div class="bio-section">
+    <img src="../../../images/RAAs/treasurer_raa.png" alt="Luyanda Msiza" />
+    <h2>Luyanda Msiza</h2>
+    <p class="bio-text">
+Luyanda is a focused and disciplined student leader, currently serving as the Treasurer RAA of Kilimanjaro.
+Born in Benoni, Daveyton, he is known for his quiet determination, reliability, and ability to get things done efficiently.
+He values thoughtful planning, respect, and consistency in all that he does, inspiring peers through his actions rather than words.
+Luyanda is deeply committed to fostering organization, accountability, and long-term growth within the residence.
+His motto: "Rule over your emotions, a calm mind handles any situation."
+    </p>
+
+    <table class="info-table">
+      <tr>
+        <td>Full Name:</td>
+        <td>Luyanda Msiza</td>
+      </tr>
+      <tr>
+        <td>Also Known As:</td>
+        <td>Mshauri OnlyFans/Fans</td>
+      </tr>
+      <tr>
+        <td>Birthday:</td>
+        <td>06 July 2005</td>
+      </tr>
+      <tr>
+        <td>Position:</td>
+        <td>Treasurer RAA</td>
+      </tr>
+      <tr>
+        <td>Position:</td>
+        <td>Bachelor of Commerce in Information Systems</td>
+      </tr>
+      <tr>
+        <td>Year of Study:</td>
+        <td>2nd Year</td>
+      </tr>
+      <tr>
+        <td>Position:</td>
+        <td>Coding, basketball,Financial literacy</td>
+      </tr>
+      <tr>
+        <td>LinkedIn:</td>
+        <td><a href="https://www.linkedin.com/in/luyanda-m-51985436b/">Here</a></td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td><a href="mailto:luyanda@mylifeaid.com">luyanda@mylifeaid.com</a></td>
+    </table>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('dropdown-menu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+
+</body>
+</html>

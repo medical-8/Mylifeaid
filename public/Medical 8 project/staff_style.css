@@ -1,0 +1,375 @@
+/* ================================================= */
+/* GLOBAL STYLES & RESET */
+/* ================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; } 
+
+:root {
+    --primary-teal: #1D4352;
+    --dark-bg: #0f2a35;
+    --accent-blue: #3692D4;
+    --accent-red: #E63946;
+    --light-gray: #f5f7fb;
+    --border-color: #d6dee7;
+}
+
+body {
+    background: var(--light-gray);
+    color: var(--primary-teal);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ================================================= */
+/* NAVBAR DESIGN */
+/* ================================================= */
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background: var(--dark-bg);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.logo .my { color: #0C5259; font-weight: 300; }
+.logo .life { color: #3692D4; }
+.logo .aid { color: #CE4040; }
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+    color: var(--accent-blue);
+}
+
+/* Dropdown Sub-menus */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: none;
+    overflow: hidden;
+    padding: 5px 0;
+    z-index: 1000;
+}
+
+.dropdown-menu li { list-style: none; }
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: var(--primary-teal);
+    font-size: 13px;
+}
+
+.dropdown-menu li a:hover {
+    background: #eef4f8;
+    color: var(--accent-blue);
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.login-button, .help-button {
+    border: 2px solid white;
+    padding: 10px 20px;
+    background: transparent;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.login-button:hover, .help-button:hover {
+    background: white;
+    color: var(--dark-bg);
+    transform: translateY(-1px);
+}
+
+/* ================================================= */
+/* HERO / MAIN SPLIT LAYOUT */
+/* ================================================= */
+.hero {
+    width: 100%;
+    min-height: calc(100vh - 74px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 8%;
+    background: linear-gradient(135deg, #0a1921 0%, var(--primary-teal) 100%);
+    gap: 40px;
+    flex-wrap: wrap; /* Important for responsiveness */
+}
+
+.hero-left {
+    flex: 1;
+    min-width: 320px;
+}
+
+.hero-text h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.hero-text p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.8);
+    max-width: 580px;
+}
+
+.value-props {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.prop-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    min-width: 240px;
+}
+
+.icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+.prop-text h4 { color: white; font-size: 16px; margin-bottom: 2px; }
+.prop-text p { color: rgba(255,255,255,0.6); font-size: 12px; }
+
+/* ================================================= */
+/* CARDS & CONTAINERS */
+/* ================================================= */
+.signup-card, .modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 420px;
+}
+
+.signup-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-teal);
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.tabs {
+    display: flex;
+    background: #edf3f8;
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    color: var(--primary-teal);
+    transition: 0.3s;
+}
+
+.tabs button.active {
+    background: var(--primary-teal);
+    color: white;
+}
+
+.input-box, .input-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.input-box label, .input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #4A6273;
+}
+
+.input-box input, .input-group input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    outline: none;
+    font-size: 15px;
+    background: #f8fafc;
+    transition: border 0.3s ease;
+}
+
+.input-box input:focus, .input-group input:focus {
+    border-color: var(--accent-blue);
+    background: white;
+}
+
+.next-btn, .final-signup-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: var(--primary-teal);
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.next-btn:hover, .final-signup-btn:hover {
+    background: #14303b;
+}
+
+.info-text {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.lock-icon { color: var(--primary-teal); font-weight: bold; }
+.info-text p { font-size: 12px; line-height: 1.5; color: #5a7385; }
+
+/* ================================================= */
+/* INTERACTIVE WINDOWS (MODAL & POPUPS) */
+/* ================================================= */
+.modal-overlay, .popup-background {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal-content, .popup-box {
+    max-width: 500px;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+.close-modal, .close-popup-button {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #a0aec0;
+}
+
+.close-modal:hover, .close-popup-button:hover { color: #4a5568; }
+
+.login-note {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13px;
+}
+.login-note a { color: var(--accent-blue); text-decoration: none; font-weight: 600; }
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* ================================================= */
+/* RESPONSIVE MEDIA QUERIES */
+/* ================================================= */
+@media (max-width: 968px) {
+    .hero {
+        flex-direction: column;
+        padding: 40px 5%;
+        text-align: center;
+    }
+    .hero-text p { margin: 0 auto 20px auto; }
+    .value-props { justify-content: center; }
+    .signup-card { max-width: 100%; }
+}
+
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; gap: 15px; padding: 15px 5%; }
+    .nav-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
+    .navbar-right { width: 100%; justify-content: center; }
+}
+
+
+
+CSS
+/* Ensure the image inside the circle scales perfectly */
+.icon-circle img {
+    width: 24px;       /* Explicit width for the icon */
+    height: 24px;      /* Explicit height for the icon */
+    object-fit: contain; /* Keeps the icon proportional without distorting */
+    display: block;    /* Removes default inline bottom spacing gaps */
+}
+
+.icon-circle img {
+    width: 24px;       /* Explicit width for the icon */
+    height: 24px;      /* Explicit height for the icon */
+    object-fit: contain; /* Keeps the icon proportional without distorting */
+    display: block;    /* Removes default inline bottom spacing gaps */
+}

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History | MyLifeAid</title>
+    
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- Using Google Fonts for a professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base professional styling */
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+
+        /* Header styling */
+        header {
+            background-color: #1D4352;
+            padding: 1.25rem 5%;
+            color: white;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-link {
+            color: white; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Main layout container */
+        #container {
+            padding: 2.5rem 5%;
+            max-width: 800px;
+            margin: 0 auto;
+            min-height: calc(100vh - 70px);
+        }
+
+        h2.page-title {
+            color: #1D4352;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 2.5rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        /* Reusable Card Styles */
+        .card {
+            background: #fff;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            border-left: 6px solid #1D4352;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+            border-color: #cbd5e1;
+        }
+
+        /* Card Content Container - Fixes the squashed text */
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem; /* Enforces clean spacing between elements */
+            flex-grow: 1;
+        }
+
+        /* Card Typography */
+        .card-info h3 {
+            color: #0f172a;
+            margin: 0;
+            font-size: 1.15rem;
+            line-height: 1.4;
+        }
+
+        .card-info p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .card-info p strong {
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .card-status-container {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        /* Uniform, neutral Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+            letter-spacing: 0.02em;
+        }
+
+        /* Overlay */
+        #popup-overlay {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6); 
+            backdrop-filter: blur(4px);
+            z-index: 999; 
+            display: none;
+        }
+
+        /* Popup Box */
+        #booking-popup-box {
+            position: fixed;
+            width: 90%;
+            maxWidth: 550px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1D4352;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2), 0 10px 10px -5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .popup-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .popup-header h3 {
+            margin: 0;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .popup-close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+            transition: opacity 0.2s;
+        }
+
+        .popup-close-btn:hover {
+            opacity: 0.7;
+        }
+
+        .popup-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        .popup-status-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Form Layout inside Popup */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 640px) {
+            .card {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center; /* Aligns items perfectly in the center for desktop */
+            }
+            .form-grid.two-cols {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="patient_dashboard.html" class="back-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+    </a>
+</header>
+
+<div id="container">
+    <h2 class="page-title">My Booking History</h2>
+    
+    <div id="bookings-container">
+        <p style="text-align: center; color: #64748b; margin-top: 3rem; font-size: 1.1rem;">Loading your booking history...</p>
+    </div>
+</div>
+
+<div id="popup-overlay"></div>
+
+<!-- ================= FIREBASE & LOGIC ================= -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collectionGroup, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+      authDomain: "mylaid-f9947.firebaseapp.com",
+      projectId: "mylaid-f9947",
+      storageBucket: "mylaid-f9947.firebasestorage.app",
+      messagingSenderId: "315125553793",
+      appId: "1:315125553793:web:af4ac3618e0531fa190b80"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ================= FETCH BOOKINGS =================
+    async function fetchUserBookings(user) {
+        try {
+
+            // Make sure there is a logged-in user
+            if (!user) {
+                document.getElementById('bookings-container').innerHTML =
+                    "<p style='text-align: center; color: #ef4444; margin-top: 3rem; font-size: 1.1rem;'>Please log in to view your history.</p>";
+                return;
+            }
+
+            // Get the UID of the currently logged-in user
+            const userUID = user.uid;
+
+            // Only retrieve bookings belonging to this user
+            const q = query(
+                collectionGroup(db, 'bookings'),
+                where('userId', '==', userUID)
+            );
+
+            const querySnapshot = await getDocs(q);
+
+            let bookings = [];
+
+            querySnapshot.forEach(function(doc) {
+                const data = doc.data();
+
+                bookings.push({
+                    id: doc.id,
+                    appointmentDate: data.appointmentDate || "N/A",
+                    appointmentTime: data.appointmentTime || "N/A",
+                    assignedDoctor: data.assignedDoctor || "Unassigned",
+                    createdAt: data.createdAt || "",
+                    firstName: data.firstName || "",
+                    surname: data.surname || "",
+                    idNumber: data.idNumber || "",
+                    phone: data.phone || "",
+                    reason: data.reason || "No reason provided",
+                    status: data.status || "Pending",
+                    uid: data.uid || ""
+                });
+            });
+
+            // Sort by most recent first
+            bookings.sort(function(a, b) {
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            });
+
+            renderBookings(bookings);
+
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+
+            document.getElementById('bookings-container').innerHTML =
+                "<p style='text-align:center; color:#ef4444; padding:2rem; background:#fee2e2; border-radius:8px;'>Error loading your history. Please try again later.</p>";
+        }
+    }
+
+    // ================= RENDER CARDS =================
+    function renderBookings(list) {
+        const container = document.getElementById("bookings-container");
+        container.innerHTML = ""; 
+
+        if (list.length === 0) {
+            container.innerHTML = "<p style='text-align: center; color: #64748b; margin-top: 3rem; font-size: 1.1rem;'>You have no booking history yet.</p>";
+            return;
+        }
+
+        list.forEach(function(booking) {
+            const card = document.createElement("div");
+            card.className = "card";
+            
+            // Truncate long reasons gracefully
+            const truncatedReason = booking.reason.length > 40 ? booking.reason.substring(0, 40) + "..." : booking.reason;
+
+            card.innerHTML = `
+                <div class="card-info">
+                    <h3>Date: ${booking.appointmentDate}</h3>
+                    <p><strong>Time:</strong> ${booking.appointmentTime}</p>
+                    <p><strong>Reason:</strong> ${truncatedReason}</p>
+                </div>
+                <div class="card-status-container">
+                    <span class="status-badge">${booking.status}</span>
+                </div>
+            `;
+
+            card.addEventListener("click", function() {
+                openBookingPopup(booking);
+            });
+
+            container.appendChild(card);
+        });
+    }
+
+    // ================= POPUP LOGIC =================
+    function openBookingPopup(booking) {
+        document.getElementById('popup-overlay').style.display = 'block';
+
+        const popUp = document.createElement("div");
+        popUp.id = "booking-popup-box";
+        
+        popUp.innerHTML = `
+            <div class="popup-header">
+                <h3>Booking Details</h3>
+                <button id="close-popup" class="popup-close-btn" aria-label="Close">&times;</button>
+            </div>
+            
+            <div class="popup-content">
+                <div class="popup-status-container">
+                    <span class="status-badge" style="font-size: 0.95rem; padding: 0.5rem 1.25rem;">Status: ${booking.status}</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-grid two-cols">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" value="${booking.firstName}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <input type="text" value="${booking.surname}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-grid two-cols">
+                        <div class="form-group">
+                            <label>ID Number</label>
+                            <input type="text" value="${booking.idNumber}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="text" value="${booking.phone}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-grid two-cols">
+                        <div class="form-group">
+                            <label>Appointment Date</label>
+                            <input type="text" value="${booking.appointmentDate}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Appointment Time</label>
+                            <input type="text" value="${booking.appointmentTime}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Assigned Doctor</label>
+                        <input type="text" value="${booking.assignedDoctor}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Reason for visit</label>
+                        <textarea disabled>${booking.reason}</textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(popUp);
+
+        // Close logic
+        const closeBtn = document.getElementById('close-popup');
+        const overlay = document.getElementById('popup-overlay');
+
+        function cleanupPopup() {
+            if (document.getElementById('booking-popup-box')) {
+                document.body.removeChild(popUp);
+                overlay.style.display = 'none';
+            }
+        }
+
+        closeBtn.onclick = cleanupPopup;
+        overlay.onclick = cleanupPopup;
+    }
+
+    // ================= INITIALIZATION =================
+    onAuthStateChanged(auth, function(user) {
+        if (user) {
+            fetchUserBookings(user);
+        } else {
+            document.getElementById('bookings-container').innerHTML = 
+                "<p style='text-align: center; color: #ef4444; margin-top: 3rem; font-size: 1.1rem;'>Please log in to view your history.</p>";
+        }
+    });
+
+</script>
+</body>
+</html>

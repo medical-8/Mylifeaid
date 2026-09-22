@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyLifeAid | Team</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
+
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: #123f4b;
+      position: relative;
+      color: white;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(10px);
+      background-color: #123f4b;
+      z-index: -1;
+    }
+
+    /* HEADER */
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background-color: rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 20;
+    }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 25px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 15px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 5px;
+      z-index: 10;
+      min-width: 150px;
+      overflow: hidden;
+    }
+
+    .dropdown a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      transition: background 0.3s;
+    }
+
+    .dropdown a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #title {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+      position: relative;
+      z-index: 10;
+    }
+
+    #title h1 {
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    #title .my {
+      color: #0C5259;
+    }
+
+    #title .life {
+      color: #3692D4;
+    }
+    #title .aid {
+      color: #ce4040;
+    }
+
+    #title p {
+      font-size: 18px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    #description {
+      text-align: center;
+      max-width: 600px;
+      margin: 10px auto 40px;
+      font-size: 18px;
+      font-style: italic;
+      color: #f0e6e6;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* INFO BOXES */
+    #main {
+      max-width: 800px;
+      margin: 0 auto 50px;
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .info-box {
+      display: flex;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px 50px 15px 15px;
+      text-decoration: none;
+      color: white;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .info-box:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .info-box img:not(.right) {
+      height: 80px;
+      width: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .info-box .right {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 24px;
+      width: 24px;
+      margin: 0;
+    }
+
+    .info-box h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .info-box p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #e0dede;
+    }
+
+    footer {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px 15px;
+      text-align: center;
+      color: white;
+      font-size: 18px;
+      position: relative;
+      z-index: 10;
+    }
+
+    footer a {
+      color: white;
+      margin: 0 15px;
+      font-size: 24px;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: #d44638;
+    }
+
+    footer a.tiktok:hover {
+      color: #00f2ea;
+    }
+
+    @media (max-width: 600px) {
+      #title h1 {
+        font-size: 32px;
+      }
+
+      #title p {
+        font-size: 16px;
+      }
+
+      nav button {
+        font-size: 14px;
+        padding: 8px 15px;
+      }
+
+      .info-box {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+
+      .info-box img:not(.right) {
+        margin: 0 0 10px;
+      }
+
+      .info-box .right {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transform: none;
+      }
+    }
+  </style>
+
+  <!-- FontAwesome for social icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Header -->
+  <div id="header">
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="dropdown" id="dropdown-menu">
+      <a href="staff_index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <!-- Title -->
+  <div id="title">
+    <h1><span class="my">MY</span><span class="life">LIFE</span><span class="aid">Aid</span></h1>
+  </div>
+
+  <!-- Description -->
+  <p id="description">
+    Meet the Team Behind MyLifeAid
+  </p>
+
+  <!-- Info Boxes -->
+  <div id="main">
+    <div id="content">
+      <a class="info-box" href="team/hlamulo.html">
+        <img src="images/hlamulo.jpeg" />
+        <div>
+          <h3>Hlamulo Magwaza</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/luyanda.html">
+        <img src="images/luyanda.jpeg" />
+        <div>
+          <h3>Luyanda Msiza</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/lynn.html">
+        <img src="images/lynn.jpeg" />
+        <div>
+          <h3>Lynn Makombe</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/naledi.html">
+        <img src="images/naledi.jpeg" />
+        <div>
+          <h3>Naledi Letswalo</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/ntando.html">
+        <img src="images/ntando.jpeg" />
+        <div>
+          <h3>Ntando Nkuna</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/ofentse.html">
+        <img src="images/ofentse.jpeg" />
+        <div>
+          <h3>Ofentse Modibela</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/sechaba.html">
+        <img src="images/sechaba.jpeg" />
+        <div>
+          <h3>Sechaba Molokomme</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+      <a class="info-box" href="team/tatenda.html">
+        <img src="images/tatenda.jpeg" />
+        <div>
+          <h3>Tatenda Ncube</h3>
+        </div>
+        <img class="right" src="images/next-arrow.png" />
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <a href="https://www.instagram.com/kilimanjaro_uj/" target="_blank" rel="noopener" aria-label="Instagram">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://www.tiktok.com/@kiliman_uj" target="_blank" rel="noopener" aria-label="TikTok" class="tiktok">
+      <i class="fab fa-tiktok"></i>
+    </a>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const dropdown = document.getElementById('dropdown-menu');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>

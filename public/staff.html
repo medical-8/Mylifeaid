@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | MyLifeAid</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: #f4f7f6; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* Navbar */
+        .navbar {
+            background-color: #1D4352; color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10; position: sticky; top: 0;
+        }
+        .logo-group { display: flex; align-items: center; gap: 10px; }
+        .logo-text h2 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .logo-text p { margin: 0; font-size: 12px; opacity: 0.8; }
+        .navbar-right { display: flex; align-items: center; gap: 20px; }
+        .user-pill { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .logout-btn { background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .logout-btn:hover { background: #c0392b; }
+
+        /* Layout Grid */
+        .app-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: #14303b;
+            color: #ecf0f1;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-section-title {
+            padding: 12px 25px 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8faab3;
+            font-weight: 700;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 25px;
+            color: #d1dbe0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu li a:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .sidebar-menu li.active a {
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-left-color: #2ecc71;
+            font-weight: 600;
+        }
+
+        .sidebar-menu li a .nav-icon {
+            font-size: 18px;
+        }
+
+        /* Content Area */
+        .dashboard-main { 
+            flex: 1; 
+            padding: 30px; 
+            width: 100%; 
+            overflow-y: auto;
+        }
+        
+        .welcome-banner { margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e0e0e0; padding-bottom: 15px;}
+        .welcome-banner h3 { color: #1D4352; font-size: 24px; }
+        .date-stamp { color: #666; font-size: 14px; font-weight: 500; }
+
+        /* Dynamic View Switching */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards & Forms */
+        .card { background: #fff; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .flex-align { display: flex; align-items: center; gap: 10px; }
+        .flex-align h3 { color: #1D4352; font-size: 20px; margin: 0; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1D4352;
+        }
+
+        .form-control {
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: #1D4352;
+        }
+
+        .btn-submit {
+            background: #1D4352;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover {
+            background: #14303b;
+        }
+        
+        /* Table */
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: top; }
+        .data-table th { background: #f8f9fa; color: #1D4352; font-weight: 600; }
+        .data-table tbody tr:hover { background: #fdfdfd; }
+        
+        .id-cell { font-family: monospace; color: #666; font-weight: 600; }
+
+        /* Badges */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge-ward { background: #e0f2fe; color: #075985; }
+        .badge-pending { background: #fef08a; color: #9a3412; }
+
+        /* Buttons */
+        .action-btns { display: flex; gap: 10px; }
+        .btn-done { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 13px; }
+        .btn-done:hover { background: #27ae60; }
+        .btn-not-done { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 13px; }
+        .btn-not-done:hover { background: #c0392b; }
+
+        /* Responsive Layout */
+        @media (max-width: 900px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .navbar { flex-direction: column; gap: 15px; text-align: center; }
+            .welcome-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .dashboard-main { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo-group">
+            <div class="logo-text">
+                <h2><span class="my">MY</span><span class="life">Life</span><span class="aid">Aid</span></h2>
+                <p id="role-subtitle">Doctor Dashboard & Clinical Portal</p>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            <div class="user-pill">
+                <span class="user-avatar"></span>
+                <span id="user-display-name">Loading Profile...</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn">
+                <span> Log Out</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="app-container">
+
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-section-title">Patient Management</div>
+            <ul class="sidebar-menu">
+                <li class="active" data-tab="tab-wards">
+                    <a href="javascript:void(0)"><span class="nav-icon"></span> Admitted Patients & Wards</a>
+                </li>
+            </ul>
+
+            <div class="sidebar-section-title">Clinical Orders</div>
+            <ul class="sidebar-menu">
+                <li data-tab="tab-labs">
+                    <a href="javascript:void(0)"><span class="nav-icon"></span> Request Blood / Lab Tests</a>
+                </li>
+                <li data-tab="tab-prescriptions">
+                    <a href="javascript:void(0)"><span class="nav-icon"></span> Prescriptions & Pharmacy</a>
+                </li>
+                <li data-tab="tab-records">
+                    <a href="javascript:void(0)"><span class="nav-icon"></span> Lab Results & Records</a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Workspace Dynamic Content -->
+        <main class="dashboard-main">
+            
+            <div class="welcome-banner">
+                <h3 id="welcomeMessage">Welcome, Doctor</h3>
+                <span class="date-stamp" id="currentDateStamp">Loading Date...</span>
+            </div>
+
+            <!-- TAB 1: ADMITTED PATIENTS & WARDS -->
+            <section id="tab-wards" class="tab-content active">
+                <div class="card full-width">
+                    <div class="card-header space-between">
+                        <div class="flex-align">
+                            <span class="card-icon" style="font-size: 24px;"></span>
+                            <h3>Your Active Patients</h3>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ward & Bed</th>
+                                    <th>Patient Name</th>
+                                    <th>ID Number</th>
+                                    <th>Admitted Date / Time</th>
+                                    <th>Clinical Reason</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admittedTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">Fetching your patients...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: BLOOD & LAB TESTS REQUEST -->
+            <section id="tab-labs" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-align">
+                            <span class="card-icon" style="font-size: 24px;"></span>
+                            <h3>Order Pathology & Blood Tests</h3>
+                        </div>
+                    </div>
+                    <form id="labRequestForm" onsubmit="handleLabRequest(event)">
+                        <div class="form-grid">
+                            
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="labTarget">Select Partner Laboratory</label>
+                                <select id="labTarget" class="form-control" required>
+                                    <option value="">-- Loading available labs... --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="labPatientId">Select Patient</label>
+                                <select id="labPatientId" class="form-control" required>
+                                    <option value="">-- Loading patients... --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="labTestType">Required Lab Panels</label>
+                                <select id="labTestType" class="form-control" required>
+                                    <option value="">-- Select Panels --</option>
+                                    <option value="Full Blood Count (FBC)">Full Blood Count (FBC)</option>
+                                    <option value="Comprehensive Metabolic Panel (CMP)">Comprehensive Metabolic Panel (CMP)</option>
+                                    <option value="Lipid Profile">Lipid Profile</option>
+                                    <option value="Blood Glucose / HbA1c">Blood Glucose / HbA1c</option>
+                                    <option value="Liver Function Tests (LFT)">Liver Function Tests (LFT)</option>
+                                    <option value="Renal Function Tests">Renal Function Tests</option>
+                                    <option value="Arterial Blood Gas (ABG)">Arterial Blood Gas (ABG)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="labUrgency">Urgency / Priority</label>
+                                <select id="labUrgency" class="form-control" required>
+                                    <option value="Routine">Routine</option>
+                                    <option value="Urgent">Urgent</option>
+                                    <option value="STAT">STAT / Emergency</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="labClinicalNotes">Clinical Indications / Notes for Pathologist</label>
+                                <textarea id="labClinicalNotes" class="form-control" rows="3" placeholder="Provide notes regarding symptoms or diagnostic query..."></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Dispatch Lab Request</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB 3: PRESCRIPTIONS & PHARMACY -->
+            <section id="tab-prescriptions" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-align">
+                            <span class="card-icon" style="font-size: 24px;"></span>
+                            <h3>Issue Medication Script</h3>
+                        </div>
+                    </div>
+                    <form onsubmit="event.preventDefault(); alert('Prescription sent to pharmacy module.');">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Patient ID Number</label>
+                                <input type="text" class="form-control" placeholder="Patient ID" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Medication Name & Dosage</label>
+                                <input type="text" class="form-control" placeholder="e.g., Amoxicillin 500mg" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Frequency</label>
+                                <select class="form-control" required>
+                                    <option>Once Daily (QD)</option>
+                                    <option>Twice Daily (BID)</option>
+                                    <option>Three Times Daily (TID)</option>
+                                    <option>As Needed (PRN)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Submit Script to Pharmacy</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB 4: CLINICAL RECORDS & RESULTS -->
+            <section id="tab-records" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-align">
+                            <span class="card-icon" style="font-size: 24px;"></span>
+                            <h3>Completed Lab Results</h3>
+                        </div>
+                    </div>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Review recent pathology results and clinical comments submitted by partner laboratories.</p>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date Completed</th>
+                                    <th>Patient ID</th>
+                                    <th>Test Panel</th>
+                                    <th>Pathology Findings</th>
+                                    <th>Pathologist Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody id="labResultsTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 20px;">Fetching lab results...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, collectionGroup, query, where, getDocs, collection, doc, updateDoc, getDoc, addDoc
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
+            authDomain: "mylaid-f9947.firebaseapp.com",
+            projectId: "mylaid-f9947",
+            storageBucket: "mylaid-f9947.firebasestorage.app",
+            messagingSenderId: "315125553793",
+            appId: "1:315125553793:web:af4ac3618e0531fa190b80"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let providerId = null;
+        let myStaffNumber = "";
+        let myActivePatients = []; 
+        let myLinkedLabs = []; // Array to store linked laboratories
+
+        /* Sidebar Navigation Toggle */
+        const navItems = document.querySelectorAll('.sidebar-menu li');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        navItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                const targetTab = item.getAttribute('data-tab');
+                if(!targetTab) return;
+
+                navItems.forEach(function(i) { i.classList.remove('active'); });
+                tabContents.forEach(function(c) { c.classList.remove('active'); });
+
+                item.classList.add('active');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        function updateDateTime() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('currentDateStamp').innerText = now.toLocaleDateString('en-ZA', options);
+        }
+        setInterval(updateDateTime, 60000);
+        updateDateTime();
+
+        onAuthStateChanged(auth, async function(user) {
+            if (user) {
+                try {
+                    // 1. Fetch Doctor's profile to get staff details & their facility ID
+                    const q = query(collectionGroup(db, 'team'), where('email', '==', user.email));
+                    const snap = await getDocs(q);
+                    
+                    if (!snap.empty) {
+                        const staffDoc = snap.docs[0];
+                        const staffData = staffDoc.data();
+                        
+                        myStaffNumber = staffData.staffNumber;
+                        providerId = staffDoc.ref.parent.parent.id; // Facility ID
+                        
+                        document.getElementById('user-display-name').innerText = staffData.name + " | " + staffData.staffNumber;
+                        document.getElementById('welcomeMessage').innerText = "Welcome, " + staffData.name;
+
+                        // 2. Fetch the hospital's specific linked laboratories
+                        await loadPartnerLaboratories();
+
+                        // 3. Load active patients (Both "Assigned" and "Admitted" states)
+                        loadActivePatients();
+                    } else {
+                        alert("Unauthorized access. Staff profile not found.");
+                        signOut(auth);
+                    }
+                } catch (error) {
+                    console.error("Error fetching staff profile:", error);
+                }
+            } else {
+                window.location.href = "staff_index.html";
+            }
+        });
+
+        // Function to fetch the laboratories linked by the hospital admin
+        async function loadPartnerLaboratories() {
+            try {
+                const facilityDoc = await getDoc(doc(db, "healthcare_services", providerId));
+                const labSelect = document.getElementById("labTarget");
+                
+                if (facilityDoc.exists()) {
+                    const facilityData = facilityDoc.data();
+                    myLinkedLabs = facilityData.linkedLabs || [];
+
+                    labSelect.innerHTML = '<option value="">-- Choose Laboratory --</option>';
+
+                    if (myLinkedLabs.length === 0) {
+                        labSelect.innerHTML = '<option value="">No partner laboratories available</option>';
+                    } else {
+                        // Populate dropdown with linked labs
+                        myLinkedLabs.forEach(function(lab) {
+                            labSelect.innerHTML += `<option value="${lab.id}">${lab.name} (${lab.type})</option>`;
+                        });
+                    }
+
+                    // Proceed to fetch the lab results from these specific labs
+                    loadLabResults();
+                }
+            } catch (error) {
+                console.error("Error loading partner labs:", error);
+            }
+        }
+
+        // Fetch completed lab results from linked laboratories
+        async function loadLabResults() {
+            const tbody = document.getElementById('labResultsTableBody');
+            
+            if (myLinkedLabs.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>Your facility has no linked laboratories to fetch results from.</td></tr>";
+                return;
+            }
+
+            let allResults = [];
+
+            try {
+                // Loop through each linked lab to query for completed results matching this doctor and facility
+                for (let i = 0; i < myLinkedLabs.length; i++) {
+                    const labId = myLinkedLabs[i].id;
+                    const reqRef = collection(db, "laboratories", labId, "requests");
+                    const q = query(reqRef, where("requestingFacilityId", "==", providerId));
+                    const snap = await getDocs(q);
+                    
+                    snap.forEach(function(docSnap) {
+                        const data = docSnap.data();
+                        // Only add if it's completed and requested by this specific doctor
+                        if (data.status === "Completed" && data.requestingDoctor === myStaffNumber) {
+                            allResults.push(data);
+                        }
+                    });
+                }
+
+                // Sort results by completion date descending
+                allResults.sort(function(a, b) {
+                    return new Date(b.completedDate) - new Date(a.completedDate);
+                });
+                
+                renderLabResults(allResults);
+
+            } catch (error) {
+                console.error("Error fetching lab results:", error);
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Error loading results from network.</td></tr>";
+            }
+        }
+
+        // Render the fetched lab results into the table
+        function renderLabResults(results) {
+            const tbody = document.getElementById('labResultsTableBody');
+            tbody.innerHTML = "";
+
+            if (results.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>No completed lab results available yet.</td></tr>";
+                return;
+            }
+
+            results.forEach(function(res) {
+                const dateStr = new Date(res.completedDate).toLocaleDateString('en-ZA');
+                const ptId = res.patientId || "N/A";
+                const test = res.testType || "N/A";
+                const findings = res.pathologyFindings || "No findings recorded.";
+                const comments = res.pathologistComment || "No clinical remarks.";
+
+                let rowHtml = "<tr>";
+                rowHtml += "<td><strong>" + dateStr + "</strong></td>";
+                rowHtml += "<td class='id-cell'>" + ptId + "</td>";
+                rowHtml += "<td>" + test + "</td>";
+                rowHtml += "<td>" + findings + "</td>";
+                rowHtml += "<td><em>" + comments + "</em></td>";
+                rowHtml += "</tr>";
+
+                tbody.innerHTML += rowHtml;
+            });
+        }
+
+        async function loadActivePatients() {
+            const tbody = document.getElementById('admittedTableBody');
+            try {
+                const bSnap = await getDocs(collection(db, "healthcare_services", providerId, "bookings"));
+                myActivePatients = [];
+                
+                bSnap.forEach(function(doc) {
+                    const b = doc.data();
+                    
+                    const isMyPatient = b.assignedDoctor && b.assignedDoctor.indexOf(myStaffNumber) !== -1;
+                    const isActiveStatus = b.status === "Assigned" || b.status === "Admitted";
+
+                    if (isActiveStatus && isMyPatient) {
+                        const patientData = b;
+                        patientData.id = doc.id;
+                        myActivePatients.push(patientData);
+                    }
+                });
+
+                myActivePatients.sort(function(a, b) {
+                    return new Date(a.appointmentDate || a.createdAt) - new Date(b.appointmentDate || b.createdAt);
+                });
+                
+                renderPatients();
+
+            } catch (error) {
+                console.error("Error loading patients:", error);
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:red;'>Failed to load patients. Check console logs.</td></tr>";
+            }
+        }
+
+        function renderPatients() {
+            const tbody = document.getElementById('admittedTableBody');
+            const labPatientSelect = document.getElementById('labPatientId'); 
+            
+            tbody.innerHTML = "";
+            labPatientSelect.innerHTML = '<option value="">-- Select Patient --</option>';
+
+            if (myActivePatients.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No active patients assigned to you right now.</td></tr>";
+                labPatientSelect.innerHTML = '<option value="">No patients available</option>';
+                return;
+            }
+
+            myActivePatients.forEach(function(patient) {
+                const isAdmitted = patient.status === "Admitted";
+                const wardBedStr = isAdmitted ? `<span class="badge badge-ward">${patient.ward}</span> ${patient.bed}` : `<span class="badge badge-pending">Pending Admission</span>`;
+                
+                const timeStr = patient.appointmentTime || "Walk-in";
+                const dateStr = patient.appointmentDate || new Date(patient.createdAt).toLocaleDateString('en-ZA');
+                const idStr = patient.idNumber || "N/A";
+                const nameStr = (patient.firstName || "") + " " + (patient.surname || "");
+                const reasonStr = patient.reason || "N/A";
+
+                let rowHtml = "<tr>";
+                rowHtml += "<td>" + wardBedStr + "</td>";
+                rowHtml += "<td><strong>" + nameStr + "</strong></td>";
+                rowHtml += "<td class='id-cell'>" + idStr + "</td>";
+                rowHtml += "<td>" + dateStr + " <br><small style='color:#666;'>" + timeStr + "</small></td>";
+                rowHtml += "<td>" + reasonStr + "</td>";
+                rowHtml += "<td>";
+                rowHtml += "<div class='action-btns'>";
+                rowHtml += "<button class='btn-done' onclick=\"updatePatientStatus('" + patient.id + "', 'Completed')\">✔ Complete Case</button>";
+                rowHtml += "</div>";
+                rowHtml += "</td>";
+                rowHtml += "</tr>";
+
+                tbody.innerHTML += rowHtml;
+                labPatientSelect.innerHTML += `<option value="${idStr}">${nameStr} (ID: ${idStr})</option>`;
+            });
+        }
+
+        window.updatePatientStatus = async function(bookingId, newStatus) {
+            if(!confirm("Are you sure you want to mark this patient's case as " + newStatus + "? This will remove them from your active view.")) return;
+
+            try {
+                await updateDoc(doc(db, "healthcare_services", providerId, "bookings", bookingId), {
+                    status: newStatus
+                });
+                
+                myActivePatients = myActivePatients.filter(function(p) {
+                    return p.id !== bookingId;
+                });
+                
+                renderPatients();
+                
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("Failed to update status. Please try again.");
+            }
+        }
+
+        window.handleLabRequest = async function(e) {
+            e.preventDefault();
+            
+            const targetLabId = document.getElementById('labTarget').value;
+            const patientId = document.getElementById('labPatientId').value;
+            const testType = document.getElementById('labTestType').value;
+            const urgency = document.getElementById('labUrgency').value;
+            const clinicalNotes = document.getElementById('labClinicalNotes').value;
+
+            if (!targetLabId) {
+                alert("Please select a partner laboratory before dispatching the request.");
+                return;
+            }
+            
+            if (!patientId) {
+                alert("Please select a patient before dispatching the request.");
+                return;
+            }
+
+            try {
+                const requestPayload = {
+                    patientId: patientId,
+                    testType: testType,
+                    urgency: urgency,
+                    clinicalNotes: clinicalNotes,
+                    status: "Pending Intake",
+                    requestingFacilityId: providerId,
+                    requestingDoctor: myStaffNumber,
+                    createdAt: new Date().toISOString()
+                };
+
+                await addDoc(collection(db, "laboratories", targetLabId, "requests"), requestPayload);
+
+                alert("Pathology order successfully submitted to the laboratory.");
+                document.getElementById('labRequestForm').reset();
+            } catch (error) {
+                console.error("Error submitting lab request:", error);
+                alert("System error. Unable to dispatch request at this time.");
+            }
+        };
+
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            await signOut(auth);
+            window.location.href = "staff_index.html";
+        });
+
+    </script>
+</body>
+</html>

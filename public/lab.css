@@ -1,0 +1,375 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+body {
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #1D4352;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    position: sticky;
+    top: 0;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.logo-text p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-pill {
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+/* Layout Grid */
+.app-container {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 65px);
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 260px;
+    background-color: #14303b;
+    color: #ecf0f1;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-section-title {
+    padding: 12px 25px 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8faab3;
+    font-weight: 700;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 25px;
+    color: #d1dbe0;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.sidebar-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.sidebar-menu li.active a {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border-left-color: #2ecc71;
+    font-weight: 600;
+}
+
+.sidebar-menu li a .nav-icon {
+    font-size: 18px;
+}
+
+/* Content Area */
+.dashboard-main { 
+    flex: 1; 
+    padding: 30px; 
+    width: 100%; 
+    overflow-y: auto;
+}
+
+.welcome-banner {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+.welcome-banner h3 {
+    color: #1D4352;
+    font-size: 24px;
+}
+
+.date-stamp {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Dynamic View Switching */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Cards & Forms */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.flex-align {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flex-align h3 {
+    color: #1D4352;
+    font-size: 20px;
+    margin: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1D4352;
+}
+
+.form-control {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: #1D4352;
+}
+
+.btn-submit {
+    background: #1D4352;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.btn-submit:hover {
+    background: #14303b;
+}
+
+/* Table */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.data-table th, .data-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.data-table th {
+    background: #f8f9fa;
+    color: #1D4352;
+    font-weight: 600;
+}
+
+.data-table tbody tr:hover {
+    background: #fdfdfd;
+}
+
+.id-cell {
+    font-family: monospace;
+    color: #666;
+}
+
+/* Status Badges */
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-stat {
+    background: #fadbd8;
+    color: #78281f;
+}
+
+.badge-urgent {
+    background: #fdebd0;
+    color: #7e5109;
+}
+
+.badge-routine {
+    background: #d4efdf;
+    color: #145a32;
+}
+
+/* Buttons */
+.action-btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-done {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    font-size: 13px;
+}
+
+.btn-done:hover {
+    background: #27ae60;
+}
+
+.btn-not-done {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+    font-size: 13px;
+}
+
+.btn-not-done:hover {
+    background: #c0392b;
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+    .app-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    .welcome-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .dashboard-main {
+        padding: 15px;
+    }
+}
