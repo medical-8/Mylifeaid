@@ -153,9 +153,9 @@
         </div>
         <div class="header-controls">
             <div class="user-pill" style="font-weight: 600;">
-                <span id="adminNameDisplay">👤 Admin</span>
+                <span id="adminNameDisplay">Admin</span>
             </div>
-            <button class="logout-btn" id="logoutBtn">🚪 Log Out</button>
+            <button class="logout-btn" id="logoutBtn">Log Out</button>
         </div>
     </header>
 
@@ -163,19 +163,19 @@
         <aside class="sidebar" id="sidebar">
             <nav>
                 <button class="nav-btn active" onclick="showSection('bed-section', this)">
-                    <span class="icon">🛏️</span> Bed Availability
+                    <span class="icon"></span> Bed Availability
                 </button>
                 <button class="nav-btn" onclick="showSection('schedule-section', this)">
-                    <span class="icon">🕒</span> Operating Schedule
+                    <span class="icon"></span> Operating Schedule
                 </button>
                 <button class="nav-btn" onclick="showSection('patient-section', this)">
-                    <span class="icon">📋</span> Patient Details
+                    <span class="icon"></span> Patient Details
                 </button>
                 <button class="nav-btn" onclick="showSection('admit-section', this)">
-                    <span class="icon">🏥</span> Admit Patient
+                    <span class="icon"></span> Admit Patient
                 </button>
                 <button class="nav-btn" onclick="showSection('chat-section', this)">
-                    <span class="icon">💬</span> Live Chat
+                    <span class="icon"></span> Live Chat
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -187,7 +187,7 @@
             
             <!-- BED AVAILABILITY SECTION -->
             <section id="bed-section" class="admin-card active">
-                <h2><span class="icon">🛏️</span> Facility Resource Monitors</h2>
+                <h2><span class="icon"></span> Facility Resource Monitors</h2>
                 <p style="color:#666; font-size:14px; margin-top:5px;">Update live bed and emergency slot availability. Changes save automatically.</p>
                 
                 <div class="resource-grid">
@@ -215,7 +215,7 @@
 
             <!-- SCHEDULE SECTION (NEW) -->
             <section id="schedule-section" class="admin-card">
-                <h2><span class="icon">🕒</span> Facility Operating Schedule</h2>
+                <h2><span class="icon"></span> Facility Operating Schedule</h2>
                 <p style="color:#666; font-size:14px; margin-top:5px; margin-bottom:20px;">Set your working hours for the week. Patients will only be able to book within these available slots.</p>
                 
                 <form id="scheduleForm" onsubmit="handleScheduleSave(event)">
@@ -293,7 +293,7 @@
 
             <!-- PATIENT DETAILS SECTION -->
             <section id="patient-section" class="admin-card">
-                <h2><span class="icon">📋</span> Booking & Patient Management</h2>
+                <h2><span class="icon"></span> Booking & Patient Management</h2>
                 
                 <div class="search-bar-container" style="margin-top:20px;">
                     <input type="text" id="patientSearch" placeholder="Search by First Name, Surname, or Booking ID...">
@@ -320,7 +320,7 @@
 
             <!-- ADMIT PATIENT SECTION -->
             <section id="admit-section" class="admin-card">
-                <h2><span class="icon">🏥</span> Hospital Patient Admission</h2>
+                <h2><span class="icon"></span> Hospital Patient Admission</h2>
                 <p style="color:#666; font-size:14px; margin-top:5px;">Admit an assigned patient directly to a hospital ward and allocate a bed.</p>
                 
                 <form id="adminAdmitForm" onsubmit="handleAdminAdmission(event)">
@@ -360,7 +360,7 @@
 
             <!-- LIVE CHAT SECTION -->
             <section id="chat-section" class="admin-card">
-                <h2><span class="icon">💬</span> Live Support Chat</h2>
+                <h2><span class="icon"></span> Live Support Chat</h2>
                 <div style="margin-top: 30px; text-align: center; padding: 50px; background: #f8f9fa; border: 2px dashed #ddd; border-radius: 12px;">
                     <h3 style="color: #1D4352;">Connect with Patients in Real-Time</h3>
                     <button style="color: white; background-color: #1D4352; padding: 10px 20px; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer;" onclick="window.open('https://dashboard.tawk.to/login#/dashboard/')">Go to Tawk.to</button>
@@ -459,7 +459,7 @@
                     if (!snap.empty) {
                         const adminDoc = snap.docs[0];
                         providerId = adminDoc.ref.parent.parent.id;
-                        document.getElementById('adminNameDisplay').innerText = `👤 ${adminDoc.data().name} (Admin)`;
+                        document.getElementById('adminNameDisplay').innerText = ` ${adminDoc.data().name} (Admin)`;
 
                         loadHospitalData();
                         loadBookings();

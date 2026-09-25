@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MyLifeAid</string>
+    <string name="title_activity_main">MyLifeAid</string>
+    <string name="package_name">com.medical8.mylifeaid</string>
+    <string name="custom_url_scheme">com.medical8.mylifeaid</string>
+</resources>

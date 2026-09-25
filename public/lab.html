@@ -589,7 +589,7 @@
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             try {
                 await signOut(auth);
-                window.location.href = "staff_index.html";
+                window.location.href = "welcome.html";
             } catch (error) {
                 alert("Error logging out.");
             }

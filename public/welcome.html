@@ -285,79 +285,66 @@
   </div>
 
   <!-- JAVASCRIPT -->
-  <script>
+  <!-- Converted to module so we can import Firestore + config safely -->
+  <script type="module">
 
-/* ================================================= */
-/* HOSPITAL DATABASE */
-/* ================================================= */
-
-const hospitalsData = [
-    {
-        name: "Hillbrow Clinic",
-        lat: -26.1935691,
-        lng: 28.0428001,
-        address: "51 Klein Street, Hillbrow",
-        phone: "+27 11 694 3700",
-        city: "Johannesburg"
-    },
-    {
-        name: "Esselen Street Clinic",
-        address: "17 Esselen Street, Hillbrow",
-        lat: -26.1907234,
-        lng: 28.0425418,
-        phone: "+27 61 626 6078",
-        city: "Johannesburg"
-    },
-    {
-        name: "Yeoville Clinic",
-        lat: -26.1810683,
-        lng: 28.0619894,
-        address: "Corner of Hopkins & Kenmere Rd",
-        phone: "+27 11 837 9119",
-        city: "Johannesburg"
-    },
-    {
-        name: "Civic Centre Clinic",
-        lat: -26.1019,
-        lng: 28.2233251,
-        address: "Civic Centre, Braamfontein",
-        phone: "+27 11 477 9936",
-        city: "Johannesburg"
-    },
-    {
-        name: "Orchards Clinic",
-        lat: -26.1545872,
-        lng: 28.0830545,
-        address: "Oaklands Road, Oaklands",
-        phone: "+27 83 281 6054",
-        city: "Johannesburg"
-    },
-    {
-        name: "Jeppe Clinic",
-        lat: -26.2061647,
-        lng: 28.0652277,
-        address: "34 Ford Street, Jeppestown",
-        phone: "+27 11 614 1474",
-        city: "Johannesburg"
-    },
-    {
-        name: "Hillbrow Poly Municipal Clinic",
-        lat: -26.191699,
-        lng: 28.0430151,
-        address: "Braamfontein, Johannesburg",
-        phone: "+27 11 720 1121",
-        city: "Johannesburg"
-    }
-];
+import { db } from './config.js';
+import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 /* ================================================= */
 /* GLOBAL VARIABLES */
 /* ================================================= */
 
+let hospitalsData = [];
 let map;
 let markers = [];
 let userLocation = null;
 let userMarker = null;
+
+/* ================================================= */
+/* HOSPITAL DATABASE (FIRESTORE FETCH) */
+/* ================================================= */
+
+async function fetchHospitalsData() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "healthcare_services"));
+        const fetched = [];
+        
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            
+            // Extracting city from the address string as a fallback since it's not explicitly a separate field in your DB docs
+            let cityStr = "Unknown";
+            if (data.address) {
+                const parts = data.address.split(',');
+                if (parts.length > 1) {
+                    cityStr = parts[parts.length - 2].trim();
+                }
+            }
+
+            fetched.push({
+                name: data.name || "Unknown Facility",
+                lat: parseFloat(data.lat) || 0,
+                lng: parseFloat(data.lng) || 0,
+                address: data.address || "No address provided",
+                phone: data.phone || "No phone provided",
+                city: cityStr
+            });
+        });
+
+        hospitalsData = fetched;
+        
+        // Refresh the UI now that we have real data
+        displayHospitals(hospitalsData);
+    } catch (error) {
+        console.error("Error fetching healthcare services from Firestore: ", error);
+        document.getElementById('hospitalList').innerHTML = `
+            <div class="loading" style="color: red;">
+                Failed to load hospitals from database.
+            </div>
+        `;
+    }
+}
 
 /* ================================================= */
 /* DISTANCE CALCULATION HELPER (HAVERSINE FORMULA) */
@@ -462,7 +449,7 @@ function displayHospitals(hospitals) {
     if (hospitals.length === 0) {
         hospitalList.innerHTML = `
             <div class="loading">
-                No hospitals found.
+                Loading hospitals...
             </div>
         `;
         return;
@@ -549,8 +536,10 @@ function displayHospitals(hospitals) {
         points.push([userLocation.lat, userLocation.lng]);
     }
 
-    const bounds = L.latLngBounds(points);
-    map.fitBounds(bounds, { padding: [30, 30] });
+    if(points.length > 0) {
+        const bounds = L.latLngBounds(points);
+        map.fitBounds(bounds, { padding: [30, 30] });
+    }
 }
 
 /* ================================================= */
@@ -858,10 +847,11 @@ modalOverlay.onclick = (e) => {
 };
 
 /* ================================================= */
-/* START MAP */
+/* START MAP & FETCH DATA */
 /* ================================================= */
 
 initMap();
+fetchHospitalsData();
 
 /* ================================================= */
 /* NEXT BUTTON & LOGIN BUTTON FUNCTIONALITY */
