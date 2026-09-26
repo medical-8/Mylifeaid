@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 22
       - run: npm install && npx cap sync ios
-      - run: cd ios/App && xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphoneos clean build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CONFIGURATION_BUILD_DIR=build
+      - run: cd ios/App && xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphoneos build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CONFIGURATION_BUILD_DIR=build
       - uses: actions/upload-artifact@v4
         with:
           name: ios-unsigned-build
