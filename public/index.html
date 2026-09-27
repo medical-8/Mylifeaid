@@ -5,6 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>MyLifeAid</title>
     <link rel="stylesheet" href="welcome.css">
+    
+    <!-- ================= MODAL CSS INJECTION ================= -->
+    <style>
+        /* The Modal Background (Hidden by Default) */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(5px);
+            overflow: auto;
+        }
+
+        /* Modal Content Box */
+        .modal-content {
+            background-color: #ffffff;
+            margin: 10% auto; 
+            padding: 30px;
+            border-radius: 12px;
+            width: 85%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: relative;
+            color: #121212;
+            font-family: inherit;
+            animation: modalFadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Close Button (X) */
+        .close-btn {
+            color: #888;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #ff3b30;
+            text-decoration: none;
+        }
+
+        /* Basic styling for the modal text so it doesn't break your theme */
+        .modal-content h2 { margin-top: 0; color: #1a73e8; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .modal-content h3 { margin-top: 20px; color: #333; }
+        .modal-content p, .modal-content ul { line-height: 1.6; font-size: 15px; }
+        .modal-content li { margin-bottom: 10px; }
+        
+        /* Form Styling for Contact Modal */
+        .contact-form .form-group { margin-bottom: 15px; }
+        .contact-form label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        .contact-form input, .contact-form select, .contact-form textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;
+        }
+        .submit-btn {
+            background-color: #1a73e8; color: white; border: none; padding: 12px 20px;
+            border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px;
+        }
+        .submit-btn:hover { background-color: #1557b0; }
+        .faq-item { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+
+        /* Responsive YouTube iframe wrapper */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 
@@ -53,13 +143,13 @@
 
        <footer>
 
-    <a href="#" onclick="goToHelp(this)">Help</a>
+    <a href="javascript:void(0)" onclick="openModal('helpModal')">Help</a>
     <a href="#">|</a>
 
-    <a href="#" onclick="goToContact(this)">Contact</a>
+    <a href="javascript:void(0)" onclick="openModal('contactModal')">Contact</a>
     <a href="#">|</a>
 
-    <a href="#" onclick="goToAbout(this)">About Us</a>
+    <a href="javascript:void(0)" onclick="openModal('aboutModal')">About Us</a>
 
 </footer>
 
@@ -68,7 +158,8 @@
     <!-- RIGHT SIDE -->
     <div class="right-panel">
 
-        <button class="learn-more" onclick="goToLearnMore(this)">
+        <!-- Updated Learn More button to trigger the video modal -->
+        <button class="learn-more" onclick="openModal('videoModal')">
     Learn More
 </button>
 
@@ -91,8 +182,173 @@
 
 </div>
 
+<!-- ================= MODALS ================= -->
+
+<!-- VIDEO MODAL (LEARN MORE) -->
+<div id="videoModal" class="modal">
+    <div class="modal-content" style="background: transparent; box-shadow: none; padding: 0;">
+        <span class="close-btn" onclick="closeModal('videoModal')" style="color: #ffffff; top: -35px; right: 0;">&times;</span>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/3kCEWozNmfM?si=iOl4WlH4HuHKNCnq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- ABOUT US MODAL -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>About Us</h2>
+        
+        <h3>Our Mission</h3>
+        <p>At MyLifeAid, we believe that accessing quality healthcare should be simple, efficient, and stress-free. Designed specifically to modernise patient management and appointment booking, MyLifeAid connects patients directly with healthcare facilities through a streamlined digital platform.</p>
+        
+        <h3>What We Do</h3>
+        <p>MyLifeAid bridges the gap between healthcare providers and patients by eliminating long waiting times and administrative bottlenecks. Our platform enables:</p>
+        <ul>
+            <li><strong>Patients:</strong> Discover healthcare providers, check availability, and book appointments instantly from any device.</li>
+            <li><strong>Clinical Staff:</strong> Manage patient schedules efficiently, reduce no-shows, and optimize day-to-day operations.</li>
+        </ul>
+
+        <h3>Why Choose MyLifeAid?</h3>
+        <ul>
+            <li><strong>Accessibility First:</strong> Intuitive design crafted so anyone can navigate healthcare seamlessly.</li>
+            <li><strong>Reliable & Secure:</strong> Built with standard data privacy protocols to protect your sensitive health information.</li>
+            <li><strong>Empowering Care:</strong> Putting control of medical scheduling back into the hands of patients and providers.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- HELP & FAQS MODAL -->
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('helpModal')">&times;</span>
+        <h2>Help & FAQs</h2>
+        
+        <h3>For Patients</h3>
+        <div class="faq-item">
+            <strong>How do I book an appointment?</strong>
+            <p>Click on <em>I'm a Patient</em> on the home page, select your preferred clinic or specialist, choose an available date and time slot, and confirm your booking.</p>
+        </div>
+        <div class="faq-item">
+            <strong>Can I reschedule or cancel my booking?</strong>
+            <p>Yes. Log into your patient dashboard, navigate to <em>My Appointments</em>, and select <em>Reschedule</em> or <em>Cancel</em> at least 24 hours prior to your scheduled time.</p>
+        </div>
+        <div class="faq-item">
+            <strong>Is my personal information secure?</strong>
+            <p>Absolutely. MyLifeAid encrypts all patient data and complies with healthcare privacy regulations to keep your details safe.</p>
+        </div>
+
+        <h3>For Healthcare Staff</h3>
+        <div class="faq-item">
+            <strong>How do I access the staff dashboard?</strong>
+            <p>Click <em>I'm Staff</em> on the landing page and log in using your facility credentials.</p>
+        </div>
+        <div class="faq-item">
+            <strong>How do I manage daily appointment schedules?</strong>
+            <p>Your staff dashboard gives you a real-time overview of incoming bookings, patient status, and slot availabilities.</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACT US MODAL -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('contactModal')">&times;</span>
+        <h2>Contact Us</h2>
+        <p>We are here to support you whether you are a patient seeking care or a healthcare provider looking to partner with us.</p>
+        
+        <div class="contact-info">
+            <p><strong>General Inquiries & Support:</strong> support@mylifeaid.com</p>
+            <p><strong>Clinic & Partnership Enquiries:</strong> partners@mylifeaid.com</p>
+            <p><strong>Phone:</strong> +27 (0) 11 555 0199</p>
+            <p><strong>Operating Hours:</strong> Monday – Friday, 08:00 – 17:00 (SAST)</p>
+        </div>
+
+        <h3>Send Us a Message</h3>
+        <form class="contact-form" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="E.g., Jane Doe" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="Patient">Patient</option>
+                    <option value="Healthcare Provider">Healthcare Provider</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" placeholder="Brief summary of your request" required>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="4" placeholder="How can we help you today?" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+</div>
+
 <!-- CAPACITOR CORE SCRIPT: Native bridge injection -->
 <script src="capacitor.js"></script>
 <script src="welcome.js"></script>
+
+<!-- ================= MODAL JS INJECTION ================= -->
+<script>
+    // Open specific modal
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    // Close specific modal and kill YouTube video if it's playing
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+        
+        if (modalId === 'videoModal') {
+            const iframe = document.querySelector('#videoModal iframe');
+            if (iframe) {
+                const iframeSrc = iframe.src;
+                iframe.src = iframeSrc; // Resets the iframe to stop audio/video
+            }
+        }
+    }
+
+    // Close modal if the user clicks anywhere outside of the white content box
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            
+            // Kill YouTube video if they click out of the background
+            if (event.target.id === 'videoModal') {
+                const iframe = document.querySelector('#videoModal iframe');
+                if (iframe) {
+                    const iframeSrc = iframe.src;
+                    iframe.src = iframeSrc;
+                }
+            }
+        }
+    }
+
+    // Prevent page reload on contact form submission
+    function handleContactSubmit(event) {
+        event.preventDefault();
+        alert('Your message has been sent to the MyLifeAid team!');
+        closeModal('contactModal');
+        event.target.reset(); // clear the form
+    }
+</script>
 </body>
 </html>
