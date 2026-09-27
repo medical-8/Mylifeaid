@@ -472,7 +472,7 @@
                     console.error("Error fetching admin profile:", error);
                 }
             } else {
-                window.location.href = "staff_index.html";
+                window.location.replace("staff_index.html");
             }
         });
 
@@ -878,7 +878,7 @@
         // 13. Logout
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             await signOut(auth);
-            window.location.href = "staff_index.html";
+            window.location.replace("staff_index.html");
         });
 
     </script>

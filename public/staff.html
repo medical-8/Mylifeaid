@@ -498,7 +498,8 @@
                     console.error("Error fetching staff profile:", error);
                 }
             } else {
-                window.location.href = "staff_index.html";
+                window.location.replace("staff_index.html");
+
             }
         });
 
@@ -736,7 +737,7 @@
 
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             await signOut(auth);
-            window.location.href = "staff_index.html";
+            window.location.replace("staff_index.html");
         });
 
     </script>

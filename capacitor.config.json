@@ -1,5 +1,10 @@
 {
   "appId": "com.medical8.mylifeaid",
   "appName": "MyLifeAid",
-  "webDir": "public"
+  "webDir": "public",
+  "server": {
+    "allowNavigation": [
+      "*.tawk.to"
+    ]
+  }
 }

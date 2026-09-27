@@ -52,8 +52,9 @@
 
         <div class="navbar-right">
             <button class="help-button" id="helpButton">Need help?</button>
-            <button class="login-button" onclick="window.location.href='healthcare-auth.html'">Register Facility</button>
-            <button class="login-button" onclick="window.location.href='lab-auth.html'">Lab</button>
+            <button class="login-button" onclick="window.location.replace('healthcare-auth.html')">Register Facility</button>
+            <button class="login-button" onclick="window.location.replace('lab-auth.html')">Lab</button>
+
         </div>
     </nav>
 
@@ -138,7 +139,7 @@
     <!-- ================= FIREBASE LOGIN LOGIC ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collectionGroup, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -153,6 +154,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        // Prevent authenticated users from staying on the login page
+        onAuthStateChanged(auth, function(user) {
+            if (user) {
+                // User is already logged in.
+                // Do not automatically redirect here if you want staff_index.html
+                // to remain accessible as the login screen.
+                console.log("Authenticated user detected.");
+            }
+        });
+
 
         let selectedRole = 'Staff';
 
@@ -237,9 +248,9 @@
                 
                 // Redirect based on selected role
                 if (selectedRole === 'Admin') {
-                    window.location.href = "admin.html";
+                    window.location.replace("admin.html");
                 } else {
-                    window.location.href = "staff.html";
+                    window.location.replace("staff.html");
                 }
 
             } catch (error) {
