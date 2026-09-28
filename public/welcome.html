@@ -2,46 +2,31 @@
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>MyLifeAid</title>
 
   <!-- GOOGLE FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <!-- BOXICONS -->
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
   <!-- FONT AWESOME -->
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <!-- LEAFLET MAP -->
-  <link rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="patienthomepagestyle.css">
   <link rel="stylesheet" href="./style.css">
-
 </head>
 
 <body>
 
   <!-- ================= NAVBAR ================= -->
-
   <nav class="navbar">
-
     <div class="logo-group">
-
-      <img src="MYAID-LOGO.png"
-        alt="MyAid Logo"
-        class="logo-img">
-
+      <img src="MYAID-LOGO.png" alt="MyAid Logo" class="logo-img">
       <div class="logo-text">
         <a href="#">
           <span class="my">MY</span>
@@ -49,257 +34,167 @@
           <span class="aid">Aid</span>
         </a>
       </div>
-
     </div>
 
     <ul class="nav-links">
-
       <li class="nav-item dropdown">
-
         <a href="#">
           About Us
           <i class="fa-solid fa-chevron-down"></i>
         </a>
-
         <ul class="dropdown-menu">
           <li><a href="#" id="ourStoryButton">Our Story</a></li>
           <li><a href="#" id="theTeamButton">The Team</a></li>
         </ul>
-
       </li>
-
       <li class="nav-item dropdown">
-
         <a href="#">
           Services
           <i class="fa-solid fa-chevron-down"></i>
         </a>
-
         <ul class="dropdown-menu">
           <li><a href="#" id="bedAvailabilityBtn">Bed Availability</a></li>
           <li><a href="#" id="emergencySearchBtn">Emergency Search</a></li>
           <li><a href="#" id="userPortalBtn">User Portal</a></li>
         </ul>
-
       </li>
-
       <li class="nav-item dropdown">
-
         <a href="#">
           Resources
           <i class="fa-solid fa-chevron-down"></i>
         </a>
-
         <ul class="dropdown-menu">
           <li><a href="#" id="faqBtn">FAQ</a></li>
         </ul>
-
       </li>
-
     </ul>
     
     <div class="navbar-right">
-
       <div class="user-icon" id="userButton">
         <i class='bx bxs-user-circle'></i>
       </div>
-
     </div>
-
   </nav>
 
   <!-- ================= HERO SECTION ================= -->
-
   <section class="hero">
-
     <div class="hero-left">
-
       <div class="hero-text">
-
-        <h1>
-          Welcome to the future of Resource Management
-        </h1>
-
-        <p>
-          MyLifeAid empowers you to search and find hospitals,
-          check availability, and manage your health.
-        </p>
-
+        <h1>Welcome to the future of Resource Management</h1>
+        <p>MyLifeAid empowers you to search and find hospitals, check availability, and manage your health.</p>
       </div>
 
-      <!-- VALUE PROPS -->
-
       <div class="value-props">
-
         <div class="prop-item">
           <div class="icon-circle">
             <i class='bx bx-building-house'></i>
           </div>
-
           <div class="prop-text">
             <h4>Find Hospitals</h4>
             <p>Near You</p>
           </div>
         </div>
-
         <div class="prop-item">
           <div class="icon-circle">
             <i class='bx bx-calendar-check'></i>
           </div>
-
           <div class="prop-text">
             <h4>Check Real-time</h4>
             <p>Availability</p>
           </div>
         </div>
-
         <div class="prop-item">
           <div class="icon-circle">
             <i class='bx bx-shield-quarter'></i>
           </div>
-
           <div class="prop-text">
             <h4>Secure & Private</h4>
             <p>Your Data</p>
           </div>
         </div>
-
       </div>
-
     </div>
 
     <!-- SIGNUP CARD -->
-
     <div class="signup-card">
-
       <h3>WELCOME TO MYLIFEAID SIGN-UP</h3>
-
       <button class="next-btn" id="nextBtn">Create Account</button>
       <button class="next-btn" id="loginBtn">Login</button>
-
     </div>
-
   </section>
 
   <!-- ================= SEARCH ================= -->
-
   <div class="search-container">
-
-    <input type="text"
-      id="searchInput"
-      placeholder="Search for hospitals or locations...">
-
-    <button id="searchBtn">
-      Search Hospitals
-    </button>
-
+    <input type="text" id="searchInput" placeholder="Search for hospitals or locations...">
+    <button id="searchBtn">Search Hospitals</button>
     <button id="Ambulance" title="Call Ambulance"> 
       <img src="images/icons8-ambulance-80.png" alt="Ambulance Icon">
     </button>
-  
   </div>
 
   <!-- ================= MAIN ================= -->
-
   <section class="main">
-
     <div class="hospital-list">
-
       <h3>Nearby Hospitals</h3>
-
       <div id="hospitalList"></div>
-
     </div>
-
     <div id="map"></div>
-
   </section>
 
   <!-- ================= FEATURES ================= -->
-
   <section class="features-panel">
-
     <div class="feature-item">
       <i class='bx bx-time-five feature-icon'></i>
-
       <div class="feature-text">
         <h4>Real-time Updates</h4>
         <p>Live information at your fingertips</p>
       </div>
     </div>
-
     <div class="feature-item">
       <i class='bx bx-check-shield feature-icon'></i>
-
       <div class="feature-text">
         <h4>Trusted & Verified</h4>
         <p>All facilities are verified</p>
       </div>
     </div>
-
     <div class="feature-item">
       <i class='bx bx-group feature-icon'></i>
-
       <div class="feature-text">
         <h4>Easy & Accessible</h4>
         <p>Designed for everyone</p>
       </div>
     </div>
-
   </section>
 
   <!-- ================= POPUP ================= -->
-
   <div class="popup-background" id="popupBackground">
-
     <div class="popup-box">
-
-      <button class="close-popup-button" id="closePopupButton">
-        &times;
-      </button>
-
+      <button class="close-popup-button" id="closePopupButton">&times;</button>
       <div id="popupContent"></div>
-
     </div>
-
   </div>
 
   <!-- ================= MODAL ================= -->
-
   <div class="modal-overlay" id="modalOverlay">
-
     <div class="modal-content">
-
-      <button class="close-modal" id="closeModalBtn">
-        &times;
-      </button>
-
+      <button class="close-modal" id="closeModalBtn">&times;</button>
       <div id="modalBody"></div>
-
     </div>
-
   </div>
 
   <!-- JAVASCRIPT -->
-  <!-- Converted to module so we can import Firestore + config safely -->
-  <script type="module">
+  <!-- Injection of Capacitor core for native location bridging -->
+  <script src="capacitor.js"></script>
 
+  <script type="module">
 import { db } from './config.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-
-/* ================================================= */
-/* GLOBAL VARIABLES */
-/* ================================================= */
 
 let hospitalsData = [];
 let map;
 let markers = [];
 let userLocation = null;
 let userMarker = null;
-
-/* ================================================= */
-/* HOSPITAL DATABASE (FIRESTORE FETCH) */
-/* ================================================= */
 
 async function fetchHospitalsData() {
     try {
@@ -308,8 +203,6 @@ async function fetchHospitalsData() {
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            
-            // Extracting city from the address string as a fallback since it's not explicitly a separate field in your DB docs
             let cityStr = "Unknown";
             if (data.address) {
                 const parts = data.address.split(',');
@@ -329,8 +222,6 @@ async function fetchHospitalsData() {
         });
 
         hospitalsData = fetched;
-        
-        // Refresh the UI now that we have real data
         displayHospitals(hospitalsData);
     } catch (error) {
         console.error("Error fetching healthcare services from Firestore: ", error);
@@ -342,12 +233,8 @@ async function fetchHospitalsData() {
     }
 }
 
-/* ================================================= */
-/* DISTANCE CALCULATION HELPER (HAVERSINE FORMULA) */
-/* ================================================= */
-
 function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Earth's radius in kilometers
+    const R = 6371; 
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     
@@ -357,61 +244,65 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Returns distance in KM
+    return R * c; 
 }
 
 /* ================================================= */
-/* GET USER LOCATION */
+/* UPDATED: GET USER LOCATION (CAPACITOR NATIVE + WEB) */
 /* ================================================= */
+async function getUserLocation() {
+    try {
+        let position;
 
-function getUserLocation() {
-    if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-
-                // Add patient location marker on the map
-                if (userMarker) {
-                    map.removeLayer(userMarker);
-                }
-
-                userMarker = L.circleMarker([userLocation.lat, userLocation.lng], {
-                    radius: 8,
-                    fillColor: '#1D4352',
-                    color: '#ffffff',
-                    weight: 2,
-                    opacity: 1,
-                    fillOpacity: 0.9
-                }).addTo(map).bindPopup("<strong>Your Location (Patient)</strong>");
-
-                // Refresh hospital list with calculated distances
-                displayHospitals(hospitalsData);
-            },
-            (error) => {
-                console.warn("Geolocation permission denied or unavailable:", error.message);
-                // Fallback: Display without dynamic user distance
-                displayHospitals(hospitalsData);
+        // Check if running natively inside Capacitor
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Geolocation) {
+            const { Geolocation } = window.Capacitor.Plugins;
+            const permissions = await Geolocation.requestPermissions();
+            
+            if (permissions.location === 'granted') {
+                position = await Geolocation.getCurrentPosition({ enableHighAccuracy: true });
+            } else {
+                throw new Error("Native location permission denied.");
             }
-        );
-    } else {
+        } 
+        // Fallback for standard Web Browser
+        else if ("geolocation" in navigator) {
+            position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+        } else {
+            throw new Error("Geolocation is not supported by this browser.");
+        }
+
+        // Apply coordinates if successfully retrieved
+        userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+
+        if (userMarker) {
+            map.removeLayer(userMarker);
+        }
+
+        userMarker = L.circleMarker([userLocation.lat, userLocation.lng], {
+            radius: 8,
+            fillColor: '#1D4352',
+            color: '#ffffff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9
+        }).addTo(map).bindPopup("<strong>Your Location (Patient)</strong>");
+
+        displayHospitals(hospitalsData);
+
+    } catch (error) {
+        console.warn("Location unavailable:", error.message);
         displayHospitals(hospitalsData);
     }
 }
 
-/* ================================================= */
-/* INITIALIZE MAP */
-/* ================================================= */
-
 function initMap() {
-
-    map = L.map('map').setView(
-        [-26.1881, 28.246],
-        11
-    );
-
+    map = L.map('map').setView([-26.1881, 28.246], 11);
     L.tileLayer(
         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
@@ -420,38 +311,23 @@ function initMap() {
         }
     ).addTo(map);
 
-    // Initial display
     displayHospitals(hospitalsData);
-
-    // Request patient GPS location
     getUserLocation();
 }
 
-/* ================================================= */
-/* DISPLAY HOSPITALS WITH DISTANCE */
-/* ================================================= */
-
 function displayHospitals(hospitals) {
-
-    // Remove old hospital markers
     markers.forEach(marker => {
         map.removeLayer(marker);
     });
-
     markers = [];
 
     const hospitalList = document.getElementById('hospitalList');
 
     if (hospitals.length === 0) {
-        hospitalList.innerHTML = `
-            <div class="loading">
-                Loading hospitals...
-            </div>
-        `;
+        hospitalList.innerHTML = `<div class="loading">Loading hospitals...</div>`;
         return;
     }
 
-    // Process distances if user location is available
     let processedHospitals = hospitals.map(h => {
         let distance = null;
         if (userLocation) {
@@ -460,7 +336,6 @@ function displayHospitals(hospitals) {
         return { ...h, distance };
     });
 
-    // Sort by distance (nearest first) if user location is detected
     if (userLocation) {
         processedHospitals.sort((a, b) => a.distance - b.distance);
     }
@@ -468,11 +343,9 @@ function displayHospitals(hospitals) {
     hospitalList.innerHTML = '';
 
     processedHospitals.forEach((hospital, index) => {
-
         const hospitalDiv = document.createElement('div');
         hospitalDiv.className = 'hospital-card';
 
-        // Format distance badge text
         const distanceText = hospital.distance !== null 
             ? `<p style="color: #1D4352; font-weight: 600; margin-top: 5px;">
                  <i class='bx bx-map-pin'></i> ${hospital.distance.toFixed(2)} km away
@@ -488,26 +361,18 @@ function displayHospitals(hospitals) {
         `;
 
         hospitalDiv.onclick = () => {
-            map.setView(
-                [hospital.lat, hospital.lng],
-                16
-            );
-
+            map.setView([hospital.lat, hospital.lng], 16);
             markers[index].openPopup();
         };
 
         hospitalList.appendChild(hospitalDiv);
 
-        /* CREATE MAP MARKER */
         const myIcon = L.icon({
             iconUrl: 'images/generic.png',
             iconSize: [30, 30]
         });
 
-        const marker = L.marker([
-            hospital.lat,
-            hospital.lng
-        ], { icon: myIcon }).addTo(map);
+        const marker = L.marker([hospital.lat, hospital.lng], { icon: myIcon }).addTo(map);
 
         const popupDistance = hospital.distance !== null 
             ? `<strong>Distance:</strong> ${hospital.distance.toFixed(2)} km<br>` 
@@ -526,7 +391,6 @@ function displayHospitals(hospitals) {
         markers.push(marker);
     });
 
-    // Include user marker in bounding box if present
     const points = processedHospitals.map(h => [h.lat, h.lng]);
     if (userLocation) {
         points.push([userLocation.lat, userLocation.lng]);
@@ -538,17 +402,8 @@ function displayHospitals(hospitals) {
     }
 }
 
-/* ================================================= */
-/* SEARCH FUNCTION */
-/* ================================================= */
-
 function searchHospitals() {
-
-    const query = document.getElementById('searchInput')
-        .value
-        .trim()
-        .toLowerCase();
-
+    const query = document.getElementById('searchInput').value.trim().toLowerCase();
     if (query === "") {
         alert("Please enter a location");
         return;
@@ -562,31 +417,18 @@ function searchHospitals() {
     if (filtered.length > 0) {
         displayHospitals(filtered);
     } else {
-        document.getElementById('hospitalList').innerHTML = `
-            <div class="loading">
-                No hospitals found.
-            </div>
-        `;
+        document.getElementById('hospitalList').innerHTML = `<div class="loading">No hospitals found.</div>`;
     }
 }
-
-/* ================================================= */
-/* POPUP SYSTEM */
-/* ================================================= */
 
 const popupBackground = document.getElementById("popupBackground");
 const popupContent = document.getElementById("popupContent");
 
 function openPopup(title, message) {
     popupContent.innerHTML = `
-        <h2 style="margin-bottom:15px; color:#1D4352;">
-            ${title}
-        </h2>
-        <p style="line-height:1.7;">
-            ${message}
-        </p>
+        <h2 style="margin-bottom:15px; color:#1D4352;">${title}</h2>
+        <p style="line-height:1.7;">${message}</p>
     `;
-
     popupBackground.style.display = "flex";
 }
 
@@ -595,98 +437,89 @@ function closePopup() {
 }
 
 /* ================================================= */
-/* HELP BUTTON */
+/* CRASH FIX: Safe Button Bindings */
 /* ================================================= */
 
-document.getElementById("helpButton").onclick = () => {
-    openPopup("Need Help?", "Call: 0800 123 456");
-};
+const helpBtn = document.getElementById("helpButton");
+if (helpBtn) {
+    helpBtn.onclick = () => openPopup("Need Help?", "Call: 0800 123 456");
+}
 
-/* ================================================= */
-/* USER BUTTON */
-/* ================================================= */
+const userBtn = document.getElementById("userButton");
+if (userBtn) {
+    userBtn.onclick = () => {
+        openModal(
+            'Account Verification',
+            `
+            <form id="signup-form">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="SignEmail" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" id="SignPhone" name="phone" required placeholder="Enter your phone number">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="SignPassword" name="password" required placeholder="Create a password">
+            </div>
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="......">
+            </div>
+            <div class="input-group remember-me">
+                <label>
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+            </div>
+            <button type="button" class="final-signup-btn" id="createBtn">
+                CREATE ACCOUNT
+            </button>
+            </form>
+            <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
+            `
+        );
 
-document.getElementById("userButton").onclick = () => {
-    openModal(
-        'Account Verification',
-        `
-        <form id="signup-form">
-        <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
-        </div>
-        <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" id="SignEmail" name="email" required placeholder="Enter your email">
-        </div>
-        <div class="input-group">
-            <label>Phone Number</label>
-            <input type="text" id="SignPhone" name="phone" required placeholder="Enter your phone number">
-        </div>
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="SignPassword" name="password" required placeholder="Create a password">
-        </div>
-        <div class="input-group">
-            <label>Confirm Password</label>
-            <input type="password" placeholder="......">
-        </div>
-        <div class="input-group remember-me">
-            <label>
-                <input type="checkbox" id="rememberMe">
-                Remember me
-            </label>
-        </div>
-        <button type="button" class="final-signup-btn" id="createBtn">
-            CREATE ACCOUNT
-        </button>
-        </form>
-        <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
-        `
-    );
+        const loginLink = document.getElementById("loginLinkModal");
+        if (loginLink) {
+            loginLink.onclick = (e) => {
+                e.preventDefault();
+                openModal(
+                    'Login',
+                    `
+                    <form id="login-form">
+                        <div class="input-group">
+                            <label>Email Address</label>
+                            <input type="email" id="email" required placeholder="Enter your email">
+                        </div>
+                        <div class="input-group">
+                            <label>Password</label>
+                            <input type="password" id="password" required placeholder="Enter your password">
+                        </div>
+                        <a href="#" id="forgotPasswordLink" style="text-decoration: underline; color: black;">Forgot Password?</a>
+                        <button type="submit" class="final-signup-btn">LOGIN</button>
+                    </form>
+                    `
+                );
+            };
+        } 
+    };
+}
 
-    const loginLink = document.getElementById("loginLinkModal");
+const closePopBtn = document.getElementById("closePopupButton");
+if (closePopBtn) closePopBtn.onclick = closePopup;
 
-    if (loginLink) {
-        loginLink.onclick = (e) => {
-            e.preventDefault();
-
-            openModal(
-                'Login',
-                `
-                <form id="login-form">
-                    <div class="input-group">
-                        <label>Email Address</label>
-                        <input type="email" id="email" required placeholder="Enter your email">
-                    </div>
-                    <div class="input-group">
-                        <label>Password</label>
-                        <input type="password" id="password" required placeholder="Enter your password">
-                    </div>
-                    <a href="#" id="forgotPasswordLink" style="text-decoration: underline; color: black;">Forgot Password?</a>
-                    <button type="submit" class="final-signup-btn">LOGIN</button>
-                </form>
-                `
-            );
-        };
-    } 
-};
-
-/* ================================================= */
-/* CLOSE POPUP EVENTS */
-/* ================================================= */
-
-document.getElementById("closePopupButton").onclick = closePopup;
-
-popupBackground.onclick = (event) => {
-    if (event.target === popupBackground) {
-        closePopup();
-    }
-};
-
-/* ================================================= */
-/* MODAL SYSTEM */
-/* ================================================= */
+if (popupBackground) {
+    popupBackground.onclick = (event) => {
+        if (event.target === popupBackground) closePopup();
+    };
+}
 
 const modalOverlay = document.getElementById('modalOverlay');
 const modalBodyDiv = document.getElementById('modalBody');
@@ -708,212 +541,195 @@ function showInfoModal(title, message) {
     openModal(title, `<p style="white-space: pre-line; font-family:'Space Grotesk', sans-serif;">${message}</p>`);
 }
 
-/* ================================================= */
-/* DROPDOWN BUTTON EVENTS */
-/* ================================================= */
+const storyBtn = document.getElementById('ourStoryButton');
+if (storyBtn) {
+    storyBtn.onclick = (e) => {
+        e.preventDefault();
+        showInfoModal('Our Story', 'MyLifeAid was founded in 2026 to connect people with healthcare resources instantly.');
+    };
+}
 
-document.getElementById('ourStoryButton').onclick = (e) => {
-    e.preventDefault();
-    showInfoModal('Our Story', 'MyLifeAid was founded in 2026 to connect people with healthcare resources instantly.');
-};
+const teamBtn = document.getElementById('theTeamButton');
+if (teamBtn) {
+    teamBtn.onclick = (e) => {
+        e.preventDefault();
+        showInfoModal('The Team', 'Medical 8 :8 UJ Students');
+    };
+}
 
-document.getElementById('theTeamButton').onclick = (e) => {
-    e.preventDefault();
-    showInfoModal('The Team', 'Medical 8 :8 UJ Students');
-};
+const bedBtn = document.getElementById('bedAvailabilityBtn');
+if (bedBtn) {
+    bedBtn.onclick = (e) => {
+        e.preventDefault();
+        showInfoModal('Bed Availability', 'Search for bed availability on map.');
+    };
+}
 
-document.getElementById('bedAvailabilityBtn').onclick = (e) => {
-    e.preventDefault();
-    showInfoModal('Bed Availability', 'Search for bed availability on map.');
-};
-
-/* ================================================= */
-/* AMBULANCE & EMERGENCY BUTTON EVENT HANDLER */
-/* ================================================= */
-
-document.getElementById('Ambulance').onclick = () => {
-    openPopup(
-        "South Africa Emergency Numbers",
-        `
-        <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
-
-            <p style="margin-bottom: 15px; color: #555; font-size: 0.95rem; line-height: 1.5;">
-                We wish you all the best during this extraordinary time and will keep you fully informed from our side as the situation evolves.
-            </p>
-
-            <!-- BANNER 1: NATIONWIDE POLICE / FLYING SQUAD -->
-            <div class="emergency-banner banner-police">
-                <div class="banner-header">
-                    <strong style="color: #1D4352; font-size: 1.05rem;">
-                        <i class='bx bx-shield-alt-2'></i> Nationwide Emergency Response
-                    </strong>
-                    <a href="tel:10111" class="call-btn">
-                        Call 10111
-                    </a>
+const ambBtn = document.getElementById('Ambulance');
+if (ambBtn) {
+    ambBtn.onclick = () => {
+        openPopup(
+            "South Africa Emergency Numbers",
+            `
+            <div style="text-align: left; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+                <p style="margin-bottom: 15px; color: #555; font-size: 0.95rem; line-height: 1.5;">
+                    We wish you all the best during this extraordinary time and will keep you fully informed from our side as the situation evolves.
+                </p>
+                <div class="emergency-banner banner-police">
+                    <div class="banner-header">
+                        <strong style="color: #1D4352; font-size: 1.05rem;">
+                            <i class='bx bx-shield-alt-2'></i> Nationwide Emergency Response
+                        </strong>
+                        <a href="tel:10111" class="call-btn">Call 10111</a>
+                    </div>
+                    <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
+                        Dial <strong>10111</strong> from anywhere in South Africa. A call centre operator will answer, take necessary particulars, and assign a Flying Squad patrol vehicle or local police station to attend the incident.
+                    </p>
                 </div>
-                <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
-                    Dial <strong>10111</strong> from anywhere in South Africa. A call centre operator will answer, take necessary particulars, and assign a Flying Squad patrol vehicle or local police station to attend the incident.
+                <div class="emergency-banner banner-cellular">
+                    <div class="banner-header">
+                        <strong style="color: #b9770e; font-size: 1.05rem;">
+                            <i class='bx bx-mobile-alt'></i> Cellular Emergency (All Networks)
+                        </strong>
+                        <a href="tel:112" class="call-btn">Call 112</a>
+                    </div>
+                    <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
+                        Call <strong>112</strong> from any cell phone in South Africa to reach a routing call centre for the emergency service closest to you.<br>
+                        <span style="font-size: 0.82rem; color: #777; display: inline-block; margin-top: 4px;">
+                            <em>Note: The automated triage menu acts as priority control to filter system abuse—please follow the voice prompts.</em>
+                        </span>
+                    </p>
+                </div>
+                <div class="emergency-banner banner-medical">
+                    <div class="banner-header">
+                        <strong style="color: #d9534f; font-size: 1.05rem;">
+                            <i class='bx bx-first-aid'></i> Ambulance & Medical Emergency
+                        </strong>
+                        <a href="tel:10177" class="call-btn">Call 10177</a>
+                    </div>
+                    <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
+                        Use <strong>10177</strong> in medical emergencies. It can be called in conjunction with both the fire and police departments depending on whether casualties are present.
+                    </p>
+                </div>
+                <div class="emergency-banner banner-local">
+                    <div class="banner-header">
+                        <strong style="color: #2e7d32; font-size: 1.05rem;">
+                            <i class='bx bx-plus-medical'></i> City of Johannesburg EMS
+                        </strong>
+                        <a href="tel:0113755911" class="call-btn">Call 011 375 5911</a>
+                    </div>
+                    <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
+                        Direct emergency dispatch line for local Johannesburg EMS and Fire facilities.
+                    </p>
+                </div>
+                <p style="font-size: 0.8rem; text-align: center; margin-top: 15px; color: #777;">
+                    Source: <a href="https://joburg.org.za/services_/Pages/City%20Services/Emergency%20Services/Emergency-Management-Services-(EMS).aspx" target="_blank" style="color: #1D4352; text-decoration: underline;">City of Johannesburg Emergency Management Services</a>
                 </p>
             </div>
+            `
+        );
+    };
+}
 
-            <!-- BANNER 2: CELLULAR EMERGENCY (112) -->
-            <div class="emergency-banner banner-cellular">
-                <div class="banner-header">
-                    <strong style="color: #b9770e; font-size: 1.05rem;">
-                        <i class='bx bx-mobile-alt'></i> Cellular Emergency (All Networks)
-                    </strong>
-                    <a href="tel:112" class="call-btn">
-                        Call 112
-                    </a>
-                </div>
-                <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
-                    Call <strong>112</strong> from any cell phone in South Africa to reach a routing call centre for the emergency service closest to you.<br>
-                    <span style="font-size: 0.82rem; color: #777; display: inline-block; margin-top: 4px;">
-                        <em>Note: The automated triage menu acts as priority control to filter system abuse—please follow the voice prompts.</em>
-                    </span>
-                </p>
-            </div>
+const faqBtn = document.getElementById('faqBtn');
+if (faqBtn) {
+    faqBtn.onclick = (e) => {
+        e.preventDefault();
+        showInfoModal('FAQ', `Q: How do I search?\nA: Use the search bar.\n\nQ: Is my data safe?\nA: Yes.`);
+    };
+}
 
-            <!-- BANNER 3: AMBULANCE & MEDICAL EMERGENCY (10177) -->
-            <div class="emergency-banner banner-medical">
-                <div class="banner-header">
-                    <strong style="color: #d9534f; font-size: 1.05rem;">
-                        <i class='bx bx-first-aid'></i> Ambulance & Medical Emergency
-                    </strong>
-                    <a href="tel:10177" class="call-btn">
-                        Call 10177
-                    </a>
-                </div>
-                <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
-                    Use <strong>10177</strong> in medical emergencies. It can be called in conjunction with both the fire and police departments depending on whether casualties are present.
-                </p>
-            </div>
+const searchBtn = document.getElementById('searchBtn');
+if (searchBtn) searchBtn.onclick = searchHospitals;
 
-            <!-- BANNER 4: CITY OF JOHANNESBURG EMS -->
-            <div class="emergency-banner banner-local">
-                <div class="banner-header">
-                    <strong style="color: #2e7d32; font-size: 1.05rem;">
-                        <i class='bx bx-plus-medical'></i> City of Johannesburg EMS
-                    </strong>
-                    <a href="tel:0113755911" class="call-btn">
-                        Call 011 375 5911
-                    </a>
-                </div>
-                <p style="font-size: 0.88rem; color: #444; margin: 0; line-height: 1.4;">
-                    Direct emergency dispatch line for local Johannesburg EMS and Fire facilities.
-                </p>
-            </div>
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchHospitals();
+        }
+    });
+}
 
-            <p style="font-size: 0.8rem; text-align: center; margin-top: 15px; color: #777;">
-                Source: <a href="https://joburg.org.za/services_/Pages/City%20Services/Emergency%20Services/Emergency-Management-Services-(EMS).aspx" target="_blank" style="color: #1D4352; text-decoration: underline;">City of Johannesburg Emergency Management Services</a>
-            </p>
+if (closeModalBtn) closeModalBtn.onclick = closeModal;
 
-        </div>
-        `
-    );
-};
-
-document.getElementById('faqBtn').onclick = (e) => {
-    e.preventDefault();
-    showInfoModal('FAQ', `Q: How do I search?\nA: Use the search bar.\n\nQ: Is my data safe?\nA: Yes.`);
-};
+if (modalOverlay) {
+    modalOverlay.onclick = (e) => {
+        if (e.target === modalOverlay) closeModal();
+    };
+}
 
 /* ================================================= */
-/* SEARCH EVENTS */
+/* INITIALIZE */
 /* ================================================= */
-
-document.getElementById('searchBtn').onclick = searchHospitals;
-
-document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        searchHospitals();
-    }
-});
-
-/* ================================================= */
-/* CLOSE MODAL EVENTS */
-/* ================================================= */
-
-closeModalBtn.onclick = closeModal;
-
-modalOverlay.onclick = (e) => {
-    if (e.target === modalOverlay) {
-        closeModal();
-    }
-};
-
-/* ================================================= */
-/* START MAP & FETCH DATA */
-/* ================================================= */
-
 initMap();
 fetchHospitalsData();
 
-/* ================================================= */
-/* NEXT BUTTON & LOGIN BUTTON FUNCTIONALITY */
-/* ================================================= */
-
-const nextBtn = document.getElementById('nextBtn');
-nextBtn.onclick = () => {
-    openModal(
-        'Account Verification',
-        `
-        <form id="signup-form">
-        <div class="input-group">
-            <label>Full Name</label>
-            <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
-        </div>
-        <div class="input-group">
-            <label>Email Address</label>
-            <input type="email" id="SignEmail" name="email" required placeholder="Enter your email">
-        </div>
-        <div class="input-group">
-            <label>Phone Number</label>
-            <input type="text" id="SignPhone" name="phone" required placeholder="Enter your phone number">
-        </div>
-        <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="SignPassword" name="password" required placeholder="Create a password">
-        </div>
-        <div class="input-group">
-            <label>Confirm Password</label>
-            <input type="password" placeholder="......">
-        </div>
-        <div class="input-group remember-me">
-            <label>
-                <input type="checkbox" id="rememberMe">
-                Remember me
-            </label>
-        </div>
-        <button class="final-signup-btn" type="button" id="createBtn">
-            CREATE ACCOUNT
-        </button>
-        </form>
-        <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
-        `
-    );
-};
-
-const loginBtn = document.getElementById('loginBtn');
-loginBtn.onclick = () => {
-    openModal(
-        'Login',
-        `
-        <form id="login-form">
+const nextBtnMain = document.getElementById('nextBtn');
+if (nextBtnMain) {
+    nextBtnMain.onclick = () => {
+        openModal(
+            'Account Verification',
+            `
+            <form id="signup-form">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+            </div>
             <div class="input-group">
                 <label>Email Address</label>
-                <input type="email" id="email" required placeholder="Enter your email">
+                <input type="email" id="SignEmail" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" id="SignPhone" name="phone" required placeholder="Enter your phone number">
             </div>
             <div class="input-group">
                 <label>Password</label>
-                <input type="password" id="password" required placeholder="Enter your password">
+                <input type="password" id="SignPassword" name="password" required placeholder="Create a password">
             </div>
-            <a href="#" id="forgotPasswordLink" style="text-decoration: underline; color: black;">Forgot Password?</a>
-            <button type="submit" class="final-signup-btn">LOGIN</button>
-        </form>
-        `
-    );
-};
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="......">
+            </div>
+            <div class="input-group remember-me">
+                <label>
+                    <input type="checkbox" id="rememberMe">
+                    Remember me
+                </label>
+            </div>
+            <button class="final-signup-btn" type="button" id="createBtn">
+                CREATE ACCOUNT
+            </button>
+            </form>
+            <p class="login-note">Already have an account? <a href="#" id="loginLinkModal">Click here</a></p>
+            `
+        );
+    };
+}
+
+const loginBtnMain = document.getElementById('loginBtn');
+if (loginBtnMain) {
+    loginBtnMain.onclick = () => {
+        openModal(
+            'Login',
+            `
+            <form id="login-form">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <a href="#" id="forgotPasswordLink" style="text-decoration: underline; color: black;">Forgot Password?</a>
+                <button type="submit" class="final-signup-btn">LOGIN</button>
+            </form>
+            `
+        );
+    };
+}
 
   </script>
   <script type="module" src="./login.js"></script>
