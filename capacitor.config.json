@@ -6,5 +6,8 @@
     "allowNavigation": [
       "*.tawk.to"
     ]
+  },
+  "ios": {
+    "allowsBackForwardNavigationGestures": true
   }
 }
