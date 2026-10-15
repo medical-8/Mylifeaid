@@ -1,0 +1,720 @@
+{
+  "_metadata": {
+    "exportedAt": "2026-10-08T19:48:05.296Z",
+    "collections": [
+      "healthcare_services",
+      "laboratories",
+      "users"
+    ]
+  },
+  "collections": {
+    "healthcare_services": {
+      "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2": {
+        "name": "Tshwane District Hospital",
+        "type": "Hospital",
+        "email": "ofentsemodibela53@gmail.com",
+        "phone": "+2712 354 7000",
+        "address": "Steve Biko Rd & Dr Savage Rd, Prinshof 349-Jr, Pretoria, 0084",
+        "tawkto": "https://tawk.to/chat/6a804240c4152c1d515baccc/1k02g5jfv?layout=modern",
+        "lat": -25.7332765,
+        "lng": 28.1997504,
+        "createdAt": "2026-09-23T16:54:32.880Z",
+        "emergencySlots": 65,
+        "beds": 177,
+        "linkedLabs": [
+          {
+            "id": "KkpkueKT6cWHNigYhO5q9ZS0QMD3",
+            "name": "VERMO LABS",
+            "type": "General Pathology",
+            "email": "224110300@student.uj.ac.za"
+          },
+          {
+            "id": "QcO761xKrZR4THyEhJnRoH19vFQ2",
+            "name": "Biocare",
+            "type": "General Pathology",
+            "email": "Tatendan145@gmail.com"
+          }
+        ],
+        "emergencySlotsAvailable": 63,
+        "booking": 4,
+        "schedule": {
+          "Monday": {
+            "closed": true,
+            "open": "",
+            "close": ""
+          },
+          "Tuesday": {
+            "closed": true,
+            "open": "",
+            "close": ""
+          },
+          "Wednesday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          },
+          "Thursday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          },
+          "Friday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          },
+          "Saturday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          },
+          "Sunday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          }
+        },
+        "bedsAvailable": 167,
+        "__subcollections": {
+          "admissions": {
+            "3Bi3jlmEnBCt6KIYgNsx": {
+              "bookingId": "2TL67fuiCGNdQ7cc4wBW",
+              "idNumber": "N/A",
+              "firstName": "hlamulo",
+              "surname": "magwaza",
+              "ward": "General Ward A",
+              "bed": "13b",
+              "condition": "hurt",
+              "admittedDate": "28 Sept 2026",
+              "createdAt": "2026-09-28T11:43:57.702Z"
+            },
+            "8aWDUsWhVYvvpdM03ayw": {
+              "bookingId": "ntI6cnTugmE9M5KnJa2W",
+              "idNumber": "101010101010",
+              "firstName": "Ofentse",
+              "surname": "Modibela",
+              "ward": "General Ward A",
+              "bed": "Bed 124",
+              "condition": "Stable",
+              "admittedDate": "23 Sept 2026",
+              "createdAt": "2026-09-23T17:32:51.842Z"
+            },
+            "ARD4t9ss3wKnAEBlcbsi": {
+              "bookingId": "5oMtFRGcD4p7b3NB1CC5",
+              "idNumber": "0311175112088",
+              "firstName": "Sechaba",
+              "surname": "Molokomme",
+              "ward": "General Ward A",
+              "bed": "12b",
+              "condition": "body",
+              "admittedDate": "26 Sept 2026",
+              "createdAt": "2026-09-26T16:37:39.103Z"
+            },
+            "CCglqRXEm2eGIv1ALlEE": {
+              "bookingId": "GH9dkd66p7gyyuIAql65",
+              "idNumber": "N/A",
+              "firstName": "NTANDO",
+              "surname": "NKUNA",
+              "ward": "General Ward B",
+              "bed": "13b",
+              "condition": "body",
+              "admittedDate": "28 Sept 2026",
+              "createdAt": "2026-09-28T09:38:06.916Z"
+            },
+            "T9dyIZ2ZOuLmbyq9JyPZ": {
+              "bookingId": "ntI6cnTugmE9M5KnJa2W",
+              "idNumber": "101010101010",
+              "firstName": "Ofentse",
+              "surname": "Modibela",
+              "ward": "General Ward A",
+              "bed": "13b",
+              "condition": "body",
+              "admittedDate": "28 Sept 2026",
+              "createdAt": "2026-09-28T08:13:57.880Z"
+            },
+            "xDIKMbbRDIX41krpebU8": {
+              "bookingId": "5oMtFRGcD4p7b3NB1CC5",
+              "idNumber": "0311175112088",
+              "firstName": "Sechaba",
+              "surname": "Molokomme",
+              "ward": "General Ward B",
+              "bed": "Bed 125",
+              "condition": "Stable",
+              "admittedDate": "23 Sept 2026",
+              "createdAt": "2026-09-23T17:49:46.827Z"
+            }
+          },
+          "bookings": {
+            "2TL67fuiCGNdQ7cc4wBW": {
+              "firstName": "hlamulo",
+              "surname": "magwaza",
+              "phone": "0644007078",
+              "appointmentDate": "2026-09-30",
+              "appointmentTime": "13:35",
+              "reason": "sick",
+              "createdAt": "2026-09-28T11:33:49.862Z",
+              "userId": "Wp4TGEiLkJO3bZzDL15df8AWPDl1",
+              "assignedDoctor": "Tshepo Maloka (EMP-010)",
+              "bed": "13b",
+              "ward": "General Ward A",
+              "status": "Admitted"
+            },
+            "5oMtFRGcD4p7b3NB1CC5": {
+              "firstName": "Sechaba",
+              "surname": "Molokomme",
+              "idNumber": "0311175112088",
+              "phone": "0646086080",
+              "appointmentDate": "2026-10-05",
+              "appointmentTime": "07:47",
+              "reason": "Death",
+              "createdAt": "2026-09-23T17:48:28.705Z",
+              "userId": "u33T7s4r76dQLQwNx1tqiGli93h2",
+              "assignedDoctor": "Tshepo Maloka (EMP-010)",
+              "bed": "12b",
+              "ward": "General Ward A",
+              "status": "Assigned"
+            },
+            "GH9dkd66p7gyyuIAql65": {
+              "firstName": "NTANDO",
+              "surname": "NKUNA",
+              "phone": "0644700145",
+              "appointmentDate": "2026-09-30",
+              "appointmentTime": "13:34",
+              "reason": "SICK",
+              "createdAt": "2026-09-28T09:32:49.939Z",
+              "userId": "WSWYlGiKdxTaypNwznmH1561cnc2",
+              "assignedDoctor": "Tshepo Maloka (EMP-010)",
+              "bed": "13b",
+              "ward": "General Ward B",
+              "status": "Admitted"
+            },
+            "ntI6cnTugmE9M5KnJa2W": {
+              "firstName": "Ofentse",
+              "surname": "Modibela",
+              "idNumber": "101010101010",
+              "phone": "0813758828",
+              "appointmentDate": "2026-09-28",
+              "appointmentTime": "11:00",
+              "reason": "Heart break\n",
+              "createdAt": "2026-09-23T17:30:13.141Z",
+              "userId": "WSWYlGiKdxTaypNwznmH1561cnc2",
+              "ward": "General Ward A",
+              "assignedDoctor": "Tshepo Maloka (EMP-010)",
+              "bed": "13b",
+              "status": "Admitted"
+            }
+          },
+          "team": {
+            "0XrEqeNt6aNmqjMkrzpjVN22YXs1": {
+              "name": "Patience Makau",
+              "email": "224006233@student.uj.ac.za",
+              "role": "Admin",
+              "staffNumber": "EMP-011",
+              "createdAt": "2026-09-23T17:15:41.201Z"
+            },
+            "qIVCHiAWC4YSLDdJqGuXieuUHGV2": {
+              "name": "Tshepo Maloka",
+              "email": "ofentsel.modibela@gmail.com",
+              "role": "Staff",
+              "staffNumber": "EMP-010",
+              "createdAt": "2026-09-23T17:03:12.468Z"
+            }
+          }
+        }
+      },
+      "kbMze3mIROOLPFESBiUo2O0N5J92": {
+        "name": "Kgabo Clinic ",
+        "type": "Clinic",
+        "email": "ntandoofficial60@gmail.com",
+        "phone": "062913086",
+        "address": "Kgabo Stand, 1480 Bushveld Road, Winterveld, 0199",
+        "tawkto": "1k37huoo1",
+        "lat": -25.582085278700696,
+        "lng": 27.987670898437504,
+        "createdAt": "2026-09-23T16:37:13.705Z",
+        "emergencySlots": 10,
+        "beds": 65,
+        "linkedLabs": [
+          {
+            "id": "s7PZRyG1foah0DbSeJkr95w0QbK2",
+            "name": "Mullah Laboratories",
+            "type": "General Pathology",
+            "email": "luyandamsiza666@gmail.com"
+          }
+        ],
+        "__subcollections": {
+          "team": {
+            "G7phsusWanUKvLbF2XlZl0qLE9l2": {
+              "email": "ntandodataanalysis2099@gmail.com",
+              "role": "Staff",
+              "staffNumber": "EMP-012",
+              "createdAt": "2026-09-23T16:57:56.175Z",
+              "name": "Gary"
+            }
+          }
+        }
+      },
+      "mEn1geb5rjTIEUA95U5nP8QPYi73": {
+        "name": "Steve Biko Academic Hospital",
+        "type": "Hospital",
+        "email": "bettynaledi83@gmail.com",
+        "phone": "+27767533966",
+        "tawkto": "1k02d3arm",
+        "createdAt": "2026-09-23T16:33:59.507Z",
+        "address": "Steve Biko and, Malan St, Capital Park, Pretoria",
+        "emergencySlots": 1000,
+        "beds": 10000,
+        "emergencySlotsAvailable": 110,
+        "bedsAvailable": 1000,
+        "lat": -25.7301659,
+        "lng": 28.2029588,
+        "__subcollections": {
+          "team": {
+            "4Q1aebSrLaW8mLAra7kDx63pQHg1": {
+              "name": "DR NB",
+              "role": "Staff",
+              "staffNumber": "EMP-007",
+              "createdAt": "2026-09-23T16:45:36.940Z",
+              "email": "queenletswalo83@gmail.com"
+            },
+            "GBWvBjTiZWQeQ7UKIYv5qJQy03I3": {
+              "name": "Naledi",
+              "email": "kingletswalo83@gmail.com",
+              "role": "Admin",
+              "staffNumber": "EMP-007",
+              "createdAt": "2026-09-23T16:48:25.933Z"
+            }
+          }
+        }
+      },
+      "mQUSNE1BECgZmSYO7jp3V3fDjtw1": {
+        "name": "Rahima Moosa Mother and Child Hospital",
+        "type": "Hospital",
+        "email": "224052906@student.uj.ac.za",
+        "phone": "011 470 9000",
+        "address": "Coronationville, Johannesburg, 2093",
+        "tawkto": "https://tawk.to/chat/6ab40013dce7f8344166921e/1k37i0k5m?layout=modern",
+        "lat": -26.188946316557878,
+        "lng": 27.972350120544437,
+        "createdAt": "2026-09-23T16:52:50.789Z",
+        "linkedLabs": [
+          {
+            "id": "s7PZRyG1foah0DbSeJkr95w0QbK2",
+            "name": "Mullah Laboratories",
+            "type": "General Pathology",
+            "email": "luyandamsiza666@gmail.com"
+          }
+        ],
+        "emergencySlotsAvailable": 335,
+        "bedsAvailable": 50,
+        "emergencySlots": 359,
+        "beds": 500,
+        "__subcollections": {
+          "team": {
+            "b1y3rlRJC4S8CtOryy2pGbVz7FC2": {
+              "name": "Mr. hlamulo Magwaza",
+              "email": "mylifeaidyt@gmail.com",
+              "role": "Admin",
+              "staffNumber": "EMP-006",
+              "createdAt": "2026-09-28T09:21:55.005Z"
+            }
+          }
+        }
+      },
+      "nIiZL4EkHva2axnWcmP2gMBNsSs1": {
+        "name": "Bertha Gxowa Hospital",
+        "type": "Hospital",
+        "email": "sechabamolokomme1@gmail.com",
+        "phone": "0112787600",
+        "address": "Angus St, Germiston South (Industries E A), Germiston, 1401",
+        "tawkto": "1k00j2kf1",
+        "lat": -26.205,
+        "lng": 28.049722,
+        "createdAt": "2026-09-23T16:42:30.383Z",
+        "emergencySlots": 30,
+        "beds": 300,
+        "linkedLabs": [
+          {
+            "id": "KkpkueKT6cWHNigYhO5q9ZS0QMD3",
+            "name": "VERMO LABS",
+            "type": "General Pathology",
+            "email": "224110300@student.uj.ac.za"
+          }
+        ],
+        "booking": 1,
+        "emergencySlotsAvailable": 23,
+        "bedsAvailable": 170,
+        "schedule": {
+          "Monday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "18:06"
+          },
+          "Tuesday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "18:06"
+          },
+          "Wednesday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "18:06"
+          },
+          "Thursday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "18:06"
+          },
+          "Friday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "06:06"
+          },
+          "Saturday": {
+            "closed": false,
+            "open": "06:06",
+            "close": "16:00"
+          },
+          "Sunday": {
+            "closed": false,
+            "open": "",
+            "close": ""
+          }
+        },
+        "__subcollections": {
+          "bookings": {
+            "OxS9qkaPuuGLhdqVdh6B": {
+              "firstName": "Sechaba",
+              "surname": "Molokomme",
+              "idNumber": "0301165112088",
+              "phone": "0646086080",
+              "appointmentDate": "2026-09-24",
+              "appointmentTime": "08:58",
+              "reason": "stomach cramps",
+              "status": "Pending",
+              "createdAt": "2026-09-23T17:11:04.961Z",
+              "userId": "u33T7s4r76dQLQwNx1tqiGli93h2"
+            }
+          },
+          "team": {
+            "SNf0UBFmsshmncqZxoFVV9G2F7m1": {
+              "name": "Dr Sechaba Molokomme",
+              "email": "sechabaworkman@gmail.com",
+              "role": "Staff",
+              "staffNumber": "EMP-001",
+              "createdAt": "2026-09-23T16:47:41.990Z"
+            },
+            "wyAfG73FpqPiJq89ngAHzT1f8k12": {
+              "name": "Mr. Malatelele",
+              "email": "malatelelemolokomme@gmail.com",
+              "role": "Admin",
+              "staffNumber": "EMP-002",
+              "createdAt": "2026-09-23T17:59:42.002Z"
+            }
+          }
+        }
+      },
+      "oY5iag0zOBSYmFJ4niztsxi5hqo2": {
+        "name": "Tambo Memorial Hospital",
+        "type": "Hospital",
+        "email": "makombelynn@gmail.com",
+        "phone": "0840296358",
+        "address": "39 Railway Street, Plantation, Boksburg, 1459, Gauteng, South Africa",
+        "tawkto": "https://tawk.to/chat/6a81f1277b55151d452bf434/1k05pc0r2?layout=modern",
+        "lat": -26.2187534,
+        "lng": 28.2474536,
+        "createdAt": "2026-09-23T16:40:54.859Z",
+        "emergencySlots": 0,
+        "beds": 200,
+        "linkedLabs": [
+          {
+            "email": "luyandamsiza123@gmail.com",
+            "type": "General Pathology",
+            "name": "Mullah Laboratories",
+            "id": "s7PZRyG1foah0DbSeJkr95w0QbK2"
+          },
+          {
+            "id": "5pIoCyIjr9YmSsTBvDZhVBfOxVI2",
+            "name": "Mullah Laboratories",
+            "type": "General Pathology",
+            "email": "techfive00@gmail.com"
+          }
+        ],
+        "__subcollections": {
+          "team": {
+            "Krz8zj08XAP5L3haw1LW6LSveFx2": {
+              "name": "Kate Brown",
+              "email": "lynntadi@gmail.com",
+              "role": "Admin",
+              "staffNumber": "EMP-004",
+              "createdAt": "2026-09-23T16:52:55.740Z"
+            },
+            "UkjoEVVDijaAUxQraoxw2tjEnR32": {
+              "name": "Elizabeth Smith",
+              "email": "tadiwanashelynn16@gmail.com",
+              "role": "Staff",
+              "staffNumber": "EMP 003",
+              "createdAt": "2026-09-23T16:45:54.746Z"
+            }
+          }
+        }
+      },
+      "sGGnUZpdYNcuUcCrmBl68mIieNu2": {
+        "name": "Helen Joseph Hospital",
+        "type": "Hospital",
+        "email": "lunesweeper@gmail.com",
+        "phone": "+27 11 463 8615",
+        "address": "Oranje Area, Perth Road, Auckland Park, Johannesburg, 2092",
+        "tawkto": "https://tawk.to/chat/6a76367268c7d71d495378b8/1jves9c5a?layout=modern",
+        "lat": -26.1852861,
+        "lng": 27.9890661,
+        "createdAt": "2026-09-23T16:42:23.219Z",
+        "emergencySlots": 40,
+        "beds": 314,
+        "linkedLabs": [
+          {
+            "id": "5pIoCyIjr9YmSsTBvDZhVBfOxVI2",
+            "name": "Mullah Laboratories",
+            "type": "General Pathology",
+            "email": "techfive00@gmail.com"
+          }
+        ],
+        "schedule": {
+          "Monday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "22:00"
+          },
+          "Tuesday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "22:00"
+          },
+          "Wednesday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "22:00"
+          },
+          "Thursday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "22:00"
+          },
+          "Friday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "22:00"
+          },
+          "Saturday": {
+            "closed": false,
+            "open": "08:00",
+            "close": "20:00"
+          },
+          "Sunday": {
+            "closed": true,
+            "open": "",
+            "close": ""
+          }
+        },
+        "bedsAvailable": 310,
+        "emergencySlotsAvailable": 20,
+        "booking": 1,
+        "__subcollections": {
+          "bookings": {
+            "TzIMMWSFbOethFGRlLmP": {
+              "firstName": "naomi",
+              "surname": "ncube",
+              "phone": "0834292513",
+              "appointmentDate": "2026-10-09",
+              "appointmentTime": "18:52",
+              "reason": "sick",
+              "status": "Pending",
+              "createdAt": "2026-10-08T15:52:05.206Z",
+              "userId": "nIiZL4EkHva2axnWcmP2gMBNsSs1"
+            }
+          },
+          "team": {
+            "CDCy7AP3qmg1KxU6kSYgcOC2uLV2": {
+              "name": "Luyanda Msiza",
+              "email": "luyandamsiza666@gmail.com",
+              "role": "Staff",
+              "staffNumber": "EMP-001",
+              "createdAt": "2026-09-23T17:11:04.382Z"
+            },
+            "yPKA4u8Q1XX1gR1pBf5K8FVOB9z2": {
+              "email": "nftmarko666@gmail.com",
+              "role": "Admin",
+              "staffNumber": "EMP-002",
+              "createdAt": "2026-09-23T17:26:08.365Z",
+              "name": "Sibusiso Mhlanga"
+            }
+          }
+        }
+      }
+    },
+    "laboratories": {
+      "5pIoCyIjr9YmSsTBvDZhVBfOxVI2": {
+        "name": "Mullah Laboratories",
+        "type": "General Pathology",
+        "email": "techfive00@gmail.com",
+        "phone": "+27 11 645 2896",
+        "address": "18 Bartlett Rd, Mayfair, Johannesburg, 2092",
+        "lat": -26.202950196737774,
+        "lng": 28.087844812067818,
+        "createdAt": "2026-09-23T17:08:43.974Z"
+      },
+      "GC0kSNcRv9Oud64YoEOJ74m5yGF2": {
+        "name": "Ampath Laboratories",
+        "type": "General Pathology",
+        "email": "bettynaledi@gmail.com",
+        "phone": "086 099 6707",
+        "address": "166 Witch Hazel Avenue, Highveld Office Park, Centurion, Pretoria, South Africa. ",
+        "lat": -26.216685473286148,
+        "lng": 28.037658693501733,
+        "createdAt": "2026-09-23T17:14:08.272Z"
+      },
+      "KkpkueKT6cWHNigYhO5q9ZS0QMD3": {
+        "name": "VERMO LABS",
+        "type": "General Pathology",
+        "email": "224110300@student.uj.ac.za",
+        "phone": "+27646086080",
+        "address": "Angus St, Germiston South (Industries E A), Germiston, 1401",
+        "lat": -26.205,
+        "lng": 28.049722,
+        "createdAt": "2026-09-23T16:59:00.108Z",
+        "__subcollections": {
+          "requests": {
+            "5Q8S8iI9MldsWMhwN7Kk": {
+              "patientId": "101010101010",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "",
+              "status": "Pending Intake",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-23T17:51:44.456Z"
+            },
+            "CFZ7W6vTqhEHYmmOJlG5": {
+              "patientId": "101010101010",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "",
+              "status": "Pending Intake",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-27T16:40:04.070Z"
+            },
+            "GBlqDTqjzVtVf0lXqY0D": {
+              "patientId": "N/A",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "K",
+              "status": "Pending Intake",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-28T09:39:47.624Z"
+            },
+            "UKpHuuglxKmoSajvRZJp": {
+              "patientId": "101010101010",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "N/A",
+              "status": "Pending Intake",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-28T08:33:20.843Z"
+            },
+            "hzm1xyt0gAee1PTwO3ys": {
+              "patientId": "101010101010",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "might die",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-28T08:16:03.224Z",
+              "status": "Completed",
+              "pathologistComment": "KA",
+              "pathologyFindings": "JA",
+              "completedDate": "2026-09-28T09:41:12.510Z"
+            },
+            "sdiHMdTkaTV6oln0TpUl": {
+              "patientId": "N/A",
+              "testType": "Full Blood Count (FBC)",
+              "urgency": "Urgent",
+              "clinicalNotes": "low blood",
+              "requestingFacilityId": "Xp1cIvXqdcgsL3MMUZ3sVjkzsIS2",
+              "requestingDoctor": "EMP-010",
+              "createdAt": "2026-09-28T11:45:52.797Z",
+              "pathologistComment": "sick",
+              "pathologyFindings": "sick",
+              "completedDate": "2026-09-28T11:51:27.139Z",
+              "status": "Completed"
+            }
+          }
+        }
+      },
+      "NYcV8CkQBvfxks2HA50oqiPwkQ12": {
+        "name": "Biocore",
+        "type": "General Pathology",
+        "email": "Joytatenda8@gmial.com",
+        "phone": "083 429 2513 ",
+        "address": "Charlotte Maxeke Johannesburg Academic Hospital, Parktown, Johannesburg, 2193",
+        "lat": -26.1750036,
+        "lng": 28.04555,
+        "createdAt": "2026-09-26T13:16:14.379Z"
+      },
+      "QcO761xKrZR4THyEhJnRoH19vFQ2": {
+        "name": "Biocare",
+        "type": "General Pathology",
+        "email": "Tatendan145@gmail.com",
+        "phone": "083 429 2513 ",
+        "address": "Charlotte Maxeke Johannesburg Academic Hospital, Parktown, Johannesburg, 2193",
+        "lat": -26.1750036,
+        "lng": 28.04555,
+        "createdAt": "2026-09-26T13:22:52.290Z"
+      }
+    },
+    "users": {
+      "Wp4TGEiLkJO3bZzDL15df8AWPDl1": {
+        "uid": "Wp4TGEiLkJO3bZzDL15df8AWPDl1",
+        "email": "hlamulomagwaza0410@gmail.com",
+        "phone": "0644700145",
+        "fullName": "Hlamulo Magwaza",
+        "createdAt": {
+          "_type": "timestamp",
+          "value": "2026-09-23T16:21:41.774Z"
+        }
+      },
+      "u33T7s4r76dQLQwNx1tqiGli93h2": {
+        "uid": "u33T7s4r76dQLQwNx1tqiGli93h2",
+        "email": "lifeaidpatient1@gmail.com",
+        "phone": "0646086080",
+        "fullName": "Sechaba Molokomme",
+        "createdAt": {
+          "_type": "timestamp",
+          "value": "2026-09-23T17:09:20.036Z"
+        }
+      },
+      "uD9fxaoGKhaK1S1yftyaEN7CC5C2": {
+        "uid": "uD9fxaoGKhaK1S1yftyaEN7CC5C2",
+        "email": "princessmylifeaid@gmail.com",
+        "phone": "0757542974",
+        "fullName": "Princess",
+        "createdAt": {
+          "_type": "timestamp",
+          "value": "2026-10-07T15:46:15.750Z"
+        }
+      },
+      "ww5TMFCOlmQrK1Da96u03QhS42D2": {
+        "uid": "ww5TMFCOlmQrK1Da96u03QhS42D2",
+        "email": "luyandamsiza2005@gmail.com",
+        "phone": "0682437504",
+        "fullName": "Luyanda Msiza",
+        "createdAt": {
+          "_type": "timestamp",
+          "value": "2026-09-23T16:46:59.527Z"
+        }
+      }
+    }
+  }
+}

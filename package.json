@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/medical-8/Mylifeaid#readme",
   "dependencies": {
+    "@capacitor/app": "^8.1.2",
     "@capacitor/core": "^8.5.2",
-    "@capacitor/geolocation": "^8.2.2"
+    "@capacitor/geolocation": "^8.2.2",
+    "firebase-admin": "^14.5.0"
   },
   "devDependencies": {
     "@capacitor/android": "^8.5.2",

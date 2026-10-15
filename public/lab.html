@@ -6,8 +6,12 @@
     <title>Pathology Staff Portal | MyLifeAid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     
+    <!-- NEW: jsPDF Library for PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
         /* Base styles */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
@@ -305,6 +309,15 @@
                                 <label for="pathologistComment">Pathologist Diagnostic Remarks</label>
                                 <textarea id="pathologistComment" class="form-control" rows="2" placeholder="Provide clinical interpretation or recommendations..."></textarea>
                             </div>
+
+                            <!-- Dynamic Fields Container -->
+                            <div id="dynamicFieldsContainer" style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 10px; margin-top: 5px;">
+                                <!-- Dynamically added fields will appear here -->
+                            </div>
+                            <div style="grid-column: 1 / -1;">
+                                <button type="button" id="addFieldBtn" class="btn-done" style="background:#3498db; margin-top: 5px;">+ Add Additional Field</button>
+                            </div>
+
                         </div>
                         <button type="submit" class="btn-submit">Sign Off & Authorize Results</button>
                     </form>
@@ -344,6 +357,22 @@
         </main>
     </div>
 
+    <!-- Report View Modal -->
+    <div id="reportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; justify-content:center; align-items:center;">
+        <div style="background:#fff; padding:30px; border-radius:12px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                <h3 style="color:#1D4352; margin:0;">Pathology Report Details</h3>
+                <button onclick="document.getElementById('reportModal').style.display='none'" style="background:none; border:none; font-size:24px; cursor:pointer; color:#666;">&times;</button>
+            </div>
+            <div id="reportModalContent" style="font-size: 15px; line-height: 1.6; color: #444;">
+                <!-- Content injected via JS -->
+            </div>
+            <div style="text-align:right; margin-top:25px; border-top:1px solid #eee; padding-top:15px;">
+                <button onclick="document.getElementById('reportModal').style.display='none'" class="btn-submit" style="margin-top:0;">Close Report</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= INTEGRATED FIREBASE LOGIC ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -368,6 +397,9 @@
 
         let currentLabId = null;
 
+        // Global object to hold fetched reports for the modal
+        window.allCompletedRequests = {};
+
         // ================= DATE FORMATTING =================
         const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('currentDateStamp').innerText = new Date().toLocaleDateString(undefined, dateOptions);
@@ -387,6 +419,21 @@
                     document.getElementById(targetId).classList.add('active');
                 }
             });
+        });
+
+        // ================= DYNAMIC FIELDS LOGIC =================
+        document.getElementById('addFieldBtn').addEventListener('click', function() {
+            const container = document.getElementById('dynamicFieldsContainer');
+            const fieldDiv = document.createElement('div');
+            fieldDiv.style.display = 'flex';
+            fieldDiv.style.gap = '10px';
+            fieldDiv.style.alignItems = 'center';
+            fieldDiv.innerHTML = `
+                <input type="text" class="form-control dynamic-field-name" placeholder="Field Name (e.g. Verified By)" style="flex: 1;">
+                <input type="text" class="form-control dynamic-field-value" placeholder="Value (Leave blank for signature)" style="flex: 2;">
+                <button type="button" class="btn-done" style="background: #e74c3c; padding: 10px;" onclick="this.parentElement.remove()">X</button>
+            `;
+            container.appendChild(fieldDiv);
         });
 
         // ================= AUTHENTICATION CHECK =================
@@ -432,6 +479,7 @@
                 
                 requestsBody.innerHTML = "";
                 archivesBody.innerHTML = "";
+                window.allCompletedRequests = {}; // Reset global store
 
                 let activeCount = 0;
                 let archiveCount = 0;
@@ -469,6 +517,9 @@
                     } 
                     else if (req.status === "Completed") {
                         archiveCount++;
+                        // Store the completed request for the modal to use
+                        window.allCompletedRequests[req.id] = req;
+
                         let row = `<tr>
                             <td class="id-cell">${req.id}</td>
                             <td><strong>${req.patientId}</strong></td>
@@ -476,7 +527,7 @@
                             <td><span class="badge badge-completed">${req.status}</span></td>
                             <td>${new Date(req.completedDate).toLocaleDateString('en-ZA')}</td>
                             <td>
-                                <button class="btn-done" onclick="alert('Viewing detailed pathology report for ${req.id}...')">View Report</button>
+                                <button class="btn-done" onclick="viewDetailedReport('${req.id}')">View Report</button>
                             </td>
                         </tr>`;
                         archivesBody.innerHTML += row;
@@ -501,6 +552,47 @@
             navigator.clipboard.writeText(text).then(function() {
                 alert("Tracking ID copied to clipboard: " + text);
             });
+        };
+
+        // ================= VIEW DETAILED REPORT FUNCTION =================
+        window.viewDetailedReport = function(id) {
+            const req = window.allCompletedRequests[id];
+            if(!req) return;
+            
+            let contentHtml = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div><span style="color:#666; font-size:13px;">Tracking No:</span><br><strong>${req.id}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Patient ID:</span><br><strong>${req.patientId}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Test Panel:</span><br><strong>${req.testType}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Completed On:</span><br><strong>${new Date(req.completedDate).toLocaleString()}</strong></div>
+                </div>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee; margin-bottom:15px;">
+                    <h4 style="margin-top:0; color:#1D4352; margin-bottom:8px;">Pathology Findings</h4>
+                    <p style="white-space: pre-wrap; margin:0;">${req.pathologyFindings}</p>
+                </div>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee; margin-bottom:15px;">
+                    <h4 style="margin-top:0; color:#1D4352; margin-bottom:8px;">Pathologist Remarks</h4>
+                    <p style="white-space: pre-wrap; margin:0;">${req.pathologistComment || 'No remarks provided.'}</p>
+                </div>
+            `;
+            
+            // Render custom added fields if they exist
+            if(req.customFields && Object.keys(req.customFields).length > 0) {
+                contentHtml += `<h4 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:8px; color:#1D4352;">Additional Fields & Signatures</h4>`;
+                contentHtml += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">`;
+                for (const [key, value] of Object.entries(req.customFields)) {
+                    contentHtml += `
+                        <div style="border-bottom: 1px dashed #ccc; padding-bottom: 5px;">
+                            <span style="color:#666; font-size:13px;">${key}:</span><br>
+                            <strong>${value ? value : '<span style="color:#ccc; font-style:italic;">[Blank / Pending Signature]</span>'}</strong>
+                        </div>
+                    `;
+                }
+                contentHtml += `</div>`;
+            }
+            
+            document.getElementById('reportModalContent').innerHTML = contentHtml;
+            document.getElementById('reportModal').style.display = 'flex';
         };
 
         // ================= SPECIMEN INTAKE HANDLER =================
@@ -545,13 +637,26 @@
             }
         };
 
-        // ================= TEST RESULTS HANDLER =================
+        // ================= TEST RESULTS HANDLER WITH PDF GENERATION =================
         window.handleResultSubmission = async function(event) {
             event.preventDefault();
             
             const barcode = document.getElementById("resultBarcode").value.trim();
             const pathologyFindings = document.getElementById("pathologyFindings").value;
             const pathologistComment = document.getElementById("pathologistComment").value;
+
+            // Gather custom dynamic fields
+            const dynamicNames = document.querySelectorAll('.dynamic-field-name');
+            const dynamicValues = document.querySelectorAll('.dynamic-field-value');
+            let customFields = {};
+            
+            for(let i = 0; i < dynamicNames.length; i++) {
+                let name = dynamicNames[i].value.trim();
+                let val = dynamicValues[i].value.trim(); // Allows empty strings for signatures
+                if(name) {
+                    customFields[name] = val;
+                }
+            }
 
             if(!barcode) {
                 alert("Please enter a Tracking No. / Barcode.");
@@ -567,16 +672,98 @@
                     return;
                 }
 
-                // Update document to Completed
+                // Update document to Completed and include custom fields
                 await updateDoc(requestRef, {
                     status: "Completed",
                     pathologyFindings: pathologyFindings,
                     pathologistComment: pathologistComment,
+                    customFields: customFields, // Saved to Firestore here
                     completedDate: new Date().toISOString()
                 });
 
-                alert("Test results securely signed off and authorized!");
+                // ================= NEW: PDF GENERATION LOGIC =================
+                try {
+                    const reqData = docSnap.data();
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+                    
+                    let yPos = 20;
+                    
+                    // Header
+                    pdf.setFontSize(18);
+                    pdf.setTextColor(29, 67, 82); // Matches #1D4352
+                    pdf.text("MyLifeAid Pathology Laboratory Report", 105, yPos, null, null, "center");
+                    yPos += 15;
+                    
+                    // Patient & Tracking Details
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(0, 0, 0);
+                    pdf.text(`Tracking No: ${barcode}`, 20, yPos);
+                    pdf.text(`Patient ID: ${reqData.patientId || 'N/A'}`, 120, yPos);
+                    yPos += 10;
+                    pdf.text(`Test Panel: ${reqData.testType || 'N/A'}`, 20, yPos);
+                    pdf.text(`Completed Date: ${new Date().toLocaleDateString()}`, 120, yPos);
+                    yPos += 15;
+                    
+                    // Findings Section
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(29, 67, 82);
+                    pdf.text("Pathology Findings & Quantitative Values", 20, yPos);
+                    yPos += 8;
+                    pdf.setFontSize(11);
+                    pdf.setTextColor(50, 50, 50);
+                    const splitFindings = pdf.splitTextToSize(pathologyFindings, 170);
+                    pdf.text(splitFindings, 20, yPos);
+                    yPos += (splitFindings.length * 6) + 10;
+                    
+                    // Add new page if content is running out of space
+                    if(yPos > 260) { pdf.addPage(); yPos = 20; }
+                    
+                    // Remarks Section
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(29, 67, 82);
+                    pdf.text("Pathologist Diagnostic Remarks", 20, yPos);
+                    yPos += 8;
+                    pdf.setFontSize(11);
+                    pdf.setTextColor(50, 50, 50);
+                    const splitRemarks = pdf.splitTextToSize(pathologistComment || 'No remarks provided.', 170);
+                    pdf.text(splitRemarks, 20, yPos);
+                    yPos += (splitRemarks.length * 6) + 15;
+                    
+                    // Custom Fields & Signatures Section
+                    if (Object.keys(customFields).length > 0) {
+                        if(yPos > 250) { pdf.addPage(); yPos = 20; }
+                        pdf.setFontSize(14);
+                        pdf.setTextColor(29, 67, 82);
+                        pdf.text("Additional Fields & Signatures", 20, yPos);
+                        yPos += 10;
+                        
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(0, 0, 0);
+                        for (const [key, value] of Object.entries(customFields)) {
+                            // Page break check for dynamic fields
+                            if(yPos > 270) { pdf.addPage(); yPos = 20; }
+                            pdf.text(`${key}:`, 20, yPos);
+                            pdf.text(`${value ? value : '[________________________]'}`, 80, yPos);
+                            yPos += 10;
+                        }
+                    }
+                    
+                    // Trigger download
+                    pdf.save(`Pathology_Report_${barcode}.pdf`);
+
+                } catch (pdfError) {
+                    console.error("Error generating PDF:", pdfError);
+                    alert("Results saved, but the system failed to generate the PDF. Check console logs.");
+                }
+                // ================= END PDF GENERATION =================
+
+                alert("Test results securely signed off and authorized! The PDF report has been downloaded.");
+                
+                // Reset form & empty out dynamic fields container
                 document.getElementById("resultsEntryForm").reset();
+                document.getElementById("dynamicFieldsContainer").innerHTML = "";
+                
                 loadIncomingRequests(); // Refresh tables so it moves to Archives
 
             } catch (error) {
@@ -589,7 +776,7 @@
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             try {
                 await signOut(auth);
-                window.location.href = "welcome.html";
+                window.location.replace("staff_index.html");
             } catch (error) {
                 alert("Error logging out.");
             }

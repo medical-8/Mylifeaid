@@ -6,7 +6,11 @@
     <title>Doctor Dashboard | MyLifeAid</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    
+    <!-- jsPDF CDN for generating the PDF script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         /* Base styles */
@@ -190,6 +194,26 @@
         .btn-done:hover { background: #27ae60; }
         .btn-not-done { background: #e74c3c; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s; font-size: 13px; }
         .btn-not-done:hover { background: #c0392b; }
+        
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-input {
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            width: 250px;
+            transition: border-color 0.2s;
+        }
+        
+        .search-input:focus {
+            border-color: #1D4352;
+        }
 
         /* Responsive Layout */
         @media (max-width: 900px) {
@@ -199,6 +223,8 @@
             .welcome-banner { flex-direction: column; align-items: flex-start; gap: 10px; }
             .card-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .dashboard-main { padding: 15px; }
+            .search-container { width: 100%; }
+            .search-input { width: 100%; }
         }
     </style>
 </head>
@@ -265,6 +291,9 @@
                         <div class="flex-align">
                             <span class="card-icon" style="font-size: 24px;"></span>
                             <h3>Your Active Patients</h3>
+                        </div>
+                        <div class="search-container">
+                            <input type="text" id="patientSearch" class="search-input" placeholder="Search by Name or ID..." onkeyup="filterPatients()">
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -357,19 +386,19 @@
                             <h3>Issue Medication Script</h3>
                         </div>
                     </div>
-                    <form onsubmit="event.preventDefault(); alert('Prescription sent to pharmacy module.');">
+                    <form onsubmit="handlePrescription(event)">
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Patient ID Number</label>
-                                <input type="text" class="form-control" placeholder="Patient ID" required>
+                                <input type="text" id="rxPatientId" class="form-control" placeholder="Patient ID" required>
                             </div>
                             <div class="form-group">
                                 <label>Medication Name & Dosage</label>
-                                <input type="text" class="form-control" placeholder="e.g., Amoxicillin 500mg" required>
+                                <input type="text" id="rxMedication" class="form-control" placeholder="e.g., Amoxicillin 500mg" required>
                             </div>
                             <div class="form-group">
                                 <label>Frequency</label>
-                                <select class="form-control" required>
+                                <select id="rxFrequency" class="form-control" required>
                                     <option>Once Daily (QD)</option>
                                     <option>Twice Daily (BID)</option>
                                     <option>Three Times Daily (TID)</option>
@@ -377,7 +406,7 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn-submit">Submit Script to Pharmacy</button>
+                        <button type="submit" class="btn-submit">Generate Script</button>
                     </form>
                 </div>
             </section>
@@ -402,11 +431,12 @@
                                     <th>Test Panel</th>
                                     <th>Pathology Findings</th>
                                     <th>Pathologist Comment</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="labResultsTableBody">
                                 <tr>
-                                    <td colspan="5" style="text-align: center; padding: 20px;">Fetching lab results...</td>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">Fetching lab results...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -415,6 +445,23 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- Report View Modal -->
+    <div id="reportModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; justify-content:center; align-items:center;">
+        <div style="background:#fff; padding:30px; border-radius:12px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.2);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:15px;">
+                <h3 style="color:#1D4352; margin:0;">Pathology Report Details</h3>
+                <button onclick="document.getElementById('reportModal').style.display='none'" style="background:none; border:none; font-size:24px; cursor:pointer; color:#666;">&times;</button>
+            </div>
+            <div id="reportModalContent" style="font-size: 15px; line-height: 1.6; color: #444;">
+                <!-- Content injected via JS -->
+            </div>
+            <div style="text-align:right; margin-top:25px; border-top:1px solid #eee; padding-top:15px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="downloadPdfBtn" class="btn-done" style="background:#3498db; margin-top:0;">Download PDF</button>
+                <button onclick="document.getElementById('reportModal').style.display='none'" class="btn-submit" style="margin-top:0;">Close Report</button>
+            </div>
+        </div>
     </div>
 
     <!-- Firebase Script -->
@@ -442,6 +489,7 @@
         let myStaffNumber = "";
         let myActivePatients = []; 
         let myLinkedLabs = []; // Array to store linked laboratories
+        window.allLabResults = {}; // Global store for lab results to populate modal
 
         /* Sidebar Navigation Toggle */
         const navItems = document.querySelectorAll('.sidebar-menu li');
@@ -537,11 +585,12 @@
             const tbody = document.getElementById('labResultsTableBody');
             
             if (myLinkedLabs.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>Your facility has no linked laboratories to fetch results from.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>Your facility has no linked laboratories to fetch results from.</td></tr>";
                 return;
             }
 
             let allResults = [];
+            window.allLabResults = {}; // reset global store
 
             try {
                 // Loop through each linked lab to query for completed results matching this doctor and facility
@@ -555,7 +604,9 @@
                         const data = docSnap.data();
                         // Only add if it's completed and requested by this specific doctor
                         if (data.status === "Completed" && data.requestingDoctor === myStaffNumber) {
-                            allResults.push(data);
+                            const resultData = { id: docSnap.id, labId: labId, ...data };
+                            allResults.push(resultData);
+                            window.allLabResults[docSnap.id] = resultData;
                         }
                     });
                 }
@@ -569,7 +620,7 @@
 
             } catch (error) {
                 console.error("Error fetching lab results:", error);
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>Error loading results from network.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:red;'>Error loading results from network.</td></tr>";
             }
         }
 
@@ -579,7 +630,7 @@
             tbody.innerHTML = "";
 
             if (results.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 20px;'>No completed lab results available yet.</td></tr>";
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No completed lab results available yet.</td></tr>";
                 return;
             }
 
@@ -587,8 +638,8 @@
                 const dateStr = new Date(res.completedDate).toLocaleDateString('en-ZA');
                 const ptId = res.patientId || "N/A";
                 const test = res.testType || "N/A";
-                const findings = res.pathologyFindings || "No findings recorded.";
-                const comments = res.pathologistComment || "No clinical remarks.";
+                const findings = res.pathologyFindings ? (res.pathologyFindings.length > 30 ? res.pathologyFindings.substring(0, 30) + "..." : res.pathologyFindings) : "No findings recorded.";
+                const comments = res.pathologistComment ? (res.pathologistComment.length > 30 ? res.pathologistComment.substring(0, 30) + "..." : res.pathologistComment) : "No clinical remarks.";
 
                 let rowHtml = "<tr>";
                 rowHtml += "<td><strong>" + dateStr + "</strong></td>";
@@ -596,10 +647,134 @@
                 rowHtml += "<td>" + test + "</td>";
                 rowHtml += "<td>" + findings + "</td>";
                 rowHtml += "<td><em>" + comments + "</em></td>";
+                rowHtml += `<td><button class="btn-done" onclick="viewDetailedReport('${res.id}')">View Report</button></td>`;
                 rowHtml += "</tr>";
 
                 tbody.innerHTML += rowHtml;
             });
+        }
+
+        // ================= VIEW DETAILED REPORT MODAL =================
+        window.viewDetailedReport = function(id) {
+            const req = window.allLabResults[id];
+            if(!req) return;
+            
+            let contentHtml = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div><span style="color:#666; font-size:13px;">Tracking No:</span><br><strong>${req.id}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Patient ID:</span><br><strong>${req.patientId || 'N/A'}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Test Panel:</span><br><strong>${req.testType || 'N/A'}</strong></div>
+                    <div><span style="color:#666; font-size:13px;">Completed On:</span><br><strong>${new Date(req.completedDate).toLocaleString()}</strong></div>
+                </div>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee; margin-bottom:15px;">
+                    <h4 style="margin-top:0; color:#1D4352; margin-bottom:8px;">Pathology Findings</h4>
+                    <p style="white-space: pre-wrap; margin:0;">${req.pathologyFindings || 'No findings recorded.'}</p>
+                </div>
+                <div style="background:#f9f9f9; padding:15px; border-radius:8px; border:1px solid #eee; margin-bottom:15px;">
+                    <h4 style="margin-top:0; color:#1D4352; margin-bottom:8px;">Pathologist Remarks</h4>
+                    <p style="white-space: pre-wrap; margin:0;">${req.pathologistComment || 'No remarks provided.'}</p>
+                </div>
+            `;
+            
+            // Render custom added fields if they exist
+            if(req.customFields && Object.keys(req.customFields).length > 0) {
+                contentHtml += `<h4 style="margin-top:20px; border-bottom:1px solid #eee; padding-bottom:8px; color:#1D4352;">Additional Fields & Signatures</h4>`;
+                contentHtml += `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">`;
+                for (const [key, value] of Object.entries(req.customFields)) {
+                    contentHtml += `
+                        <div style="border-bottom: 1px dashed #ccc; padding-bottom: 5px;">
+                            <span style="color:#666; font-size:13px;">${key}:</span><br>
+                            <strong>${value ? value : '<span style="color:#ccc; font-style:italic;">[Blank / Pending Signature]</span>'}</strong>
+                        </div>
+                    `;
+                }
+                contentHtml += `</div>`;
+            }
+            
+            document.getElementById('reportModalContent').innerHTML = contentHtml;
+            document.getElementById('reportModal').style.display = 'flex';
+            
+            // Setup PDF Download Button
+            const downloadBtn = document.getElementById('downloadPdfBtn');
+            downloadBtn.onclick = function() {
+                generateReportPDF(req);
+            };
+        };
+
+        // ================= PDF GENERATION FOR REPORTS =================
+        function generateReportPDF(reqData) {
+            try {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF();
+                
+                let yPos = 20;
+                
+                // Header
+                pdf.setFontSize(18);
+                pdf.setTextColor(29, 67, 82); // Matches #1D4352
+                pdf.text("MyLifeAid Pathology Laboratory Report", 105, yPos, null, null, "center");
+                yPos += 15;
+                
+                // Patient & Tracking Details
+                pdf.setFontSize(12);
+                pdf.setTextColor(0, 0, 0);
+                pdf.text(`Tracking No: ${reqData.id}`, 20, yPos);
+                pdf.text(`Patient ID: ${reqData.patientId || 'N/A'}`, 120, yPos);
+                yPos += 10;
+                pdf.text(`Test Panel: ${reqData.testType || 'N/A'}`, 20, yPos);
+                pdf.text(`Completed Date: ${new Date(reqData.completedDate).toLocaleDateString()}`, 120, yPos);
+                yPos += 15;
+                
+                // Findings Section
+                pdf.setFontSize(14);
+                pdf.setTextColor(29, 67, 82);
+                pdf.text("Pathology Findings & Quantitative Values", 20, yPos);
+                yPos += 8;
+                pdf.setFontSize(11);
+                pdf.setTextColor(50, 50, 50);
+                const splitFindings = pdf.splitTextToSize(reqData.pathologyFindings || 'No findings recorded.', 170);
+                pdf.text(splitFindings, 20, yPos);
+                yPos += (splitFindings.length * 6) + 10;
+                
+                // Add new page if content is running out of space
+                if(yPos > 260) { pdf.addPage(); yPos = 20; }
+                
+                // Remarks Section
+                pdf.setFontSize(14);
+                pdf.setTextColor(29, 67, 82);
+                pdf.text("Pathologist Diagnostic Remarks", 20, yPos);
+                yPos += 8;
+                pdf.setFontSize(11);
+                pdf.setTextColor(50, 50, 50);
+                const splitRemarks = pdf.splitTextToSize(reqData.pathologistComment || 'No remarks provided.', 170);
+                pdf.text(splitRemarks, 20, yPos);
+                yPos += (splitRemarks.length * 6) + 15;
+                
+                // Custom Fields & Signatures Section
+                if (reqData.customFields && Object.keys(reqData.customFields).length > 0) {
+                    if(yPos > 250) { pdf.addPage(); yPos = 20; }
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(29, 67, 82);
+                    pdf.text("Additional Fields & Signatures", 20, yPos);
+                    yPos += 10;
+                    
+                    pdf.setFontSize(11);
+                    pdf.setTextColor(0, 0, 0);
+                    for (const [key, value] of Object.entries(reqData.customFields)) {
+                        if(yPos > 270) { pdf.addPage(); yPos = 20; }
+                        pdf.text(`${key}:`, 20, yPos);
+                        pdf.text(`${value ? value : '[________________________]'}`, 80, yPos);
+                        yPos += 10;
+                    }
+                }
+                
+                // Trigger download
+                pdf.save(`Pathology_Report_${reqData.id}.pdf`);
+                
+            } catch (pdfError) {
+                console.error("Error generating PDF:", pdfError);
+                alert("Failed to generate the PDF. Check console logs.");
+            }
         }
 
         async function loadActivePatients() {
@@ -633,20 +808,21 @@
             }
         }
 
-        function renderPatients() {
+        function renderPatients(patientsToRender = myActivePatients) {
             const tbody = document.getElementById('admittedTableBody');
             const labPatientSelect = document.getElementById('labPatientId'); 
             
             tbody.innerHTML = "";
+            // We only want to rebuild the dropdown once ideally, but rebuilding here is fine for simplicity
             labPatientSelect.innerHTML = '<option value="">-- Select Patient --</option>';
 
-            if (myActivePatients.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No active patients assigned to you right now.</td></tr>";
+            if (patientsToRender.length === 0) {
+                tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; padding: 20px;'>No active patients found.</td></tr>";
                 labPatientSelect.innerHTML = '<option value="">No patients available</option>';
                 return;
             }
 
-            myActivePatients.forEach(function(patient) {
+            patientsToRender.forEach(function(patient) {
                 const isAdmitted = patient.status === "Admitted";
                 const wardBedStr = isAdmitted ? `<span class="badge badge-ward">${patient.ward}</span> ${patient.bed}` : `<span class="badge badge-pending">Pending Admission</span>`;
                 
@@ -673,6 +849,24 @@
                 labPatientSelect.innerHTML += `<option value="${idStr}">${nameStr} (ID: ${idStr})</option>`;
             });
         }
+        
+        // ================= SEARCH FUNCTIONALITY =================
+        window.filterPatients = function() {
+            const searchInput = document.getElementById('patientSearch').value.toLowerCase();
+            
+            if(!searchInput) {
+                renderPatients(myActivePatients);
+                return;
+            }
+            
+            const filtered = myActivePatients.filter(patient => {
+                const fullName = ((patient.firstName || "") + " " + (patient.surname || "")).toLowerCase();
+                const idNum = (patient.idNumber || "").toLowerCase();
+                return fullName.includes(searchInput) || idNum.includes(searchInput);
+            });
+            
+            renderPatients(filtered);
+        };
 
         window.updatePatientStatus = async function(bookingId, newStatus) {
             if(!confirm("Are you sure you want to mark this patient's case as " + newStatus + "? This will remove them from your active view.")) return;
@@ -686,7 +880,7 @@
                     return p.id !== bookingId;
                 });
                 
-                renderPatients();
+                renderPatients(); // will re-render with the updated myActivePatients list
                 
             } catch (error) {
                 console.error("Error updating status:", error);
@@ -733,6 +927,72 @@
                 console.error("Error submitting lab request:", error);
                 alert("System error. Unable to dispatch request at this time.");
             }
+        };
+
+        // ==========================================
+        // NEW: GENERATE & DOWNLOAD PRESCRIPTION PDF 
+        // ==========================================
+        window.handlePrescription = function(e) {
+            e.preventDefault();
+            
+            // 1. Pull the data from the HTML form and dashboard
+            const ptId = document.getElementById('rxPatientId').value;
+            const med = document.getElementById('rxMedication').value;
+            const freq = document.getElementById('rxFrequency').value;
+            
+            const doctorName = document.getElementById('user-display-name').innerText;
+            const dateStr = document.getElementById('currentDateStamp').innerText;
+            const facilityId = providerId || "MyLifeAid Facility";
+
+            // 2. Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // 3. Draw Header
+            doc.setFontSize(20);
+            doc.setTextColor(29, 67, 82); // #1D4352 MyLifeAid theme color
+            doc.text("MyLifeAid Official Prescription", 20, 20);
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Date: " + dateStr, 20, 30);
+            doc.text("Facility ID: " + facilityId, 20, 38);
+            doc.text("Prescribing Doctor: " + doctorName, 20, 46);
+            
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 52, 190, 52);
+            
+            // 4. Draw Patient Info
+            doc.setFontSize(16);
+            doc.setTextColor(50, 50, 50);
+            doc.text("Patient Details", 20, 65);
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text("Patient ID / Ref: " + ptId, 20, 75);
+            
+            // 5. Draw Medication Order
+            doc.setFontSize(16);
+            doc.setTextColor(50, 50, 50);
+            doc.text("Clinical Order", 20, 95);
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text("Medication & Dosage: " + med, 20, 105);
+            doc.text("Frequency: " + freq, 20, 115);
+            
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 125, 190, 125);
+            
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text("Electronically Signed By: " + doctorName, 20, 135);
+            doc.text("Generated securely via MyLifeAid Systems", 20, 280);
+
+            
+            doc.save("Script_" + ptId + ".pdf");
+            
+            alert("Prescription PDF generated and downloaded.");
+            e.target.reset(); // clear the input fields
         };
 
         document.getElementById('logoutBtn').addEventListener('click', async function() {

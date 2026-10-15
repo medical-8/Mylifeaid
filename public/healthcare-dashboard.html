@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Facility Dashboard | MyLifeAid</title>
+  <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
 
   <!-- GOOGLE FONT -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -936,7 +937,7 @@
     document.getElementById('logoutBtn').addEventListener('click', async function() {
       try {
         await signOut(auth);
-        window.location.href = "welcome.html"; // Assumed login page based on your previous config
+        window.location.replace("staff_index.html"); // Assumed login page based on your previous config
       } catch (error) {
         alert("Error logging out.");
       }

@@ -9,6 +9,7 @@
     
     <!-- Using Google Fonts for a professional look -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/MyLifeAidLogo.png" />
 
     <style>
         /* Base professional styling */
@@ -287,7 +288,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collectionGroup, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collectionGroup, query, where, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyABwRJyK5SdeC4FM0jTbnVbiV4hU3TXB6I",
@@ -326,11 +327,25 @@
 
             let bookings = [];
 
-            querySnapshot.forEach(function(doc) {
-                const data = doc.data();
+            for (const docSnap of querySnapshot.docs) {
+                const data = docSnap.data();
+                let facilityName = "Unknown Facility";
+
+                // Fetch parent document to get the facility name
+                if (docSnap.ref.parent && docSnap.ref.parent.parent) {
+                    try {
+                        const parentSnap = await getDoc(docSnap.ref.parent.parent);
+                        if (parentSnap.exists() && parentSnap.data().name) {
+                            facilityName = parentSnap.data().name;
+                        }
+                    } catch (err) {
+                        console.error("Error fetching facility name:", err);
+                    }
+                }
 
                 bookings.push({
-                    id: doc.id,
+                    id: docSnap.id,
+                    facilityName: facilityName,
                     appointmentDate: data.appointmentDate || "N/A",
                     appointmentTime: data.appointmentTime || "N/A",
                     assignedDoctor: data.assignedDoctor || "Unassigned",
@@ -343,7 +358,7 @@
                     status: data.status || "Pending",
                     uid: data.uid || ""
                 });
-            });
+            }
 
             // Sort by most recent first
             bookings.sort(function(a, b) {
@@ -380,6 +395,7 @@
             card.innerHTML = `
                 <div class="card-info">
                     <h3>Date: ${booking.appointmentDate}</h3>
+                    <p><strong>Facility:</strong> ${booking.facilityName}</p>
                     <p><strong>Time:</strong> ${booking.appointmentTime}</p>
                     <p><strong>Reason:</strong> ${truncatedReason}</p>
                 </div>
@@ -428,10 +444,6 @@
 
                     <div class="form-grid two-cols">
                         <div class="form-group">
-                            <label>ID Number</label>
-                            <input type="text" value="${booking.idNumber}" disabled>
-                        </div>
-                        <div class="form-group">
                             <label>Phone Number</label>
                             <input type="text" value="${booking.phone}" disabled>
                         </div>
@@ -448,9 +460,15 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Assigned Doctor</label>
-                        <input type="text" value="${booking.assignedDoctor}" disabled>
+                    <div class="form-grid two-cols">
+                        <div class="form-group">
+                            <label>Facility Name</label>
+                            <input type="text" value="${booking.facilityName}" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Assigned Doctor</label>
+                            <input type="text" value="${booking.assignedDoctor}" disabled>
+                        </div>
                     </div>
 
                     <div class="form-group">
